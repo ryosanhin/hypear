@@ -42,7 +42,9 @@ be positive. Time, speed, capacity and target must also be positive.
 - `game/`: display-independent fruit data, generation, boxes, scoring and session.
 - `scenes/game/`: main scene, input, UI and visual queue movement.
 - `views/`: independent fruit, conveyor, worker and box presentation scenes.
-- `tests/test_runner.gd`: headless tests without external test addons.
+- `tests/<target>/<target>_test.gd`: independently runnable headless test suites.
+- `tests/<target>/fixtures/`: settings and scripts used only by that suite.
+- `tests/supports/test_helper.gd`: shared assertions and result reporting.
 
 To add art, replace drawing in the `views/*_view.tscn` scenes with Sprite2D or
 animated nodes, keeping the fruit `configure()` and box `update_weight()` entry
@@ -54,11 +56,17 @@ Scoring can be changed in `game/score_calculator.gd` without modifying the views
 
 ```sh
 godot --headless --path . --editor --import --quit
-godot --headless --path . --script tests/test_runner.gd
+for test_script in tests/*/*_test.gd; do
+    godot --headless --path . --script "$test_script" || exit 1
+done
 godot --headless --path . --quit-after 120
 ```
 
-The runner exits with code 1 on failure. Tests cover generation, FIFO, sorting,
+Each suite uses `tests/supports/test_helper.gd` and exits with code 1 on failure.
+To run one suite, for example:
+`godot --headless --path . --script tests/game_session/game_session_test.gd`.
+Fixture resources are duplicated for each test so configuration changes do not
+leak into other tests. Tests cover generation, FIFO, sorting,
 shipping, scoring, overflow, state restrictions, timer reset and retry. A scene
 integration test also checks InputMap bindings and the start-to-retry flow.
 
