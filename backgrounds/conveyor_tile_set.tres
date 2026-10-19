@@ -1,0 +1,81 @@
+[gd_resource type="TileSet" format=3 uid="uid://s4ro47keg0x1"]
+
+[ext_resource type="Texture2D" uid="uid://cl7n5vsshv0ju" path="res://backgrounds/conveyor.png" id="1_wnosa"]
+[ext_resource type="Texture2D" uid="uid://tu5276cmfnne" path="res://backgrounds/conveyor_simple.png" id="2_jpyyu"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f5uci"]
+texture = ExtResource("1_wnosa")
+texture_region_size = Vector2i(48, 48)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/animation_columns = 2
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/0 = 0
+4:0/size_in_atlas = Vector2i(2, 2)
+4:0/animation_columns = 2
+4:0/animation_frame_0/duration = 1.0
+4:0/animation_frame_1/duration = 1.0
+4:0/0 = 0
+4:2/size_in_atlas = Vector2i(2, 2)
+4:2/animation_columns = 2
+4:2/animation_frame_0/duration = 1.0
+4:2/animation_frame_1/duration = 1.0
+4:2/0 = 0
+0:2/size_in_atlas = Vector2i(2, 2)
+0:2/animation_columns = 2
+0:2/animation_frame_0/duration = 1.0
+0:2/animation_frame_1/duration = 1.0
+0:2/0 = 0
+0:4/size_in_atlas = Vector2i(2, 2)
+0:4/animation_columns = 2
+0:4/animation_frame_0/duration = 1.0
+0:4/animation_frame_1/duration = 1.0
+0:4/0 = 0
+4:4/size_in_atlas = Vector2i(2, 2)
+4:4/animation_columns = 2
+4:4/animation_frame_0/duration = 1.0
+4:4/animation_frame_1/duration = 1.0
+4:4/0 = 0
+0:6/size_in_atlas = Vector2i(2, 2)
+0:6/animation_columns = 2
+0:6/animation_frame_0/duration = 1.0
+0:6/animation_frame_1/duration = 1.0
+0:6/0 = 0
+4:6/size_in_atlas = Vector2i(2, 2)
+4:6/animation_columns = 2
+4:6/animation_frame_0/duration = 1.0
+4:6/animation_frame_1/duration = 1.0
+4:6/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_382lb"]
+texture = ExtResource("2_jpyyu")
+texture_region_size = Vector2i(48, 48)
+4:0/size_in_atlas = Vector2i(2, 2)
+4:0/animation_columns = 2
+4:0/animation_frame_0/duration = 1.0
+4:0/animation_frame_1/duration = 1.0
+4:0/0 = 0
+4:0/0/texture_origin = Vector2i(-24, -24)
+0:2/size_in_atlas = Vector2i(2, 2)
+0:2/animation_columns = 2
+0:2/animation_frame_0/duration = 1.0
+0:2/animation_frame_1/duration = 1.0
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(-24, -24)
+4:2/size_in_atlas = Vector2i(2, 2)
+4:2/animation_columns = 2
+4:2/animation_frame_0/duration = 1.0
+4:2/animation_frame_1/duration = 1.0
+4:2/0 = 0
+4:2/0/texture_origin = Vector2i(-24, -24)
+0:0/size_in_atlas = Vector2i(2, 2)
+0:0/animation_columns = 2
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-24, -24)
+
+[resource]
+tile_size = Vector2i(48, 48)
+sources/0 = SubResource("TileSetAtlasSource_f5uci")
+sources/1 = SubResource("TileSetAtlasSource_382lb")
