@@ -23,8 +23,8 @@ func _test_scene_flow() -> void:
 	_helper.change_test_name("scene_flow")
 	var scene := GAME_SCENE.instantiate() as Node2D
 	root.add_child(scene)
-# 供給と移動を手動更新し、実行環境のフレーム速度に依存させない。
-	scene.set_process(false)
+	# 供給と移動を手動更新し、実行環境のフレーム速度に依存させない。
+	scene.session.set_process(false)
 	_helper.assert_equal(scene.session.state, GameSession.State.READY, "シーンは開始待ち")
 	_helper.assert_true(_mapped_key("sort_left", KEY_LEFT), "左キーのInputMap")
 	_helper.assert_true(_mapped_key("sort_right", KEY_RIGHT), "右キーのInputMap")
@@ -33,33 +33,40 @@ func _test_scene_flow() -> void:
 	_helper.assert_equal(scene.session.state, GameSession.State.PLAYING, "入力で開始")
 	for index in 2:
 		scene.session.supply()
-	var first: FruitData = scene.session.get_queue()[0]
-	var second: FruitData = scene.session.get_queue()[1]
+		scene.session.conveyor.advance(0.2)
+	var first: FruitData = scene.session.conveyor.get_queue()[0]
+	var second: FruitData = scene.session.conveyor.get_queue()[1]
 	_press(scene, "sort_left")
+	_helper.assert_equal(scene.session.left_box.weight, 0, "到着前の入力は箱へ渡さない")
+	scene.session.conveyor.advance(20.0)
+	_press(scene, "sort_left")
+	scene.session.conveyor.advance(20.0)
 	_press(scene, "sort_right")
 	_helper.assert_equal(scene.session.left_box.weight, first.weight, "入力で左箱に仕分け")
 	_helper.assert_equal(scene.session.right_box.weight, second.weight, "入力で右箱に仕分け")
-	var expected := ScoreCalculator.calculate(first.weight, scene.settings.target_weight)
-	expected += ScoreCalculator.calculate(second.weight, scene.settings.target_weight)
+	var expected := ScoreCalculator.calculate(first.weight, scene.session.settings.target_weight)
+	expected += ScoreCalculator.calculate(second.weight, scene.session.settings.target_weight)
 	_press(scene, "ship_boxes")
 	_helper.assert_equal(scene.session.score, expected, "入力で出荷")
 	scene.session.supply()
-	scene._process(0.25)
-	var fruit: Node2D = scene._fruit_views[scene.session.get_queue()[0]]
-	var initial_x := fruit.position.x
-	scene._process(0.25)
-	_helper.assert_true(fruit.position.x < initial_x, "果実の見た目が前進する")
+	var follower := scene.get_node("Conveyor/FruitPath").get_child(0) as PathFollow2D
+	var initial_position := follower.position
+	scene.session.advance(0.25)
+	_helper.assert_not_equal(follower.position, initial_position, "果実が経路に沿って前進する")
+	var fruit := follower.get_child(0) as Node2D
 	var shown: bool = scene._show_weights
 	_press(scene, "toggle_weights")
 	_helper.assert_not_equal(scene._show_weights, shown, "デバッグ表示を入力で切り替え")
 	_helper.assert_equal(fruit.get_node("Weight").visible, scene._show_weights, "果実の数値表示も切り替え")
-	for index in scene.settings.queue_capacity:
+	for index in scene.session.settings.queue_capacity:
+		scene.session.conveyor.advance(0.2)
 		scene.session.supply()
 	_helper.assert_equal(scene.session.state, GameSession.State.GAME_OVER, "シーンで上限超過")
 	_helper.assert_true(scene.get_node("UI/Overlay").visible, "終了画面を表示")
 	_press(scene, "start_game")
-	_helper.assert_true(scene.session.score == 0 and scene.session.get_queue().is_empty(), "入力でリトライ")
+	_helper.assert_true(scene.session.score == 0 and scene.session.conveyor.get_queue().is_empty(), "入力でリトライ")
 	_helper.assert_false(scene.get_node("UI/Overlay").visible, "リトライで終了画面を閉じる")
+	_helper.assert_equal(scene.get_node("Conveyor/FruitPath").get_child_count(), 0, "リトライで果実表示も除去")
 	scene.queue_free()
 	await process_frame
 

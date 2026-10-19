@@ -9,21 +9,27 @@
 ## Playable demo
 
 Open `project.godot` in Godot 4 and run the project (F6 runs the current scene;
-F5 runs the game). The demo uses shapes only and does not require external assets.
+F5 runs the game). The demo uses the included animated conveyor tiles and placeholder shapes for fruit,
+the worker and boxes. It does not require external assets.
 The original project's Godot 4.7 feature declaration is preserved; this demo was
 validated with Godot 4.6.1 using the compatibility renderer.
 
 | Input | Action |
 | --- | --- |
 | Enter / Space or START button | Start or retry |
-| Left / Right | Put the oldest fruit in the left / right box |
+| Left / Right | Put the arrived fruit in the left / right box |
 | Down | Ship both boxes |
 | D or Show weights checkbox | Toggle all fruit weight numbers |
 
 Fruit weights are 2, 3, 5, 7 and 10, with equal probabilities by default.
 A fruit arrives every 1.5 seconds. The queue holds 10 fruit; the next supply while
-full ends the game. Sorting is allowed as soon as fruit enters the queue, including
-while its visual is moving. The oldest fruit moves toward the ring above the worker.
+full ends the game. The count includes all fruit currently on the conveyor.
+Fruit follows the belt from the top entrance through the bends to the sorting
+station above the worker. Only the oldest fruit that has reached the station can
+be sorted; each following fruit then advances, maintaining a 56-pixel path gap.
+If the entrance is still occupied when another fruit is supplied, the game also
+ends instead of creating overlapping fruit. With the default settings, the first
+fruit takes about 4.4 seconds to reach the station after appearing.
 Boxes accept weights above the target of 20. Only shipped boxes earn points;
 unshipped fruit does not add points at game over.
 
@@ -39,18 +45,36 @@ movement speed and initial number visibility. Weight and probability arrays must
 have matching sizes, weights must be positive, and at least one probability must
 be positive. Time, speed, capacity and target must also be positive.
 
-- `game/`: display-independent fruit data, generation, boxes, scoring and session.
-- `scenes/game/`: main scene, input, UI and visual queue movement.
-- `views/`: independent fruit, conveyor, worker and box presentation scenes.
+- `game/`: fruit data, generation, box state, scoring and the `GameSession` coordinator.
+- `backgrounds/conveyor.tscn`: floor, animated belt, editable path and conveyor component.
+- `scenes/game/`: main scene, component connections, input and HUD.
+- `views/`: fruit and worker presentation scenes, and the box component.
 - `tests/<target>/<target>_test.gd`: independently runnable headless test suites.
 - `tests/<target>/fixtures/`: settings and scripts used only by that suite.
 - `tests/supports/test_helper.gd`: shared assertions and result reporting.
 
-To add art, replace drawing in the `views/*_view.tscn` scenes with Sprite2D or
-animated nodes, keeping the fruit `configure()` and box `update_weight()` entry
-points. The conveyor view only draws the belt; fruit movement belongs to the main
-scene controller. The HUD and overlays are editable nodes in `scenes/game/game.tscn`.
-Scoring can be changed in `game/score_calculator.gd` without modifying the views.
+The conveyor owns fruit order, PathFollow2D nodes, movement, stopping and arrival
+checks. Its `add_fruit()`, `peek_ready_fruit()`, `take_ready_fruit()` and `clear()`
+methods are the interface used by the rest of the game. It has no automatic
+process: `GameSession` advances it up to each supply time, so long frames preserve
+both supply timing and movement. Fruit paths do not loop or rotate the visuals.
+
+Each box owns its `BoxState` and updates its label when fruit is added or cleared.
+`GameSession` is a Node connected to the conveyor and two boxes in the Inspector.
+It controls start/retry, supply, sorting, shipping, score and game over; it does
+not keep a second fruit queue. Input and HUD connections belong to `game.gd`.
+
+To adjust the route, open `backgrounds/conveyor.tscn` and edit the Curve2D on
+`FruitPath`. The first point is the entrance and the last is the sorting station.
+The initial route approximates the bends with radius-48 quarter circles; refine
+it visually in the editor as needed. `fruit_spacing` belongs to the conveyor.
+If the endpoint changes, also move the worker, boxes and HUD in the game scene.
+Check spacing, travel time, capacity and supply interval together when tuning.
+
+To add art, replace placeholder drawing in the view scenes, retaining the fruit
+`configure()` method and box `configure()`, `add_fruit()` and `clear()` methods.
+The HUD and overlays are editable nodes in `scenes/game/game.tscn`. Scoring can be
+changed in `game/score_calculator.gd` without modifying the components.
 
 ### Tests
 
@@ -66,9 +90,16 @@ Each suite uses `tests/supports/test_helper.gd` and exits with code 1 on failure
 To run one suite, for example:
 `godot --headless --path . --script tests/game_session/game_session_test.gd`.
 Fixture resources are duplicated for each test so configuration changes do not
-leak into other tests. Tests cover generation, FIFO, sorting,
-shipping, scoring, overflow, state restrictions, timer reset and retry. A scene
-integration test also checks InputMap bindings and the start-to-retry flow.
+leak into other tests. Conveyor and box suites instantiate their real scenes.
+Session tests connect fresh conveyor and box instances without the HUD. Tests
+cover generation, FIFO, path movement, arrival restrictions, spacing, capacity,
+blocked entrances, box display, shipping, scoring, state restrictions, timer reset
+and retry. A game scene integration test checks InputMap bindings and the full
+start-to-retry connection flow.
+
+For visual verification, run the game with a GUI and check the route against the
+belt centers, fruit overlap at bends, animation direction, HUD placement and
+sorting feel. Headless tests do not verify rendered appearance.
 
 This is a fixed-layout 960 x 720 demo with 4:3 letterboxing. Text is currently
 English and visuals are placeholders. It has no audio, character abilities,

@@ -1,6 +1,6 @@
 class_name GameSession
-extends RefCounted
-## FIFO、箱、出荷、ゲーム状態を管理する表示非依存のゲーム本体。
+extends Node
+## コンベアと箱を取りまとめ、供給、仕分け、出荷とゲーム進行を管理する。
 
 signal changed
 signal shipped(points: int)
@@ -8,30 +8,38 @@ signal shipped(points: int)
 enum State { READY, PLAYING, GAME_OVER }
 enum BoxSide { LEFT, RIGHT }
 
+@export var settings: DemoSettings = preload("res://game/demo_settings.tres")
+@export var conveyor: Conveyor
+@export var left_box: FruitBox
+@export var right_box: FruitBox
+
 var state: State = State.READY
 var score: int = 0
-var left_box := BoxState.new()
-var right_box := BoxState.new()
-var settings: DemoSettings
-
-var _queue: Array[FruitData] = []
 var _generator: FruitGenerator
 var _supply_elapsed: float = 0.0
 
 
-## 使用する設定でゲームを準備する。[br]
-## [param demo_settings]: 一回のプレイで使用する設定。
-func _init(demo_settings: DemoSettings) -> void:
-	assert(demo_settings.is_valid(), "デモ設定が不正です")
-	settings = demo_settings
+## 接続されたコンポーネントを設定して開始待ちにする。
+func _ready() -> void:
+	assert(settings.is_valid(), "デモ設定が不正です")
+	assert(conveyor != null and left_box != null and right_box != null, "コンポーネントが未設定です")
 	_generator = FruitGenerator.new(settings)
+	conveyor.configure(settings)
+	left_box.configure(settings.target_weight)
+	right_box.configure(settings.target_weight)
 
 
-## 重量、待機列、時間、スコアを初期化して開始する。リトライにも使用する。
+## ゲームの時間を進める。[br]
+## [param delta]: 前フレームからの経過秒数。
+func _process(delta: float) -> void:
+	advance(delta)
+
+
+## 全コンポーネント、供給時間とスコアを初期化して開始する。
 func start() -> void:
 	if state == State.PLAYING:
 		return
-	_queue.clear()
+	conveyor.clear()
 	left_box.clear()
 	right_box.clear()
 	score = 0
@@ -40,43 +48,44 @@ func start() -> void:
 	changed.emit()
 
 
-## 経過時間に応じて果実を供給する。[br]
+## 供給時刻ごとに搬送を進め、長いフレームでも生成位置を重ねない。[br]
 ## [param delta]: 前回の更新からの経過秒数。
 func advance(delta: float) -> void:
-	if state != State.PLAYING or delta <= 0.0:
+	if state != State.PLAYING or delta <= 0.0 or not is_finite(delta):
 		return
-	_supply_elapsed += delta
-	while _supply_elapsed >= settings.supply_interval and state == State.PLAYING:
-		_supply_elapsed -= settings.supply_interval
-		supply()
-
-
-## 果実を一個供給する。満杯の状態への追加供給でゲームオーバーにする。
-func supply() -> void:
-	if state != State.PLAYING:
-		return
-	if _queue.size() >= settings.queue_capacity:
-		state = State.GAME_OVER
-	else:
-		_queue.append(_generator.generate())
+	while delta > 0.0 and state == State.PLAYING:
+		var until_supply := maxf(0.0, settings.supply_interval - _supply_elapsed)
+		var step := minf(delta, until_supply)
+		conveyor.advance(step)
+		_supply_elapsed += step
+		delta -= step
+		if _supply_elapsed >= settings.supply_interval:
+			_supply_elapsed = 0.0
+			supply()
 	changed.emit()
 
 
-## 待機列の参照用コピーを返す。並び順は生成順。
-func get_queue() -> Array[FruitData]:
-	return _queue.duplicate()
+## 果実を供給する。容量超過または入口の詰まりでゲームを終了する。
+func supply() -> void:
+	if state != State.PLAYING:
+		return
+	if not conveyor.add_fruit(_generator.generate()):
+		state = State.GAME_OVER
+	changed.emit()
 
 
-## 先頭果実を箱に投入する。処理できなければfalseを返す。[br]
+## 到着した先頭果実を選択した箱へ渡す。処理できなければfalseを返す。[br]
 ## [param side]: 投入先の箱。
 func sort_fruit(side: BoxSide) -> bool:
-	if state != State.PLAYING or _queue.is_empty():
+	if state != State.PLAYING:
 		return false
 	if side != BoxSide.LEFT and side != BoxSide.RIGHT:
 		return false
-	var fruit: FruitData = _queue.pop_front()
+	var fruit := conveyor.take_ready_fruit()
+	if fruit == null:
+		return false
 	var box := left_box if side == BoxSide.LEFT else right_box
-	box.add(fruit)
+	box.add_fruit(fruit)
 	changed.emit()
 	return true
 

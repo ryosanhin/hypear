@@ -3,7 +3,17 @@
 [ext_resource type="Texture2D" uid="uid://crckknvc07tx8" path="res://backgrounds/floor_tile.png" id="1_f5uci"]
 [ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://backgrounds/conveyor_tile_set.tres" id="1_u0rji"]
 
+[ext_resource type="Script" path="res://backgrounds/conveyor.gd" id="3_script"]
+
+[sub_resource type="Curve2D" id="Curve2D_fruit"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 480, -48, 0, 0, 0, 26.509668, 480, 144, -26.509668, 0, 0, 0, 528, 192, 0, 0, 26.509668, 0, 720, 192, 0, -26.509668, 0, 26.509668, 768, 240, 26.509668, 0, 0, 0, 720, 288, 0, 0, -26.509668, 0, 240, 288, 0, -26.509668, 0, 26.509668, 192, 336, -26.509668, 0, 0, 0, 240, 384, 0, 0, 26.509668, 0, 432, 384, 0, -26.509668, 0, 0, 480, 432, 0, 0, 0, 0, 480, 504)
+}
+point_count = 12
+
 [node name="Conveyor" type="Node2D" unique_id=914560823]
+script = ExtResource("3_script")
 
 [node name="Node2D" type="Sprite2D" parent="." unique_id=759792737]
 texture_filter = 1
@@ -17,3 +27,6 @@ region_rect = Rect2(0, 0, 1024, 1024)
 texture_filter = 1
 tile_map_data = PackedByteArray("AAAUAA0AAQAAAAAAABAQAA0AAQAAAAAAABAMAA0AAQAAAAAAABAIAA0AAQAAAAAAABAEAA0AAQAAAAAAABAAAA0AAQAAAAAAABASAA0AAQAEAAAAABAOAA0AAQAEAAAAABAKAA0AAQAEAAAAABAGAA0AAQAEAAAAABACAA0AAQAEAAAAABAKAP//AQAAAAAAAFAKAAEAAQAEAAAAAFAJAAMAAQAAAAIAAEALAAMAAQAAAAAAAAANAAMAAQAEAAAAAAAPAAMAAQAEAAIAAAANAAUAAQAEAAAAAAAJAAUAAQAEAAAAAAAFAAUAAQAEAAAAAAAHAAcAAQAEAAAAAAAJAAcAAQAAAAIAAAAKAAkAAQAEAAAAAFALAAUAAQAAAAAAAAAHAAUAAQAAAAAAAAAGAAcAAQAAAAAAABAIAAcAAQAEAAAAABADAAYAAQAAAAIAAGAEAAgAAQAEAAIAADAQAAUAAQAAAAIAAFA=")
 tile_set = ExtResource("1_u0rji")
+
+[node name="FruitPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_fruit")
