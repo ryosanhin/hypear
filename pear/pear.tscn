@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bcnambv625tio"]
+
+[ext_resource type="Texture2D" uid="uid://1fl2k1kg5fro" path="res://pear/pear.png" id="1_sf8sb"]
+
+[node name="Pear" type="Sprite2D" unique_id=1666238198]
+texture_filter = 1
+texture = ExtResource("1_sf8sb")
+offset = Vector2(0, -48)

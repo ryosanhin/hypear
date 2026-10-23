@@ -1,114 +1,106 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://byt23a87ocmm5"]
 
-[ext_resource type="Script" path="res://scenes/game/game.gd" id="1"]
-[ext_resource type="PackedScene" path="res://backgrounds/conveyor.tscn" id="2"]
+[ext_resource type="Script" uid="uid://chg7418o7pi87" path="res://scenes/game/game.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://backgrounds/conveyor.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://views/player_view.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://views/box_view.tscn" id="4"]
-[ext_resource type="Resource" path="res://game/demo_settings.tres" id="5"]
+[ext_resource type="Script" uid="uid://bduqtp860kc06" path="res://game/game_session.gd" id="6_session"]
 
-[ext_resource type="Script" path="res://game/game_session.gd" id="6_session"]
-
-[node name="Game" type="Node2D"]
+[node name="Game" type="Node2D" unique_id=726251494]
 script = ExtResource("1")
 
-[node name="Conveyor" parent="." instance=ExtResource("2")]
+[node name="Conveyor" parent="." unique_id=2026519136 instance=ExtResource("2")]
 
-[node name="Player" parent="." instance=ExtResource("3")]
+[node name="Player" parent="." unique_id=869056657 instance=ExtResource("3")]
 position = Vector2(480, 570)
 
-[node name="LeftBox" parent="." instance=ExtResource("4")]
+[node name="LeftBox" parent="." unique_id=2096603432 instance=ExtResource("4")]
 position = Vector2(285, 560)
 
-[node name="RightBox" parent="." instance=ExtResource("4")]
+[node name="RightBox" parent="." unique_id=1692497799 instance=ExtResource("4")]
 position = Vector2(675, 560)
 
-[node name="GameSession" type="Node" parent="." node_paths=PackedStringArray("conveyor", "left_box", "right_box")]
+[node name="GameSession" type="Node" parent="." unique_id=470072350 node_paths=PackedStringArray("conveyor", "left_box", "right_box")]
 script = ExtResource("6_session")
-settings = ExtResource("5")
 conveyor = NodePath("../Conveyor")
 left_box = NodePath("../LeftBox")
 right_box = NodePath("../RightBox")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=575587609]
+visible = false
 
-[node name="Score" type="Label" parent="UI"]
+[node name="Score" type="Label" parent="UI" unique_id=420133365]
 offset_left = 35.0
 offset_top = 20.0
 offset_right = 485.0
 offset_bottom = 80.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 32
 text = "SCORE  0"
-horizontal_alignment = 0
 vertical_alignment = 1
 
-[node name="QueueCount" type="Label" parent="UI"]
+[node name="QueueCount" type="Label" parent="UI" unique_id=1233893448]
 offset_left = 540.0
 offset_top = 20.0
 offset_right = 925.0
 offset_bottom = 80.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 28
 text = "QUEUE  0 / 10"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Instructions" type="Label" parent="UI"]
+[node name="Instructions" type="Label" parent="UI" unique_id=1039092073]
 offset_left = 35.0
 offset_top = 100.0
 offset_right = 420.0
 offset_bottom = 225.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 22
-text = "SORTING STATION\nWait for fruit to arrive\nLEFT / RIGHT: sort\nDOWN: ship both boxes"
-horizontal_alignment = 0
+text = "SORTING STATION
+Wait for fruit to arrive
+LEFT / RIGHT: sort
+DOWN: ship both boxes"
 vertical_alignment = 1
 
-[node name="Target" type="Label" parent="UI"]
+[node name="Target" type="Label" parent="UI" unique_id=547417485]
 offset_left = 590.0
 offset_top = 435.0
 offset_right = 935.0
 offset_bottom = 475.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 20
 text = "Current fruit: --"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LeftCaption" type="Label" parent="UI"]
+[node name="LeftCaption" type="Label" parent="UI" unique_id=725025048]
 offset_left = 155.0
 offset_top = 475.0
 offset_right = 415.0
 offset_bottom = 510.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 22
 text = "LEFT BOX  [Left]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RightCaption" type="Label" parent="UI"]
+[node name="RightCaption" type="Label" parent="UI" unique_id=1695823666]
 offset_left = 545.0
 offset_top = 475.0
 offset_right = 805.0
 offset_bottom = 510.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 22
 text = "RIGHT BOX  [Right]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Shipment" type="Label" parent="UI"]
+[node name="Shipment" type="Label" parent="UI" unique_id=499051614]
 offset_left = 540.0
 offset_top = 100.0
 offset_right = 925.0
 offset_bottom = 140.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 22
 text = "Ship both boxes with DOWN"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DebugToggle" type="CheckButton" parent="UI"]
+[node name="DebugToggle" type="CheckButton" parent="UI" unique_id=390342783]
 offset_left = 35.0
 offset_top = 655.0
 offset_right = 355.0
@@ -116,34 +108,34 @@ offset_bottom = 705.0
 focus_mode = 0
 text = "Show weights [D]"
 
-[node name="Overlay" type="ColorRect" parent="UI"]
+[node name="Overlay" type="ColorRect" parent="UI" unique_id=1701168143]
 offset_right = 960.0
 offset_bottom = 720.0
 color = Color(0.035, 0.065, 0.1, 0.97)
 
-[node name="Title" type="Label" parent="UI/Overlay"]
+[node name="Title" type="Label" parent="UI/Overlay" unique_id=1362098096]
+layout_mode = 0
 offset_left = 70.0
 offset_top = 140.0
 offset_right = 890.0
 offset_bottom = 220.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 36
 text = "HYPEAR / SORTING DEMO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Summary" type="Label" parent="UI/Overlay"]
+[node name="Summary" type="Label" parent="UI/Overlay" unique_id=681639154]
+layout_mode = 0
 offset_left = 100.0
 offset_top = 255.0
 offset_right = 860.0
 offset_bottom = 435.0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 26
-text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Start" type="Button" parent="UI/Overlay"]
+[node name="Start" type="Button" parent="UI/Overlay" unique_id=1260924957]
+layout_mode = 0
 offset_left = 270.0
 offset_top = 485.0
 offset_right = 690.0
