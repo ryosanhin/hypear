@@ -9,8 +9,8 @@
 ## Playable demo
 
 Open `project.godot` in Godot 4 and run the project (F6 runs the current scene;
-F5 runs the game). The demo uses the included animated conveyor tiles and placeholder shapes for fruit,
-the worker and boxes. It does not require external assets.
+F5 runs the game). The demo uses the included animated conveyor tiles, pear and
+cardboard scenes, and a placeholder shape for the worker. It does not require external assets.
 The original project's Godot 4.7 feature declaration is preserved; this demo was
 validated with Godot 4.6.1 using the compatibility renderer.
 
@@ -22,6 +22,8 @@ validated with Godot 4.6.1 using the compatibility renderer.
 | D or Show weights checkbox | Toggle all fruit weight numbers |
 
 Fruit weights are 2, 3, 5, 7 and 10, with equal probabilities by default.
+Pear sprites use `pear/pear.tscn` at its original size for weight 5; each sprite
+scales by `weight / 5.0` around its foot, while weight labels keep a fixed font size.
 A fruit arrives every 1.5 seconds. The queue holds 10 fruit; the next supply while
 full ends the game. The count includes all fruit currently on the conveyor.
 Fruit follows the belt from the top entrance through the bends to the sorting
@@ -71,7 +73,8 @@ it visually in the editor as needed. `fruit_spacing` belongs to the conveyor.
 If the endpoint changes, also move the worker, boxes and HUD in the game scene.
 Check spacing, travel time, capacity and supply interval together when tuning.
 
-To add art, replace placeholder drawing in the view scenes, retaining the fruit
+The fruit and box views instance `pear/pear.tscn` and `cardboard/cardboard.tscn`.
+To change their art, edit those scenes, retaining the fruit
 `configure()` method and box `configure()`, `add_fruit()` and `clear()` methods.
 The HUD and overlays are editable nodes in `scenes/game/game.tscn`. Scoring can be
 changed in `game/score_calculator.gd` without modifying the components.
@@ -102,7 +105,7 @@ belt centers, fruit overlap at bends, animation direction, HUD placement and
 sorting feel. Headless tests do not verify rendered appearance.
 
 This is a fixed-layout 960 x 720 demo with 4:3 letterboxing. Text is currently
-English and visuals are placeholders. It has no audio, character abilities,
+English and the worker visual is a placeholder. It has no audio, character abilities,
 stages, saves, rankings or difficulty progression.
 
 ## License

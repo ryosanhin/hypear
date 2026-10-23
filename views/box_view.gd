@@ -40,10 +40,3 @@ func clear() -> void:
 func _refresh() -> void:
 	_label.text = "%d / %d" % [weight, _target]
 	_label.modulate = Color("ffb09b") if weight > _target else Color.WHITE
-
-
-## 仮の箱を描画する。
-func _draw() -> void:
-	draw_rect(Rect2(-100, -45, 200, 90), Color("74593d"))
-	draw_rect(Rect2(-100, -45, 200, 90), Color("dcb77b"), false, 4.0)
-	draw_line(Vector2(-100, -25), Vector2(100, -25), Color("dcb77b"), 3.0)
