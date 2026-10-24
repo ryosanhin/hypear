@@ -23,7 +23,9 @@ validated with Godot 4.6.1 using the compatibility renderer.
 
 Fruit weights are 2, 3, 5, 7 and 10, with equal probabilities by default.
 Pear sprites use `pear/pear.tscn` at its original size for weight 5; each sprite
-scales by `weight / 5.0` around its foot, while weight labels keep a fixed font size.
+scales by the cube root of `weight / 5.0` around its foot, while weight labels keep
+a fixed font size. This treats weight as proportional to volume for fruit of the
+same shape and density.
 A fruit arrives every 1.5 seconds. The queue holds 10 fruit; the next supply while
 full ends the game. The count includes all fruit currently on the conveyor.
 Fruit follows the belt from the top entrance through the bends to the sorting
