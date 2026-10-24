@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bynpr1ss5gqby"]
+
+[ext_resource type="Texture2D" uid="uid://bt4m2ggn3dkq3" path="res://umamusume/furioso_front.png" id="1_1l1n4"]
+[ext_resource type="Texture2D" uid="uid://dqbbjnsh23wh3" path="res://umamusume/furioso_front_hands.png" id="2_ugqs2"]
+
+[node name="Character" type="Node2D" unique_id=1421077664]
+
+[node name="Body" type="Sprite2D" parent="." unique_id=589924340]
+texture = ExtResource("1_1l1n4")
+
+[node name="HoldPoint" type="Sprite2D" parent="Body" unique_id=105631025]
+position = Vector2(0, 72)
+
+[node name="Hands" type="Sprite2D" parent="Body" unique_id=628066370]
+texture = ExtResource("2_ugqs2")
