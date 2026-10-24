@@ -95,3 +95,11 @@ func clear() -> void:
 		follower.queue_free()
 	_followers.clear()
 	_fruits.clear()
+
+
+## 到着済みの果実表示を切り替え、搬送中の果実は表示する。[br]
+## [param enabled]: 到着済みの果実もコンベア上に表示するか。
+func set_ready_fruit_visible(enabled: bool) -> void:
+	var ready := peek_ready_fruit()
+	for index in _followers.size():
+		_followers[index].visible = enabled or _fruits[index] != ready

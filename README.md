@@ -10,7 +10,7 @@
 
 Open `project.godot` in Godot 4 and run the project (F6 runs the current scene;
 F5 runs the game). The demo uses the included animated conveyor tiles, pear and
-cardboard scenes, and a placeholder shape for the worker. It does not require external assets.
+cardboard scenes, and the character in `character/character.tscn`. It does not require external assets.
 The original project's Godot 4.7 feature declaration is preserved; this demo was
 validated with Godot 4.6.1 using the compatibility renderer.
 
@@ -52,7 +52,8 @@ be positive. Time, speed, capacity and target must also be positive.
 - `game/`: fruit data, generation, box state, scoring and the `GameSession` coordinator.
 - `backgrounds/conveyor.tscn`: floor, animated belt, editable path and conveyor component.
 - `scenes/game/`: main scene, component connections, input and HUD.
-- `views/`: fruit and worker presentation scenes, and the box component.
+- `character/`: character presentation, held fruit and sorting poses.
+- `views/`: fruit presentation and the box component.
 - `tests/<target>/<target>_test.gd`: independently runnable headless test suites.
 - `tests/<target>/fixtures/`: settings and scripts used only by that suite.
 - `tests/supports/test_helper.gd`: shared assertions and result reporting.
@@ -78,6 +79,15 @@ Check spacing, travel time, capacity and supply interval together when tuning.
 The fruit and box views instance `pear/pear.tscn` and `cardboard/cardboard.tscn`.
 To change their art, edit those scenes, retaining the fruit
 `configure()` method and box `configure()`, `add_fruit()` and `clear()` methods.
+The game displays the arrived fruit under `Body/HoldPoint`, between the body and
+front hands, and hides its conveyor visual until it is sorted. Fruit size and
+weight display remain consistent with the conveyor. On a successful sort, the
+character shows the selected side pose for `pose_duration` seconds (default 0.2),
+then returns to the front pose. Set `left_pose_texture` and `right_pose_texture`
+on `character.tscn` independently; a missing side uses the other texture flipped
+horizontally. If both are empty, the front pose is retained. The included scene
+sets only the left texture.
+
 The HUD and overlays are editable nodes in `scenes/game/game.tscn`. Scoring can be
 changed in `game/score_calculator.gd` without modifying the components.
 
@@ -107,7 +117,7 @@ belt centers, fruit overlap at bends, animation direction, HUD placement and
 sorting feel. Headless tests do not verify rendered appearance.
 
 This is a fixed-layout 960 x 720 demo with 4:3 letterboxing. Text is currently
-English and the worker visual is a placeholder. It has no audio, character abilities,
+English. It has no audio, character abilities,
 stages, saves, rankings or difficulty progression.
 
 ## License

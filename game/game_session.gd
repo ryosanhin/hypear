@@ -4,6 +4,7 @@ extends Node
 
 signal changed
 signal shipped(points: int)
+signal fruit_sorted(side: BoxSide)
 
 enum State { READY, PLAYING, GAME_OVER }
 enum BoxSide { LEFT, RIGHT }
@@ -86,6 +87,7 @@ func sort_fruit(side: BoxSide) -> bool:
 		return false
 	var box := left_box if side == BoxSide.LEFT else right_box
 	box.add_fruit(fruit)
+	fruit_sorted.emit(side)
 	changed.emit()
 	return true
 

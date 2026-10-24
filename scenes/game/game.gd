@@ -4,6 +4,7 @@ extends Node2D
 var _show_weights: bool
 
 @onready var session: GameSession = $GameSession
+@onready var _player: SortingCharacter = $Player
 @onready var _conveyor: Conveyor = $Conveyor
 @onready var _score: Label = $UI/Score
 @onready var _queue_count: Label = $UI/QueueCount
@@ -24,6 +25,7 @@ func _ready() -> void:
 	_start_button.pressed.connect(_on_start_pressed)
 	session.changed.connect(_refresh)
 	session.shipped.connect(_on_shipped)
+	session.fruit_sorted.connect(_on_fruit_sorted)
 	_refresh()
 
 
@@ -65,6 +67,12 @@ func _on_shipped(points: int) -> void:
 	_shipment.text = "Shipment: +%d" % points
 
 
+## 成功した投入の方向をキャラクター表示へ渡す。[br]
+## [param side]: 投入先の箱。
+func _on_fruit_sorted(side: GameSession.BoxSide) -> void:
+	_player.show_sort_pose(side == GameSession.BoxSide.LEFT)
+
+
 ## ゲームの変更を各表示へ反映する。
 func _refresh() -> void:
 	var fruits := _conveyor.get_queue()
@@ -76,6 +84,10 @@ func _refresh() -> void:
 	)
 	_target.text = "Current fruit: --"
 	var ready_fruit := _conveyor.peek_ready_fruit()
+	_player.set_fruit(ready_fruit, _show_weights)
+	_conveyor.set_ready_fruit_visible(false)
+	if session.state != GameSession.State.PLAYING:
+		_player.reset_pose()
 	if ready_fruit != null:
 		_target.text = (
 				"Current fruit: %d" % ready_fruit.weight

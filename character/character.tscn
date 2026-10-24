@@ -3,7 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://bt4m2ggn3dkq3" path="res://umamusume/furioso_front.png" id="1_1l1n4"]
 [ext_resource type="Texture2D" uid="uid://dqbbjnsh23wh3" path="res://umamusume/furioso_front_hands.png" id="2_ugqs2"]
 
+[ext_resource type="Script" path="res://character/character.gd" id="3_script"]
+[ext_resource type="Texture2D" path="res://umamusume/furioso_left.png" id="4_left"]
+
 [node name="Character" type="Node2D" unique_id=1421077664]
+script = ExtResource("3_script")
+left_pose_texture = ExtResource("4_left")
 
 [node name="Body" type="Sprite2D" parent="." unique_id=589924340]
 texture = ExtResource("1_1l1n4")
