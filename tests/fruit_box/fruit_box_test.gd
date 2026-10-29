@@ -15,7 +15,7 @@ func _initialize() -> void:
 ## 実シーンの重量加算、超過と初期化を検証する。
 func _run() -> void:
 	_helper.change_test_name("weight_and_display")
-	var box := BOX_SCENE.instantiate() as FruitBox
+	var box := BOX_SCENE.instantiate() as BoxView
 	root.add_child(box)
 	box.configure(20)
 	box.add_fruit(FruitData.new(7))

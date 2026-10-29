@@ -51,7 +51,7 @@ func _test_poses() -> void:
 	var hands := character.get_node("Body/Hands") as Sprite2D
 	var view := character.get_node("Body/HoldPoint").get_child(0) as Node2D
 	var front := body.texture
-	var left := character.left_pose_texture
+	var left := character._left_pose_texture
 	var right := GradientTexture2D.new()
 	character.set_fruit(FruitData.new(5), true)
 	character.show_sort_pose(true)
@@ -61,21 +61,21 @@ func _test_poses() -> void:
 	character.show_sort_pose(false)
 	_helper.assert_same(body.texture, left, "右未設定なら左画像を使う")
 	_helper.assert_true(body.flip_h, "左画像を右用に反転する")
-	character.right_pose_texture = right
+	character._right_pose_texture = right
 	character.show_sort_pose(false)
 	_helper.assert_same(body.texture, right, "右画像があれば優先する")
 	_helper.assert_false(body.flip_h, "専用画像は反転しない")
-	character.left_pose_texture = null
+	character._left_pose_texture = null
 	character.show_sort_pose(true)
 	_helper.assert_same(body.texture, right, "左未設定なら右画像を使う")
 	_helper.assert_true(body.flip_h, "右画像を左用に反転する")
-	character._process(character.pose_duration / 2.0)
+	character._process(character._pose_duration / 2.0)
 	_helper.assert_same(body.texture, right, "表示時間の途中ではポーズを維持")
-	character._process(character.pose_duration)
+	character._process(character._pose_duration)
 	_helper.assert_same(body.texture, front, "表示時間後に正面へ戻る")
 	_helper.assert_false(body.flip_h, "正面に反転を残さない")
 	_helper.assert_true(hands.visible and view.visible, "正面の手と待機果実を復元")
-	character.right_pose_texture = null
+	character._right_pose_texture = null
 	character.show_sort_pose(false)
 	_helper.assert_same(body.texture, front, "両側未設定なら正面を維持")
 	character.free()

@@ -157,8 +157,8 @@ func _test_overflow_and_retry() -> void:
 func _make_session(settings: DemoSettings) -> GameSession:
 	var fixture := Node.new()
 	var conveyor := CONVEYOR_SCENE.instantiate() as Conveyor
-	var left_box := BOX_SCENE.instantiate() as FruitBox
-	var right_box := BOX_SCENE.instantiate() as FruitBox
+	var left_box := BOX_SCENE.instantiate() as BoxView
+	var right_box := BOX_SCENE.instantiate() as BoxView
 	fixture.add_child(conveyor)
 	fixture.add_child(left_box)
 	fixture.add_child(right_box)

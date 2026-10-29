@@ -1,42 +1,29 @@
-class_name FruitBox
+class_name BoxView
 extends Node2D
 ## 果実の重量保持と箱の表示を担当する。
 
-var _state := BoxState.new()
-var _target: int = 20
-var weight: int:
-	get:
-		return _state.weight
+@export var _debug_label: Label
 
-@onready var _label: Label = $Weight
+var _box_state: BoxState
 
 
-## 単独配置時も初期重量を表示する。
-func _ready() -> void:
-	_refresh()
+## コンストラクタの代わり。[br]
+## [param init_box_state]: 参照する箱の状態。
+func construct(init_box_state: BoxState) -> BoxView:
+	_box_state = init_box_state
+	_box_state.weight_changed.connect(_debug_display)
+	_box_state.shipped.connect(_ship_animation)
+	return self
 
 
-## 目標重量を設定して表示を更新する。[br]
-## [param target]: 出荷時の目標重量。
-func configure(target: int) -> void:
-	_target = target
-	_refresh()
+## 出荷アニメーション用。
+func _ship_animation(_shipped_weight: int) -> void:
+	if _box_state.weight_changed.is_connected(_debug_display):
+		_box_state.weight_changed.disconnect(_debug_display)
+	if _box_state.weight_changed.is_connected(_ship_animation):
+		_box_state.weight_changed.disconnect(_ship_animation)
 
 
-## 果実を受け入れて重量と表示を更新する。[br]
-## [param fruit]: 投入する果実。
-func add_fruit(fruit: FruitData) -> void:
-	_state.add(fruit)
-	_refresh()
-
-
-## 箱を空にして表示を更新する。
-func clear() -> void:
-	_state.clear()
-	_refresh()
-
-
-## 現在重量と目標重量を表示する。
-func _refresh() -> void:
-	_label.text = "%d / %d" % [weight, _target]
-	_label.modulate = Color("ffb09b") if weight > _target else Color.WHITE
+## デバッグ用の表示。
+func _debug_display(weight: int) -> void:
+	_debug_label.text = "%d" % weight

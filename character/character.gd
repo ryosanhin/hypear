@@ -4,36 +4,26 @@ extends Node2D
 
 const FRUIT_SCENE := preload("res://views/fruit_view.tscn")
 
-@export var left_pose_texture: Texture2D
-@export var right_pose_texture: Texture2D
-@export_range(0.05, 1.0) var pose_duration: float = 0.2
-
 var _front_texture: Texture2D
-var _pose_remaining: float = 0.0
-var _fruit_view: Node2D
+@export var _left_pose_texture: Texture2D
+@export var _right_pose_texture: Texture2D
+@export_range(0.05, 1.0) var _pose_duration: float = 0.2
+
 var _has_fruit: bool = false
 
-@onready var _body: Sprite2D = $Body
-@onready var _hold_point: Sprite2D = $Body/HoldPoint
-@onready var _hands: Sprite2D = $Body/Hands
+@export var _body: Sprite2D
+@export var _fruit_view: Node2D
+@export var _hands: Sprite2D
+
+@export var _timer: Timer
 
 
 ## 正面画像を保存し、手前の手と奥の胴体の間に果実表示を作成する。
 func _ready() -> void:
 	_front_texture = _body.texture
-	_fruit_view = FRUIT_SCENE.instantiate() as Node2D
-	_hold_point.add_child(_fruit_view)
 	_fruit_view.visible = false
-
-
-## 投入ポーズの表示時間を進め、終了時に正面へ戻す。[br]
-## [param delta]: 前フレームからの経過秒数。
-func _process(delta: float) -> void:
-	if _pose_remaining <= 0.0:
-		return
-	_pose_remaining = maxf(0.0, _pose_remaining - delta)
-	if _pose_remaining == 0.0:
-		reset_pose()
+	_timer.wait_time = _pose_duration
+	_timer.timeout.connect(reset_pose)
 
 
 ## 手元に表示する果実を更新する。nullなら非表示にする。[br]
@@ -45,14 +35,14 @@ func set_fruit(fruit: FruitData, show_weight: bool) -> void:
 		# キャラクターの表示倍率にかかわらず、コンベア上と同じ果実サイズを保つ。
 		_fruit_view.global_scale = Vector2.ONE
 		_fruit_view.configure(fruit.weight, show_weight)
-	_fruit_view.visible = _has_fruit and _pose_remaining <= 0.0
+	_fruit_view.visible = _has_fruit
 
 
 ## 指定方向の投入画像を表示する。未設定なら反対側を反転して補う。[br]
 ## [param to_left]: 左の箱へ投入するか。
 func show_sort_pose(to_left: bool) -> void:
-	var texture := left_pose_texture if to_left else right_pose_texture
-	var fallback := right_pose_texture if to_left else left_pose_texture
+	var texture := _left_pose_texture if to_left else _right_pose_texture
+	var fallback := _right_pose_texture if to_left else _left_pose_texture
 	if texture == null and fallback == null:
 		reset_pose()
 		return
@@ -60,12 +50,10 @@ func show_sort_pose(to_left: bool) -> void:
 	_body.flip_h = texture == null
 	_hands.visible = false
 	_fruit_view.visible = false
-	_pose_remaining = pose_duration
 
 
 ## 投入ポーズを解除し、正面画像と手元の表示へ戻す。
 func reset_pose() -> void:
-	_pose_remaining = 0.0
 	_body.texture = _front_texture
 	_body.flip_h = false
 	_hands.visible = true

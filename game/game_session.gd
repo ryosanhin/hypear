@@ -11,8 +11,8 @@ enum BoxSide { LEFT, RIGHT }
 
 @export var settings: DemoSettings = preload("res://game/demo_settings.tres")
 @export var conveyor: Conveyor
-@export var left_box: FruitBox
-@export var right_box: FruitBox
+@export var left_box: BoxView
+@export var right_box: BoxView
 
 var state: State = State.READY
 var score: int = 0

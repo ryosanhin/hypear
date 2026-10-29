@@ -50,7 +50,7 @@ func _test_scene_flow() -> void:
 	var arrived := scene.get_node("Conveyor/FruitPath").get_child(0) as PathFollow2D
 	_helper.assert_false(arrived.visible, "到着した果実を二重表示しない")
 	_press(scene, "sort_left")
-	_helper.assert_same(body.texture, player.left_pose_texture, "左投入で横向きへ切り替え")
+	_helper.assert_same(body.texture, player._left_pose_texture, "左投入で横向きへ切り替え")
 	_helper.assert_false(body.flip_h or held.visible, "左投入は反転せず果実を消す")
 	scene.session.conveyor.advance(20.0)
 	_press(scene, "sort_right")
