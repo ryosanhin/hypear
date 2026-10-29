@@ -156,7 +156,7 @@ func _test_overflow_and_retry() -> void:
 ## [param settings]: 各テスト固有の進行設定。
 func _make_session(settings: DemoSettings) -> GameSession:
 	var fixture := Node.new()
-	var conveyor := CONVEYOR_SCENE.instantiate() as Conveyor
+	var conveyor := CONVEYOR_SCENE.instantiate() as MainConveyor
 	var left_box := BOX_SCENE.instantiate() as BoxView
 	var right_box := BOX_SCENE.instantiate() as BoxView
 	fixture.add_child(conveyor)

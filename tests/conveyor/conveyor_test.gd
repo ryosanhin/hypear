@@ -22,7 +22,7 @@ func _run() -> void:
 ## 経路上での前進、間隔、到着条件とFIFOを検証する。
 func _test_transport() -> void:
 	_helper.change_test_name("transport")
-	var conveyor := CONVEYOR_SCENE.instantiate() as Conveyor
+	var conveyor := CONVEYOR_SCENE.instantiate() as MainConveyor
 	root.add_child(conveyor)
 	conveyor.configure(DemoSettings.new())
 	var first := CargoItemData.new(2)
@@ -57,7 +57,7 @@ func _test_transport() -> void:
 ## 入口の重複生成、容量超過、参照コピーと初期化を検証する。
 func _test_limits() -> void:
 	_helper.change_test_name("limits")
-	var conveyor := CONVEYOR_SCENE.instantiate() as Conveyor
+	var conveyor := CONVEYOR_SCENE.instantiate() as MainConveyor
 	root.add_child(conveyor)
 	var settings := DemoSettings.new()
 	settings.queue_capacity = 2

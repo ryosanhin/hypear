@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://b6qpwg2vmpc8"]
 
 [ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://backgrounds/conveyor_tile_set.tres" id="1_u0rji"]
-[ext_resource type="Script" uid="uid://csq5iycsd5m2i" path="res://backgrounds/conveyor.gd" id="3_script"]
+[ext_resource type="Script" uid="uid://csq5iycsd5m2i" path="res://backgrounds/main_conveyor.gd" id="3_script"]
 
 [sub_resource type="Curve2D" id="Curve2D_fruit"]
 bake_interval = 2.0

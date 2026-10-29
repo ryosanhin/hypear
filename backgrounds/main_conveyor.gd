@@ -1,4 +1,4 @@
-class_name Conveyor
+class_name MainConveyor
 extends Node2D
 ## 果実の受け入れ、経路上の搬送、待機と取り出しを管理する。
 

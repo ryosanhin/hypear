@@ -5,7 +5,7 @@ var _show_weights: bool
 
 @onready var session: GameSession = $GameSession
 @onready var _player: SortingCharacter = $Player
-@onready var _conveyor: Conveyor = $Conveyor
+@onready var _conveyor: MainConveyor = $MainConveyor
 @onready var _score: Label = $UI/Score
 @onready var _queue_count: Label = $UI/QueueCount
 @onready var _target: Label = $UI/Target
@@ -103,5 +103,5 @@ func _refresh() -> void:
 		_start_button.text = "START (Enter / Space)"
 	elif session.state == GameSession.State.GAME_OVER:
 		_title.text = "GAME OVER"
-		_summary.text = "Conveyor full or entrance blocked!\nFinal score: %d" % session.score
+		_summary.text = "MainConveyor full or entrance blocked!\nFinal score: %d" % session.score
 		_start_button.text = "RETRY (Enter / Space)"
