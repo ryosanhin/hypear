@@ -1,7 +1,8 @@
 class_name BoxView
 extends Node2D
-## 果実の重量保持と箱の表示を担当する。
+## 箱の表示を担当する。
 
+@export var _cardboard_sprite: Sprite2D
 @export var _debug_label: Label
 
 var _box_state: BoxState
