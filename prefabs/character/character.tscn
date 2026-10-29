@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bt4m2ggn3dkq3" path="res://umamusume/furioso_front.png" id="1_1l1n4"]
 [ext_resource type="Texture2D" uid="uid://dqbbjnsh23wh3" path="res://umamusume/furioso_front_hands.png" id="2_ugqs2"]
-[ext_resource type="Script" uid="uid://l1ciev0d1asb" path="res://character/character.gd" id="3_script"]
+[ext_resource type="Script" uid="uid://l1ciev0d1asb" path="res://prefabs/character/character.gd" id="3_script"]
 [ext_resource type="PackedScene" uid="uid://bcnambv625tio" path="res://prefabs/cargo_item/cargo_item.tscn" id="4_0rvpn"]
 [ext_resource type="Texture2D" uid="uid://dwgmnb30t3jt2" path="res://umamusume/furioso_left.png" id="4_left"]
 

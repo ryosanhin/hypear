@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://pxjcsgc58q0l"]
 
-[ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://backgrounds/conveyor_tile_set.tres" id="1_hlgup"]
+[ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://prefabs/conveyors/conveyor_tile_set.tres" id="1_hlgup"]
 
 [sub_resource type="Curve2D" id="Curve2D_gyxp3"]
 _data = {

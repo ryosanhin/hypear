@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://byt23a87ocmm5"]
 
 [ext_resource type="Script" uid="uid://chg7418o7pi87" path="res://scenes/game/game.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://backgrounds/main_conveyor.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://character/character.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://prefabs/conveyors/main_conveyor.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://prefabs/character/character.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://dws5x03rm72mu" path="res://prefabs/boxes/box_view.tscn" id="4"]
 [ext_resource type="Script" uid="uid://bduqtp860kc06" path="res://game/game_session.gd" id="6_session"]
 

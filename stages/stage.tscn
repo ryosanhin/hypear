@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://lhlc3sxlq4mr"]
 
 [ext_resource type="Texture2D" uid="uid://crckknvc07tx8" path="res://backgrounds/floor_tile.png" id="1_cyhdb"]
-[ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://backgrounds/main_conveyor.tscn" id="1_oiaqk"]
+[ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://prefabs/conveyors/main_conveyor.tscn" id="1_oiaqk"]
 [ext_resource type="PackedScene" uid="uid://dws5x03rm72mu" path="res://prefabs/boxes/box_view.tscn" id="2_fa2lt"]
-[ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://character/character.tscn" id="3_qghdb"]
-[ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://backgrounds/shipping_conveyor.tscn" id="5_ar3c0"]
+[ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://prefabs/character/character.tscn" id="3_qghdb"]
+[ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://prefabs/conveyors/shipping_conveyor.tscn" id="5_ar3c0"]
 
 [node name="Stage" type="Node" unique_id=1784597213]
 
