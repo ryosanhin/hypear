@@ -11,6 +11,7 @@ point_count = 2
 [node name="ShippingConveyor" type="Node2D" unique_id=1465225219]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1717828582]
+texture_filter = 1
 tile_map_data = PackedByteArray("AAAAAP//AQAAAAAAAAAEAP//AQAAAAAAAAAIAP//AQAAAAAAAAAMAP//AQAAAAAAAAAQAP//AQAAAAAAAAAUAP//AQAAAAAAAAD+////AQAEAAAAAAACAP//AQAEAAAAAAAGAP//AQAEAAAAAAAKAP//AQAEAAAAAAAOAP//AQAEAAAAAAASAP//AQAEAAAAAAAWAP//AQAEAAAAAAD8////AQAAAAAAAAA=")
 tile_set = ExtResource("1_hlgup")
 
