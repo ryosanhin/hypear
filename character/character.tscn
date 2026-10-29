@@ -6,11 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://bcnambv625tio" path="res://prefabs/cargo_item/cargo_item.tscn" id="4_0rvpn"]
 [ext_resource type="Texture2D" uid="uid://dwgmnb30t3jt2" path="res://umamusume/furioso_left.png" id="4_left"]
 
-[node name="Character" type="Node2D" unique_id=1421077664 node_paths=PackedStringArray("_body", "_fruit_view", "_hands", "_timer")]
+[node name="Character" type="Node2D" unique_id=1421077664 node_paths=PackedStringArray("_body", "_cargo_item_view", "_hands", "_timer")]
 script = ExtResource("3_script")
 _left_pose_texture = ExtResource("4_left")
 _body = NodePath("Body")
-_fruit_view = NodePath("Body/HoldPoint/Pear")
+_cargo_item_view = NodePath("Body/HoldPoint/Pear")
 _hands = NodePath("Body/Hands")
 _timer = NodePath("Timer")
 

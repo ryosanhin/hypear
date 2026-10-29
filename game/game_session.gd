@@ -13,11 +13,10 @@ enum BoxSide { LEFT, RIGHT }
 @export var conveyor: Conveyor
 
 @export var left_box: BoxView
-var _left_box_state: BoxState
 @export var right_box: BoxView
+
+var _left_box_state: BoxState
 var _right_box_state: BoxState
-
-
 var state: State = State.READY
 var score: int = 0
 var _generator: FruitGenerator
@@ -31,10 +30,7 @@ func _ready() -> void:
 	_generator = FruitGenerator.new(settings)
 	conveyor.configure(settings)
 
-	_left_box_state = BoxState.new()
-	_right_box_state = BoxState.new()
-	left_box.construct(_left_box_state)
-	right_box.construct(_right_box_state)
+	_replace_boxes()
 
 
 ## ゲームの時間を進める。[br]
@@ -48,6 +44,7 @@ func start() -> void:
 	if state == State.PLAYING:
 		return
 	conveyor.clear()
+	_replace_boxes()
 	score = 0
 	_supply_elapsed = 0.0
 	state = State.PLAYING
@@ -90,8 +87,8 @@ func sort_fruit(side: BoxSide) -> bool:
 	var fruit := conveyor.take_ready_fruit()
 	if fruit == null:
 		return false
-	var box := left_box if side == BoxSide.LEFT else right_box
-	box.add_fruit(fruit)
+	var box_state := _left_box_state if side == BoxSide.LEFT else _right_box_state
+	box_state.add(fruit)
 	fruit_sorted.emit(side)
 	changed.emit()
 	return true
@@ -99,7 +96,7 @@ func sort_fruit(side: BoxSide) -> bool:
 
 ## 左右の箱を同時出荷して合計得点を返す。両方空の場合は出荷しない。
 func ship() -> int:
-	if state != State.PLAYING or (left_box.weight == 0 and right_box.weight == 0):
+	if state != State.PLAYING or (_left_box_state.weight == 0 and _right_box_state.weight == 0):
 		return 0
 	var points := ScoreCalculator.calculate(
 			_left_box_state.weight,
@@ -110,6 +107,21 @@ func ship() -> int:
 			settings.target_weight,
 	)
 	score += points
+	_replace_boxes(true)
 	shipped.emit(points)
 	changed.emit()
 	return points
+
+
+## 左右を空の箱の状態に交換し、表示を接続し直す。[br]
+## [param notify_shipment]: 交換前の箱に出荷を通知するか。
+func _replace_boxes(notify_shipment: bool = false) -> void:
+	var previous_left := _left_box_state
+	var previous_right := _right_box_state
+	_left_box_state = BoxState.new()
+	_right_box_state = BoxState.new()
+	if notify_shipment:
+		previous_left.ship()
+		previous_right.ship()
+	left_box.construct(_left_box_state)
+	right_box.construct(_right_box_state)

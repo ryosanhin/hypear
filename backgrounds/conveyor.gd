@@ -2,7 +2,7 @@ class_name Conveyor
 extends Node2D
 ## 果実の受け入れ、経路上の搬送、待機と取り出しを管理する。
 
-const FRUIT_SCENE := preload("res://views/fruit_view.tscn")
+const CARGO_ITEM_SCENE := preload("res://prefabs/cargo_item/cargo_item.tscn")
 
 @export_range(46.0, 100.0) var fruit_spacing: float = 56.0
 
@@ -34,9 +34,9 @@ func add_fruit(fruit: CargoItemData) -> bool:
 	follower.loop = false
 	follower.rotates = false
 	_path.add_child(follower)
-	var view := FRUIT_SCENE.instantiate() as Node2D
+	var view := CARGO_ITEM_SCENE.instantiate() as CargoItem
 	follower.add_child(view)
-	view.configure(fruit.weight, _show_weights)
+	view.construct(fruit.weight, _show_weights)
 	_fruits.append(fruit)
 	_followers.append(follower)
 	return true
@@ -84,8 +84,8 @@ func get_queue() -> Array[CargoItemData]:
 func set_show_weights(enabled: bool) -> void:
 	_show_weights = enabled
 	for index in _followers.size():
-		var view := _followers[index].get_child(0) as Node2D
-		view.configure(_fruits[index].weight, enabled)
+		var view := _followers[index].get_child(0) as CargoItem
+		view.construct(_fruits[index].weight, enabled)
 
 
 ## 全果実と表示を取り除き、空の搬送状態へ戻す。

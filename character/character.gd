@@ -2,14 +2,13 @@ class_name SortingCharacter
 extends Node2D
 ## 手元の果実表示と左右への投入ポーズを担当する。
 
-const FRUIT_SCENE := preload("res://views/fruit_view.tscn")
-
 var _front_texture: Texture2D
 @export var _left_pose_texture: Texture2D
 @export var _right_pose_texture: Texture2D
 @export_range(0.05, 1.0) var _pose_duration: float = 0.2
 
 var _has_cargo_item: bool = false
+var _is_sorting: bool = false
 
 @export var _body: Sprite2D
 @export var _cargo_item_view: CargoItem
@@ -35,7 +34,7 @@ func set_fruit(fruit: CargoItemData, show_weight: bool) -> void:
 		# キャラクターの表示倍率にかかわらず、コンベア上と同じ果実サイズを保つ。
 		_cargo_item_view.global_scale = Vector2.ONE
 		_cargo_item_view.construct(fruit.weight, show_weight)
-	_cargo_item_view.visible = _has_cargo_item
+	_cargo_item_view.visible = _has_cargo_item and not _is_sorting
 
 
 ## 指定方向の投入画像を表示する。未設定なら反対側を反転して補う。[br]
@@ -46,6 +45,7 @@ func show_sort_pose(to_left: bool) -> void:
 	if texture == null and fallback == null:
 		reset_pose()
 		return
+	_is_sorting = true
 	_body.texture = texture if texture != null else fallback
 	_body.flip_h = texture == null
 	_hands.visible = false
@@ -55,6 +55,8 @@ func show_sort_pose(to_left: bool) -> void:
 
 ## 投入ポーズを解除し、正面画像と手元の表示へ戻す。
 func reset_pose() -> void:
+	_timer.stop()
+	_is_sorting = false
 	_body.texture = _front_texture
 	_body.flip_h = false
 	_hands.visible = true
