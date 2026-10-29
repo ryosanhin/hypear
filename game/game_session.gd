@@ -11,8 +11,12 @@ enum BoxSide { LEFT, RIGHT }
 
 @export var settings: DemoSettings = preload("res://game/demo_settings.tres")
 @export var conveyor: Conveyor
+
 @export var left_box: BoxView
+var _left_box_state: BoxState
 @export var right_box: BoxView
+var _right_box_state: BoxState
+
 
 var state: State = State.READY
 var score: int = 0
@@ -26,8 +30,11 @@ func _ready() -> void:
 	assert(conveyor != null and left_box != null and right_box != null, "コンポーネントが未設定です")
 	_generator = FruitGenerator.new(settings)
 	conveyor.configure(settings)
-	left_box.configure(settings.target_weight)
-	right_box.configure(settings.target_weight)
+
+	_left_box_state = BoxState.new()
+	_right_box_state = BoxState.new()
+	left_box.construct(_left_box_state)
+	right_box.construct(_right_box_state)
 
 
 ## ゲームの時間を進める。[br]
@@ -41,8 +48,6 @@ func start() -> void:
 	if state == State.PLAYING:
 		return
 	conveyor.clear()
-	left_box.clear()
-	right_box.clear()
 	score = 0
 	_supply_elapsed = 0.0
 	state = State.PLAYING
@@ -96,11 +101,15 @@ func sort_fruit(side: BoxSide) -> bool:
 func ship() -> int:
 	if state != State.PLAYING or (left_box.weight == 0 and right_box.weight == 0):
 		return 0
-	var points := ScoreCalculator.calculate(left_box.weight, settings.target_weight)
-	points += ScoreCalculator.calculate(right_box.weight, settings.target_weight)
+	var points := ScoreCalculator.calculate(
+			_left_box_state.weight,
+			settings.target_weight,
+	)
+	points += ScoreCalculator.calculate(
+			_right_box_state.weight,
+			settings.target_weight,
+	)
 	score += points
-	left_box.clear()
-	right_box.clear()
 	shipped.emit(points)
 	changed.emit()
 	return points

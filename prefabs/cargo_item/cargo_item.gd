@@ -14,7 +14,6 @@ const BASE_WEIGHT: float = 5.0
 func construct(weight: int, show_weight: bool) -> CargoItem:
 	var size_ratio: float = pow(float(weight) / BASE_WEIGHT, 1.0 / 3.0)
 	_sprite.scale = Vector2.ONE * size_ratio
-	if show_weight:
-		_label.text = "%d" % weight
-		_label.visible = show_weight
+	_label.text = "%d" % weight
+	_label.visible = show_weight
 	return self

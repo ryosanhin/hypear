@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://bcnambv625tio"]
 
+[ext_resource type="Script" uid="uid://bt7u1wfabylwc" path="res://prefabs/cargo_item/cargo_item.gd" id="1_2y763"]
 [ext_resource type="Texture2D" uid="uid://1fl2k1kg5fro" path="res://prefabs/cargo_item/pear.png" id="1_sf8sb"]
 
-[node name="Pear" type="Node2D" unique_id=909094776]
+[node name="CargoItem" type="Node2D" unique_id=909094776 node_paths=PackedStringArray("_sprite", "_label")]
+script = ExtResource("1_2y763")
+_sprite = NodePath("Sprite2D")
+_label = NodePath("DebugLabel")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1766034468]
 texture_filter = 1
