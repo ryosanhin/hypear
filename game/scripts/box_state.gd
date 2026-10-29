@@ -16,10 +16,10 @@ func _init(init_target_weight: int) -> void:
 	_target_weight = init_target_weight
 
 
-## 果実の重量を加算する。[br]
-## [param fruit]: 投入する果実。
-func add(fruit: FruitData) -> void:
-	weight += fruit.weight
+## 輸送物の重量を加算する。[br]
+## [param cargo_item_data]: 投入する輸送物。
+func add(cargo_item_data: CargoItemData) -> void:
+	weight += cargo_item_data.weight
 
 
 ## 出荷する。

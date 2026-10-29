@@ -9,7 +9,7 @@ const FRUIT_SCENE := preload("res://views/fruit_view.tscn")
 var capacity: int = 10
 var speed: float = 360.0
 var _show_weights: bool = true
-var _fruits: Array[FruitData] = []
+var _fruits: Array[CargoItemData] = []
 var _followers: Array[PathFollow2D] = []
 
 @onready var _path: Path2D = $FruitPath
@@ -25,7 +25,7 @@ func configure(settings: DemoSettings) -> void:
 
 ## 果実を入口に追加する。容量超過または入口が塞がっていればfalseを返す。[br]
 ## [param fruit]: 供給する果実。
-func add_fruit(fruit: FruitData) -> bool:
+func add_fruit(fruit: CargoItemData) -> bool:
 	if _fruits.size() >= capacity:
 		return false
 	if not _followers.is_empty() and _followers.back().progress < fruit_spacing:
@@ -54,7 +54,7 @@ func advance(delta: float) -> void:
 
 
 ## 終端に到着した先頭果実を返す。移動中または空ならnullを返す。
-func peek_ready_fruit() -> FruitData:
+func peek_ready_fruit() -> CargoItemData:
 	if _followers.is_empty():
 		return null
 	if not is_equal_approx(_followers[0].progress, _path.curve.get_baked_length()):
@@ -63,7 +63,7 @@ func peek_ready_fruit() -> FruitData:
 
 
 ## 到着済みの先頭果実を取り出し、その表示を除去する。
-func take_ready_fruit() -> FruitData:
+func take_ready_fruit() -> CargoItemData:
 	var fruit := peek_ready_fruit()
 	if fruit == null:
 		return null
@@ -75,7 +75,7 @@ func take_ready_fruit() -> FruitData:
 
 
 ## 搬送中を含む未処理果実を生成順のコピーで返す。
-func get_queue() -> Array[FruitData]:
+func get_queue() -> Array[CargoItemData]:
 	return _fruits.duplicate()
 
 

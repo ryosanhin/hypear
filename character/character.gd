@@ -29,7 +29,7 @@ func _ready() -> void:
 ## 手元に表示する果実を更新する。nullなら非表示にする。[br]
 ## [param fruit]: 到着した果実。[br]
 ## [param show_weight]: 重量の数値を表示するか。
-func set_fruit(fruit: FruitData, show_weight: bool) -> void:
+func set_fruit(fruit: CargoItemData, show_weight: bool) -> void:
 	_has_fruit = fruit != null
 	if _has_fruit:
 		# キャラクターの表示倍率にかかわらず、コンベア上と同じ果実サイズを保つ。

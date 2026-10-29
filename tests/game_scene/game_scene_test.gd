@@ -34,8 +34,8 @@ func _test_scene_flow() -> void:
 	for index in 2:
 		scene.session.supply()
 		scene.session.conveyor.advance(0.2)
-	var first: FruitData = scene.session.conveyor.get_queue()[0]
-	var second: FruitData = scene.session.conveyor.get_queue()[1]
+	var first: CargoItemData = scene.session.conveyor.get_queue()[0]
+	var second: CargoItemData = scene.session.conveyor.get_queue()[1]
 	var player := scene.get_node("Player") as SortingCharacter
 	var body := player.get_node("Body") as Sprite2D
 	var front := body.texture

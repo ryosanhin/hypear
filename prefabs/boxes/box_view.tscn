@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://dws5x03rm72mu"]
 
-[ext_resource type="Texture2D" uid="uid://bhqo6pekbphae" path="res://cardboard/cardboard.png" id="1_dc1mj"]
+[ext_resource type="Texture2D" uid="uid://bhqo6pekbphae" path="res://prefabs/boxes/cardboard.png" id="1_nkrun"]
 
-[node name="Cardboard" type="Node2D" unique_id=2061415090]
+[node name="BoxView" type="Node2D" unique_id=2061415090]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1041591730]
 texture_filter = 1
-texture = ExtResource("1_dc1mj")
+texture = ExtResource("1_nkrun")
 offset = Vector2(0, -48)
 
 [node name="DebugLabel" type="Label" parent="." unique_id=1949685904]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://lhlc3sxlq4mr"]
 
 [ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://backgrounds/conveyor.tscn" id="1_oiaqk"]
-[ext_resource type="PackedScene" uid="uid://dws5x03rm72mu" path="res://cardboard/cardboard.tscn" id="2_fa2lt"]
+[ext_resource type="PackedScene" uid="uid://dws5x03rm72mu" path="res://prefabs/boxes/box_view.tscn" id="2_fa2lt"]
 [ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://character/character.tscn" id="3_qghdb"]
 
 [node name="Stage" type="Node" unique_id=1784597213]

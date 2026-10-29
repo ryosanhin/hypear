@@ -10,7 +10,7 @@ var _weight: int = 0
 
 ## 果実の重量を加算する。[br]
 ## [param fruit]: 投入する果実。
-func add(fruit: FruitData) -> void:
+func add(fruit: CargoItemData) -> void:
 	_weight += fruit.weight
 	weight_changed.emit(_weight)
 
