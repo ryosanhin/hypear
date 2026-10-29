@@ -1,0 +1,18 @@
+[gd_scene format=4 uid="uid://pxjcsgc58q0l"]
+
+[ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://backgrounds/conveyor_tile_set.tres" id="1_hlgup"]
+
+[sub_resource type="Curve2D" id="Curve2D_gyxp3"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1248, 0, 0, 0, 0, 0, -288, 0)
+}
+point_count = 2
+
+[node name="ShippingConveyor" type="Node2D" unique_id=1465225219]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1717828582]
+tile_map_data = PackedByteArray("AAAAAP//AQAAAAAAAAAEAP//AQAAAAAAAAAIAP//AQAAAAAAAAAMAP//AQAAAAAAAAAQAP//AQAAAAAAAAAUAP//AQAAAAAAAAD+////AQAEAAAAAAACAP//AQAEAAAAAAAGAP//AQAEAAAAAAAKAP//AQAEAAAAAAAOAP//AQAEAAAAAAASAP//AQAEAAAAAAAWAP//AQAEAAAAAAD8////AQAAAAAAAAA=")
+tile_set = ExtResource("1_hlgup")
+
+[node name="Path2D" type="Path2D" parent="." unique_id=654173839]
+curve = SubResource("Curve2D_gyxp3")

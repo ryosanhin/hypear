@@ -1,6 +1,5 @@
 [gd_scene format=4 uid="uid://b6qpwg2vmpc8"]
 
-[ext_resource type="Texture2D" uid="uid://crckknvc07tx8" path="res://backgrounds/floor_tile.png" id="1_f5uci"]
 [ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://backgrounds/conveyor_tile_set.tres" id="1_u0rji"]
 [ext_resource type="Script" uid="uid://csq5iycsd5m2i" path="res://backgrounds/conveyor.gd" id="3_script"]
 
@@ -14,17 +13,9 @@ point_count = 14
 [node name="Conveyor" type="Node2D" unique_id=914560823]
 script = ExtResource("3_script")
 
-[node name="Node2D" type="Sprite2D" parent="." unique_id=759792737]
-texture_filter = 1
-texture_repeat = 2
-position = Vector2(480, 360)
-texture = ExtResource("1_f5uci")
-region_enabled = true
-region_rect = Rect2(0, 0, 1024, 1024)
-
 [node name="BeltConveyorLayer" type="TileMapLayer" parent="." unique_id=589496843]
 texture_filter = 1
-tile_map_data = PackedByteArray("AAAUAA0AAQAAAAAAABAQAA0AAQAAAAAAABAMAA0AAQAAAAAAABAIAA0AAQAAAAAAABAEAA0AAQAAAAAAABAAAA0AAQAAAAAAABASAA0AAQAEAAAAABAOAA0AAQAEAAAAABAKAA0AAQAEAAAAABAGAA0AAQAEAAAAABACAA0AAQAEAAAAABAKAP//AQAAAAAAAFAJAAEAAQAEAAIAAEALAAEAAQAAAAAAAAANAAEAAQAEAAIAAAAOAAMAAQAAAAIAAFALAAMAAQAEAAAAAAAJAAMAAQAAAAAAAAAHAAMAAQAEAAAAAAAFAAQAAQAAAAIAAGAFAAUAAQAEAAIAAEAHAAUAAQAAAAAAAAAJAAUAAQAEAAIAAAAKAAcAAQAAAAAAAFA=")
+tile_map_data = PackedByteArray("AAAKAP//AQAAAAAAAFAJAAEAAQAEAAIAAEALAAEAAQAAAAAAAAANAAEAAQAEAAIAAAAOAAMAAQAAAAIAAFALAAMAAQAEAAAAAAAJAAMAAQAAAAAAAAAHAAMAAQAEAAAAAAAFAAQAAQAAAAIAAGAFAAUAAQAEAAIAAEAHAAUAAQAAAAAAAAAJAAUAAQAEAAIAAAAKAAcAAQAAAAAAAFA=")
 tile_set = ExtResource("1_u0rji")
 
 [node name="FruitPath" type="Path2D" parent="." unique_id=1460154912]

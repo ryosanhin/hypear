@@ -1,12 +1,25 @@
 [gd_scene format=3 uid="uid://lhlc3sxlq4mr"]
 
+[ext_resource type="Texture2D" uid="uid://crckknvc07tx8" path="res://backgrounds/floor_tile.png" id="1_cyhdb"]
 [ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://backgrounds/conveyor.tscn" id="1_oiaqk"]
 [ext_resource type="PackedScene" uid="uid://dws5x03rm72mu" path="res://prefabs/boxes/box_view.tscn" id="2_fa2lt"]
 [ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://character/character.tscn" id="3_qghdb"]
+[ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://backgrounds/shipping_conveyor.tscn" id="5_ar3c0"]
 
 [node name="Stage" type="Node" unique_id=1784597213]
 
+[node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=733164112]
+texture_filter = 1
+texture_repeat = 2
+position = Vector2(480, 360)
+texture = ExtResource("1_cyhdb")
+region_enabled = true
+region_rect = Rect2(0, 0, 1024, 1024)
+
 [node name="Conveyor" parent="." unique_id=914560823 instance=ExtResource("1_oiaqk")]
+
+[node name="ShippingConveyor" parent="." unique_id=1465225219 instance=ExtResource("5_ar3c0")]
+position = Vector2(0, 720)
 
 [node name="LeftBox" parent="." unique_id=450220743 instance=ExtResource("2_fa2lt")]
 position = Vector2(288, 600)
