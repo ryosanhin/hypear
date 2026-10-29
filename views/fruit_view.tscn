@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://nnyrxf8jebh1"]
 
 [ext_resource type="Script" uid="uid://cbbo3fgbr6vg4" path="res://views/fruit_view.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://bcnambv625tio" path="res://prefabs/pear/pear.tscn" id="2_pear"]
+[ext_resource type="PackedScene" uid="uid://bcnambv625tio" path="res://prefabs/cargo_item/cargo_item.tscn" id="2_pear"]
 
 [node name="FruitView" type="Node2D" unique_id=927629815]
 script = ExtResource("1")
