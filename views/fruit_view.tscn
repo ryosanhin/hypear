@@ -1,20 +1,18 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://nnyrxf8jebh1"]
 
-[ext_resource type="Script" path="res://views/fruit_view.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbbo3fgbr6vg4" path="res://views/fruit_view.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bcnambv625tio" path="res://prefabs/pear/pear.tscn" id="2_pear"]
 
-[ext_resource type="PackedScene" path="res://pear/pear.tscn" id="2_pear"]
-
-[node name="FruitView" type="Node2D"]
+[node name="FruitView" type="Node2D" unique_id=927629815]
 script = ExtResource("1")
 
-[node name="Pear" parent="." instance=ExtResource("2_pear")]
+[node name="Pear" parent="." unique_id=1654847187 instance=ExtResource("2_pear")]
 
-[node name="Weight" type="Label" parent="."]
+[node name="Weight" type="Label" parent="." unique_id=594305147]
 offset_left = -26.0
 offset_top = -16.0
 offset_right = 26.0
 offset_bottom = 16.0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.1, 0.15, 0.2, 1)
 theme_override_font_sizes/font_size = 18
 text = "0"
