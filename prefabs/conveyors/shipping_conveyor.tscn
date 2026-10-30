@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://pxjcsgc58q0l"]
 
 [ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://prefabs/conveyors/conveyor_tile_set.tres" id="1_hlgup"]
+[ext_resource type="Script" uid="uid://66aeje4yc32" path="res://prefabs/conveyors/shipping_conveyor.gd" id="1_lwsmg"]
 
 [sub_resource type="Curve2D" id="Curve2D_gyxp3"]
 _data = {
@@ -8,7 +9,9 @@ _data = {
 }
 point_count = 2
 
-[node name="ShippingConveyor" type="Node2D" unique_id=1465225219]
+[node name="ShippingConveyor" type="Node2D" unique_id=1465225219 node_paths=PackedStringArray("_path")]
+script = ExtResource("1_lwsmg")
+_path = NodePath("Path2D")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1717828582]
 texture_filter = 1

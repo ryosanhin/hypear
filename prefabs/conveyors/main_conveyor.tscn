@@ -10,7 +10,7 @@ _data = {
 }
 point_count = 14
 
-[node name="Conveyor" type="Node2D" unique_id=914560823]
+[node name="MainConveyor" type="Node2D" unique_id=914560823]
 script = ExtResource("3_script")
 
 [node name="BeltConveyorLayer" type="TileMapLayer" parent="." unique_id=589496843]

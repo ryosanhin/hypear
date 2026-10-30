@@ -10,10 +10,17 @@ enum State { READY, PLAYING, GAME_OVER }
 enum BoxSide { LEFT, RIGHT }
 
 @export var settings: DemoSettings = preload("res://game/demo_settings.tres")
-@export var conveyor: MainConveyor
+@export var _main_conveyor: MainConveyor
+@export var _shipping_conveyor :ShippingConveyor
 
-@export var left_box: BoxView
-@export var right_box: BoxView
+@export var _box_view_prefab: PackedScene
+@export var _left_box_spawn_marker: Marker2D
+@export var _right_box_spawn_marker: Marker2D
+@export var _left_box_ship_marker: Marker2D
+@export var _right_box_ship_marker: Marker2D
+
+var _left_box: BoxView
+var _right_box: BoxView
 
 var _left_box_state: BoxState
 var _right_box_state: BoxState
@@ -26,11 +33,11 @@ var _supply_elapsed: float = 0.0
 ## 接続されたコンポーネントを設定して開始待ちにする。
 func _ready() -> void:
 	assert(settings.is_valid(), "デモ設定が不正です")
-	assert(conveyor != null and left_box != null and right_box != null, "コンポーネントが未設定です")
+	assert(_main_conveyor != null and _left_box != null and _right_box != null, "コンポーネントが未設定です")
 	_generator = FruitGenerator.new(settings)
-	conveyor.configure(settings)
+	_main_conveyor.configure(settings)
 
-	_replace_boxes()
+	_create_boxes()
 
 
 ## ゲームの時間を進める。[br]
@@ -43,8 +50,8 @@ func _process(delta: float) -> void:
 func start() -> void:
 	if state == State.PLAYING:
 		return
-	conveyor.clear()
-	_replace_boxes()
+	_main_conveyor.clear()
+	_create_boxes()
 	score = 0
 	_supply_elapsed = 0.0
 	state = State.PLAYING
@@ -59,7 +66,7 @@ func advance(delta: float) -> void:
 	while delta > 0.0 and state == State.PLAYING:
 		var until_supply := maxf(0.0, settings.supply_interval - _supply_elapsed)
 		var step := minf(delta, until_supply)
-		conveyor.advance(step)
+		_main_conveyor.advance(step)
 		_supply_elapsed += step
 		delta -= step
 		if _supply_elapsed >= settings.supply_interval:
@@ -72,7 +79,7 @@ func advance(delta: float) -> void:
 func supply() -> void:
 	if state != State.PLAYING:
 		return
-	if not conveyor.add_fruit(_generator.generate()):
+	if not _main_conveyor.add_fruit(_generator.generate()):
 		state = State.GAME_OVER
 	changed.emit()
 
@@ -84,7 +91,7 @@ func sort_fruit(side: BoxSide) -> bool:
 		return false
 	if side != BoxSide.LEFT and side != BoxSide.RIGHT:
 		return false
-	var fruit := conveyor.take_ready_fruit()
+	var fruit := _main_conveyor.take_ready_fruit()
 	if fruit == null:
 		return false
 	var box_state := _left_box_state if side == BoxSide.LEFT else _right_box_state
@@ -107,21 +114,21 @@ func ship() -> int:
 			settings.target_weight,
 	)
 	score += points
-	_replace_boxes(true)
 	shipped.emit(points)
+	_create_boxes()
 	changed.emit()
 	return points
 
 
-## 左右を空の箱の状態に交換し、表示を接続し直す。[br]
-## [param notify_shipment]: 交換前の箱に出荷を通知するか。
-func _replace_boxes(notify_shipment: bool = false) -> void:
-	var previous_left := _left_box_state
-	var previous_right := _right_box_state
+func _create_boxes() -> void:
+	_left_box = _box_view_prefab.instantiate() as BoxView
+	_left_box.global_position = _left_box_spawn_marker.global_position
 	_left_box_state = BoxState.new()
+	_left_box.construct(_left_box_state, _left_box_ship_marker)
+	_left_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+
+	_right_box = _box_view_prefab.instantiate() as BoxView
+	_right_box.global_position = _right_box_spawn_marker.global_position
 	_right_box_state = BoxState.new()
-	if notify_shipment:
-		previous_left.ship()
-		previous_right.ship()
-	left_box.construct(_left_box_state)
-	right_box.construct(_right_box_state)
+	_right_box.construct(_right_box_state, _right_box_ship_marker)
+	_right_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
