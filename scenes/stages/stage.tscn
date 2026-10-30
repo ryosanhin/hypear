@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://lhlc3sxlq4mr"]
+
+[ext_resource type="Script" uid="uid://bduqtp860kc06" path="res://game/game_session.gd" id="1_a70sx"]
+[ext_resource type="PackedScene" uid="uid://dws5x03rm72mu" path="res://prefabs/boxes/box_view.tscn" id="2_ko36a"]
+[ext_resource type="Texture2D" uid="uid://crckknvc07tx8" path="res://backgrounds/floor_tile.png" id="3_xch81"]
+[ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://prefabs/conveyors/main_conveyor.tscn" id="4_sponv"]
+[ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://prefabs/conveyors/shipping_conveyor.tscn" id="5_sc1co"]
+[ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://prefabs/character/character.tscn" id="6_2lgi4"]
+
+[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
+script = ExtResource("1_a70sx")
+_main_conveyor = NodePath("MainConveyor")
+_shipping_conveyor = NodePath("ShippingConveyor")
+_character = NodePath("Character")
+_box_view_prefab = ExtResource("2_ko36a")
+_left_box_spawn_marker = NodePath("LeftBoxSpawnMarker2D")
+_right_box_spawn_marker = NodePath("RightBoxSpawnMarker2D")
+_left_box_ship_marker = NodePath("LeftBoxSpawnMarker2D/LeftBoxShipMarker2D")
+_right_box_ship_marker = NodePath("RightBoxSpawnMarker2D/RightBoxShipMarker2D")
+
+[node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=733164112]
+texture_filter = 1
+texture_repeat = 2
+position = Vector2(480, 360)
+texture = ExtResource("3_xch81")
+region_enabled = true
+region_rect = Rect2(0, 0, 1024, 1024)
+
+[node name="MainConveyor" parent="." unique_id=914560823 instance=ExtResource("4_sponv")]
+
+[node name="ShippingConveyor" parent="." unique_id=1465225219 instance=ExtResource("5_sc1co")]
+position = Vector2(0, 672)
+
+[node name="Character" parent="." unique_id=1421077664 instance=ExtResource("6_2lgi4")]
+position = Vector2(480, 520)
+scale = Vector2(0.4, 0.4)
+
+[node name="LeftBoxSpawnMarker2D" type="Marker2D" parent="." unique_id=1332628430]
+position = Vector2(288, 600)
+gizmo_extents = 96.0
+
+[node name="LeftBoxShipMarker2D" type="Marker2D" parent="LeftBoxSpawnMarker2D" unique_id=769727755]
+position = Vector2(0, 72)
+gizmo_extents = 96.0
+
+[node name="RightBoxSpawnMarker2D" type="Marker2D" parent="." unique_id=761463731]
+position = Vector2(672, 600)
+gizmo_extents = 96.0
+
+[node name="RightBoxShipMarker2D" type="Marker2D" parent="RightBoxSpawnMarker2D" unique_id=519624363]
+position = Vector2(0, 72)
+gizmo_extents = 96.0

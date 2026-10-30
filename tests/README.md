@@ -19,6 +19,11 @@ godot --headless --path . --quit-after 120
 Each suite uses `tests/supports/test_helper.gd` and exits with code 1 on failure.
 To run one suite, for example:
 `godot --headless --path . --script tests/game_session/game_session_test.gd`.
+
+Run the current stage's arrival display, sorting poses and shipping transport
+integration test with:
+`godot --headless --path . --script tests/stage/stage_test.gd`.
+
 Fixture resources are duplicated for each test so configuration changes do not
 leak into other tests. Conveyor and box suites instantiate their real scenes.
 Session tests connect fresh conveyor and box instances without the HUD. Tests

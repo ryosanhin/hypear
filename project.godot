@@ -11,7 +11,6 @@ config_version=5
 [application]
 
 config/name="hypear"
-run/main_scene="res://scenes/game/game.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
@@ -58,4 +57,3 @@ toggle_weights={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.07, 0.12, 0.17, 1)

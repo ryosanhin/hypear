@@ -1,0 +1,24 @@
+[gd_scene format=4 uid="uid://b6qpwg2vmpc8"]
+
+[ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://prefabs/conveyors/conveyor_tile_set.tres" id="1_u0rji"]
+[ext_resource type="Script" uid="uid://csq5iycsd5m2i" path="res://prefabs/conveyors/main_conveyor.gd" id="3_script"]
+
+[sub_resource type="Curve2D" id="Curve2D_fruit"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 480, -100.57143, 0, 0, 0, 0, 480, 4.5714264, 0, 0, 0, 0, 492, 44, 0, 0, 0, 0, 528, 57.142853, 0, 0, 0, 0, 648, 57.142853, 0, 0, 0, 0, 672, 109.71428, 0, 0, 0, 0, 648, 162.2857, 0, 0, 0, 0, 312, 162.2857, 0, 0, 0, 0, 288, 214.85715, 0, 0, 0, 0, 312, 267.42856, 0, 0, 0, 0, 444, 267.42856, 0, 0, 0, 0, 480, 280.57144, 0, 0, 0, 0, 480, 320, 0, 0, 0, 0, 480, 398.85715)
+}
+point_count = 14
+
+[node name="MainConveyor" type="Node2D" unique_id=914560823]
+script = ExtResource("3_script")
+
+[node name="BeltConveyorLayer" type="TileMapLayer" parent="." unique_id=589496843]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAAKAP//AQAAAAAAAFAJAAEAAQAEAAIAAEALAAEAAQAAAAAAAAANAAEAAQAEAAIAAAAOAAMAAQAAAAIAAFALAAMAAQAEAAAAAAAJAAMAAQAAAAAAAAAHAAMAAQAEAAAAAAAFAAQAAQAAAAIAAGAFAAUAAQAEAAIAAEAHAAUAAQAAAAAAAAAJAAUAAQAEAAIAAAAKAAcAAQAAAAAAAFA=")
+tile_set = ExtResource("1_u0rji")
+
+[node name="FruitPath" type="Path2D" parent="." unique_id=1460154912]
+position = Vector2(0, 43.826088)
+scale = Vector2(1, 0.9130435)
+curve = SubResource("Curve2D_fruit")

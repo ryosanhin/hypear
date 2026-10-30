@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://dws5x03rm72mu"]
-
-[ext_resource type="Texture2D" uid="uid://bhqo6pekbphae" path="res://cardboard/cardboard.png" id="1_dc1mj"]
-
-[node name="Cardboard" type="Sprite2D" unique_id=450220743]
-texture_filter = 1
-texture = ExtResource("1_dc1mj")
-offset = Vector2(0, -48)

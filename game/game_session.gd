@@ -4,16 +4,29 @@ extends Node
 
 signal changed
 signal shipped(points: int)
-signal fruit_sorted(side: BoxSide)
+signal sorted(side: BoxSide)
 
 enum State { READY, PLAYING, GAME_OVER }
 enum BoxSide { LEFT, RIGHT }
 
-@export var settings: DemoSettings = preload("res://game/demo_settings.tres")
-@export var conveyor: Conveyor
-@export var left_box: FruitBox
-@export var right_box: FruitBox
+@export var is_start_automatically: bool = true
 
+@export var settings: DemoSettings = preload("res://game/demo_settings.tres")
+@export var _main_conveyor: MainConveyor
+@export var _shipping_conveyor :ShippingConveyor
+@export var _character: SortingCharacter
+
+@export var _box_view_prefab: PackedScene
+@export var _left_box_spawn_marker: Marker2D
+@export var _right_box_spawn_marker: Marker2D
+@export var _left_box_ship_marker: Marker2D
+@export var _right_box_ship_marker: Marker2D
+
+var _left_box: BoxView
+var _right_box: BoxView
+
+var _left_box_state: BoxState
+var _right_box_state: BoxState
 var state: State = State.READY
 var score: int = 0
 var _generator: FruitGenerator
@@ -22,12 +35,11 @@ var _supply_elapsed: float = 0.0
 
 ## 接続されたコンポーネントを設定して開始待ちにする。
 func _ready() -> void:
-	assert(settings.is_valid(), "デモ設定が不正です")
-	assert(conveyor != null and left_box != null and right_box != null, "コンポーネントが未設定です")
 	_generator = FruitGenerator.new(settings)
-	conveyor.configure(settings)
-	left_box.configure(settings.target_weight)
-	right_box.configure(settings.target_weight)
+	_main_conveyor.configure(settings)
+	_main_conveyor.reached_terminal.connect(_on_cargo_item_reached_terminal)
+	if is_start_automatically:
+		start_game()
 
 
 ## ゲームの時間を進める。[br]
@@ -36,13 +48,25 @@ func _process(delta: float) -> void:
 	advance(delta)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_echo():
+		return
+	elif event.is_action_pressed("sort_left"):
+		sort_cargo_item(GameSession.BoxSide.LEFT)
+	elif event.is_action_pressed("sort_right"):
+		sort_cargo_item(GameSession.BoxSide.RIGHT)
+	elif event.is_action_pressed("ship_boxes"):
+		ship()
+
+
 ## 全コンポーネント、供給時間とスコアを初期化して開始する。
-func start() -> void:
+func start_game() -> void:
 	if state == State.PLAYING:
 		return
-	conveyor.clear()
-	left_box.clear()
-	right_box.clear()
+	_main_conveyor.clear()
+	_character.set_fruit(null, settings.show_weights)
+	_character.reset_pose()
+	_create_boxes()
 	score = 0
 	_supply_elapsed = 0.0
 	state = State.PLAYING
@@ -57,7 +81,8 @@ func advance(delta: float) -> void:
 	while delta > 0.0 and state == State.PLAYING:
 		var until_supply := maxf(0.0, settings.supply_interval - _supply_elapsed)
 		var step := minf(delta, until_supply)
-		conveyor.advance(step)
+		_main_conveyor.advance(step)
+		_shipping_conveyor.advance(step)
 		_supply_elapsed += step
 		delta -= step
 		if _supply_elapsed >= settings.supply_interval:
@@ -70,37 +95,78 @@ func advance(delta: float) -> void:
 func supply() -> void:
 	if state != State.PLAYING:
 		return
-	if not conveyor.add_fruit(_generator.generate()):
+	if not _main_conveyor.add_cargo_item(_generator.generate()):
 		state = State.GAME_OVER
 	changed.emit()
 
 
 ## 到着した先頭果実を選択した箱へ渡す。処理できなければfalseを返す。[br]
 ## [param side]: 投入先の箱。
-func sort_fruit(side: BoxSide) -> bool:
+func sort_cargo_item(side: BoxSide) -> bool:
 	if state != State.PLAYING:
 		return false
 	if side != BoxSide.LEFT and side != BoxSide.RIGHT:
 		return false
-	var fruit := conveyor.take_ready_fruit()
-	if fruit == null:
+	var cargo_item := _main_conveyor.take_ready_cargo_item()
+	if cargo_item == null:
 		return false
-	var box := left_box if side == BoxSide.LEFT else right_box
-	box.add_fruit(fruit)
-	fruit_sorted.emit(side)
+	var box_state := _left_box_state if side == BoxSide.LEFT else _right_box_state
+	box_state.add(cargo_item)
+	_character.set_fruit(null, settings.show_weights)
+	_character.show_sort_pose(side == BoxSide.LEFT)
+	sorted.emit(side)
 	changed.emit()
 	return true
 
 
+## 到着した輸送物を手元へ表示し、コンベア上の二重表示を防ぐ。[br]
+## [param cargo_item]: 終端に到着した輸送物。
+func _on_cargo_item_reached_terminal(cargo_item: CargoItemData) -> void:
+	_character.set_fruit(cargo_item, settings.show_weights)
+	_main_conveyor.set_ready_fruit_visible(false)
+
+
 ## 左右の箱を同時出荷して合計得点を返す。両方空の場合は出荷しない。
 func ship() -> int:
-	if state != State.PLAYING or (left_box.weight == 0 and right_box.weight == 0):
+	if state != State.PLAYING or (_left_box_state.weight == 0 and _right_box_state.weight == 0):
 		return 0
-	var points := ScoreCalculator.calculate(left_box.weight, settings.target_weight)
-	points += ScoreCalculator.calculate(right_box.weight, settings.target_weight)
+	var points := calculate(
+			_left_box_state.weight,
+			settings.target_weight,
+	)
+	points += calculate(
+			_right_box_state.weight,
+			settings.target_weight,
+	)
 	score += points
-	left_box.clear()
-	right_box.clear()
 	shipped.emit(points)
+	_left_box_state.ship()
+	_right_box_state.ship()
+	_create_boxes()
 	changed.emit()
 	return points
+
+
+func _create_boxes() -> void:
+	_left_box = _box_view_prefab.instantiate() as BoxView
+	add_child(_left_box)
+	_left_box.global_position = _left_box_spawn_marker.global_position
+	_left_box_state = BoxState.new()
+	_left_box.construct(_left_box_state, _left_box_ship_marker)
+	_left_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+
+	_right_box = _box_view_prefab.instantiate() as BoxView
+	add_child(_right_box)
+	_right_box.global_position = _right_box_spawn_marker.global_position
+	_right_box_state = BoxState.new()
+	_right_box.construct(_right_box_state, _right_box_ship_marker)
+	_right_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+
+
+## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]
+## [param shipped_weight]: 箱の現在重量。[br]
+## [param target_weight]: 目標重量。
+func calculate(shipped_weight: int, target_weight: int) -> int:
+	if shipped_weight == 0:
+		return 0
+	return maxi(0, 100 - absi(shipped_weight - target_weight) * 5)

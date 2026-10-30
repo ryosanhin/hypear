@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dws5x03rm72mu"]
+
+[ext_resource type="Script" uid="uid://bmktw6r4podf5" path="res://prefabs/boxes/box_view.gd" id="1_fu4bm"]
+[ext_resource type="Texture2D" uid="uid://bhqo6pekbphae" path="res://prefabs/boxes/cardboard.png" id="1_nkrun"]
+
+[node name="BoxView" type="Node2D" unique_id=2061415090 node_paths=PackedStringArray("_sprite", "_debug_label")]
+script = ExtResource("1_fu4bm")
+_sprite = NodePath("Sprite2D")
+_debug_label = NodePath("DebugLabel")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1041591730]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("1_nkrun")
+offset = Vector2(0, -48)
+
+[node name="DebugLabel" type="Label" parent="." unique_id=1949685904]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
