@@ -46,15 +46,22 @@ func add_cargo_item(cargo_item: CargoItemData) -> bool:
 	return true
 
 
-## 先頭から順に、終端または前の果実の手前まで搬送する。[br]
+## 先頭から順に搬送し、新しく終端へ到着した輸送物を通知する。[br]
 ## [param delta]: 前回の更新からの経過秒数。
 func advance(delta: float) -> void:
 	if delta <= 0.0 or not is_finite(delta):
 		return
+
+	var ready_before := peek_ready_cargo_item()
+
 	var limit := _path.curve.get_baked_length()
 	for follower in _followers:
 		follower.progress = minf(follower.progress + speed * delta, limit)
 		limit = maxf(0.0, follower.progress - fruit_spacing)
+
+	var ready_after := peek_ready_cargo_item()
+	if ready_after != null and ready_after != ready_before:
+		reached_terminal.emit(ready_after)
 
 
 ## 終端に到着した先頭果実を返す。移動中または空ならnullを返す。
