@@ -7,10 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://prefabs/conveyors/shipping_conveyor.tscn" id="5_sc1co"]
 [ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://prefabs/character/character.tscn" id="6_2lgi4"]
 
-[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
+[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
 script = ExtResource("1_a70sx")
 _main_conveyor = NodePath("MainConveyor")
 _shipping_conveyor = NodePath("ShippingConveyor")
+_character = NodePath("Character")
 _box_view_prefab = ExtResource("2_ko36a")
 _left_box_spawn_marker = NodePath("LeftBoxSpawnMarker2D")
 _right_box_spawn_marker = NodePath("RightBoxSpawnMarker2D")

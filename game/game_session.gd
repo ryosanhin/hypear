@@ -14,6 +14,7 @@ enum BoxSide { LEFT, RIGHT }
 @export var settings: DemoSettings = preload("res://game/demo_settings.tres")
 @export var _main_conveyor: MainConveyor
 @export var _shipping_conveyor :ShippingConveyor
+@export var _character: SortingCharacter
 
 @export var _box_view_prefab: PackedScene
 @export var _left_box_spawn_marker: Marker2D
@@ -36,6 +37,7 @@ var _supply_elapsed: float = 0.0
 func _ready() -> void:
 	_generator = FruitGenerator.new(settings)
 	_main_conveyor.configure(settings)
+	_main_conveyor.reached_terminal.connect(_on_cargo_item_reached_terminal)
 	if is_start_automatically:
 		start_game()
 
@@ -62,6 +64,8 @@ func start_game() -> void:
 	if state == State.PLAYING:
 		return
 	_main_conveyor.clear()
+	_character.set_fruit(null, settings.show_weights)
+	_character.reset_pose()
 	_create_boxes()
 	score = 0
 	_supply_elapsed = 0.0
@@ -78,6 +82,7 @@ func advance(delta: float) -> void:
 		var until_supply := maxf(0.0, settings.supply_interval - _supply_elapsed)
 		var step := minf(delta, until_supply)
 		_main_conveyor.advance(step)
+		_shipping_conveyor.advance(step)
 		_supply_elapsed += step
 		delta -= step
 		if _supply_elapsed >= settings.supply_interval:
@@ -107,9 +112,18 @@ func sort_cargo_item(side: BoxSide) -> bool:
 		return false
 	var box_state := _left_box_state if side == BoxSide.LEFT else _right_box_state
 	box_state.add(cargo_item)
+	_character.set_fruit(null, settings.show_weights)
+	_character.show_sort_pose(side == BoxSide.LEFT)
 	sorted.emit(side)
 	changed.emit()
 	return true
+
+
+## 到着した輸送物を手元へ表示し、コンベア上の二重表示を防ぐ。[br]
+## [param cargo_item]: 終端に到着した輸送物。
+func _on_cargo_item_reached_terminal(cargo_item: CargoItemData) -> void:
+	_character.set_fruit(cargo_item, settings.show_weights)
+	_main_conveyor.set_ready_fruit_visible(false)
 
 
 ## 左右の箱を同時出荷して合計得点を返す。両方空の場合は出荷しない。
