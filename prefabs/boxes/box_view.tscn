@@ -10,6 +10,7 @@ _debug_label = NodePath("DebugLabel")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1041591730]
 texture_filter = 1
+scale = Vector2(2, 2)
 texture = ExtResource("1_nkrun")
 offset = Vector2(0, -48)
 

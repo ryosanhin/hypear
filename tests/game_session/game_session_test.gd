@@ -31,7 +31,7 @@ func _run() -> void:
 func _test_fifo_and_sorting() -> void:
 	_helper.change_test_name("fifo_and_sorting")
 	var session := _make_session(DemoSettings.new())
-	session.start()
+	session.start_game()
 	for index in 4:
 		session.supply()
 		session._main_conveyor.advance(0.2)
@@ -62,7 +62,7 @@ func _test_shipping() -> void:
 	var session := _make_session(FIXED_SETTINGS.duplicate() as DemoSettings)
 	var shipments: Array[int] = []
 	session.shipped.connect(func(points: int) -> void: shipments.append(points))
-	session.start()
+	session.start_game()
 	_helper.assert_true(session.ship() == 0 and shipments.is_empty(), "両箱空では出荷しない")
 	# 左20・右30を作り、合計150点と超過投入を同時に確認する。
 	for index in 2:
@@ -96,7 +96,7 @@ func _test_timing_and_states() -> void:
 	_helper.assert_equal(session.state, GameSession.State.READY, "初期状態はREADY")
 	_helper.assert_true(session._main_conveyor.get_queue().is_empty(), "開始前は供給しない")
 	_helper.assert_false(session.sort_fruit(GameSession.BoxSide.LEFT), "開始前は仕分け不可")
-	session.start()
+	session.start_game()
 	session.advance(0.75)
 	_helper.assert_true(session._main_conveyor.get_queue().is_empty(), "間隔未到達では生成しない")
 	session.advance(0.25)
@@ -108,7 +108,7 @@ func _test_timing_and_states() -> void:
 	_helper.assert_true(is_equal_approx(path.get_child(0).progress, 900.0), "先頭は供給後の2.5秒分だけ進む")
 	_helper.assert_true(is_equal_approx(path.get_child(1).progress, 540.0), "後続も供給時刻から進む")
 	_helper.assert_true(is_equal_approx(path.get_child(2).progress, 180.0), "最後の供給後の残り時間も搬送する")
-	session.start()
+	session.start_game()
 	_helper.assert_equal(session._main_conveyor.get_queue().size(), 3, "プレイ中の開始は無視する")
 
 
@@ -119,7 +119,7 @@ func _test_overflow_and_retry() -> void:
 	settings.queue_capacity = 2
 	settings.supply_interval = 1.0
 	var session := _make_session(settings)
-	session.start()
+	session.start_game()
 	# リトライ前に得点と箱の重量を残し、初期値同士の比較になることを避ける。
 	session.supply()
 	session._main_conveyor.advance(20.0)
@@ -142,7 +142,7 @@ func _test_overflow_and_retry() -> void:
 	_helper.assert_equal(session.ship(), 0, "終了後は出荷停止")
 	_helper.assert_true(session.score == 50 and session._right_box.weight == 10, "終了後は得点と箱を維持")
 	_helper.assert_equal(session._main_conveyor.get_queue().size(), 2, "終了後は生成停止")
-	session.start()
+	session.start_game()
 	_helper.assert_equal(session.state, GameSession.State.PLAYING, "リトライでPLAYING")
 	_helper.assert_true(session.score == 0 and session._main_conveyor.get_queue().is_empty(), "得点と待機列を初期化")
 	_helper.assert_true(session._left_box.weight == 0 and session._right_box.weight == 0, "両方の箱を初期化")

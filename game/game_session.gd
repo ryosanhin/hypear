@@ -9,6 +9,8 @@ signal fruit_sorted(side: BoxSide)
 enum State { READY, PLAYING, GAME_OVER }
 enum BoxSide { LEFT, RIGHT }
 
+@export var is_start_automatically: bool = true
+
 @export var settings: DemoSettings = preload("res://game/demo_settings.tres")
 @export var _main_conveyor: MainConveyor
 @export var _shipping_conveyor :ShippingConveyor
@@ -34,8 +36,8 @@ var _supply_elapsed: float = 0.0
 func _ready() -> void:
 	_generator = FruitGenerator.new(settings)
 	_main_conveyor.configure(settings)
-
-	_create_boxes()
+	if is_start_automatically:
+		start_game()
 
 
 ## ゲームの時間を進める。[br]
@@ -44,8 +46,19 @@ func _process(delta: float) -> void:
 	advance(delta)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_echo():
+		return
+	elif event.is_action_pressed("sort_left"):
+		sort_fruit(GameSession.BoxSide.LEFT)
+	elif event.is_action_pressed("sort_right"):
+		sort_fruit(GameSession.BoxSide.RIGHT)
+	elif event.is_action_pressed("ship_boxes"):
+		ship()
+
+
 ## 全コンポーネント、供給時間とスコアを初期化して開始する。
-func start() -> void:
+func start_game() -> void:
 	if state == State.PLAYING:
 		return
 	_main_conveyor.clear()
