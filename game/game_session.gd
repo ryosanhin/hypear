@@ -32,8 +32,6 @@ var _supply_elapsed: float = 0.0
 
 ## 接続されたコンポーネントを設定して開始待ちにする。
 func _ready() -> void:
-	assert(settings.is_valid(), "デモ設定が不正です")
-	assert(_main_conveyor != null and _left_box != null and _right_box != null, "コンポーネントが未設定です")
 	_generator = FruitGenerator.new(settings)
 	_main_conveyor.configure(settings)
 
@@ -105,16 +103,18 @@ func sort_fruit(side: BoxSide) -> bool:
 func ship() -> int:
 	if state != State.PLAYING or (_left_box_state.weight == 0 and _right_box_state.weight == 0):
 		return 0
-	var points := ScoreCalculator.calculate(
+	var points := calculate(
 			_left_box_state.weight,
 			settings.target_weight,
 	)
-	points += ScoreCalculator.calculate(
+	points += calculate(
 			_right_box_state.weight,
 			settings.target_weight,
 	)
 	score += points
 	shipped.emit(points)
+	_left_box_state.ship()
+	_right_box_state.ship()
 	_create_boxes()
 	changed.emit()
 	return points
@@ -122,13 +122,24 @@ func ship() -> int:
 
 func _create_boxes() -> void:
 	_left_box = _box_view_prefab.instantiate() as BoxView
+	add_child(_left_box)
 	_left_box.global_position = _left_box_spawn_marker.global_position
 	_left_box_state = BoxState.new()
 	_left_box.construct(_left_box_state, _left_box_ship_marker)
 	_left_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
 
 	_right_box = _box_view_prefab.instantiate() as BoxView
+	add_child(_right_box)
 	_right_box.global_position = _right_box_spawn_marker.global_position
 	_right_box_state = BoxState.new()
 	_right_box.construct(_right_box_state, _right_box_ship_marker)
 	_right_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+
+
+## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]
+## [param shipped_weight]: 箱の現在重量。[br]
+## [param target_weight]: 目標重量。
+func calculate(shipped_weight: int, target_weight: int) -> int:
+	if shipped_weight == 0:
+		return 0
+	return maxi(0, 100 - absi(shipped_weight - target_weight) * 5)

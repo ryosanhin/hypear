@@ -30,14 +30,6 @@ region_rect = Rect2(0, 0, 1024, 1024)
 [node name="ShippingConveyor" parent="." unique_id=1465225219 instance=ExtResource("5_sc1co")]
 position = Vector2(0, 672)
 
-[node name="LeftBox" parent="." unique_id=450220743 instance=ExtResource("2_ko36a")]
-position = Vector2(288, 600)
-scale = Vector2(2, 2)
-
-[node name="RightBox" parent="." unique_id=748890437 instance=ExtResource("2_ko36a")]
-position = Vector2(672, 600)
-scale = Vector2(2, 2)
-
 [node name="Character" parent="." unique_id=1421077664 instance=ExtResource("6_2lgi4")]
 position = Vector2(480, 520)
 scale = Vector2(0.4, 0.4)

@@ -7,7 +7,7 @@ signal reached_ship_entry_position(box_view: BoxView)
 @export var _sprite: Sprite2D
 @export var _debug_label: Label
 
-const SHIP_ENTRY_SPEED := 0.25
+const SHIP_ENTRY_SPEED := 72.0
 
 var _box_state: BoxState
 var _ship_entry_marker: Marker2D
