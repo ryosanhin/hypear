@@ -2,6 +2,10 @@ class_name MainConveyor
 extends Node2D
 ## 果実の受け入れ、経路上の搬送、待機と取り出しを管理する。
 
+## 輸送物が終点に到達したことを知らせるシグナル。[br]
+## [param cargo_item]: 終点に到達した輸送物データ。
+signal reached_terminal(cargo_item: CargoItemData)
+
 const CARGO_ITEM_SCENE := preload("res://prefabs/cargo_item/cargo_item.tscn")
 
 @export_range(46.0, 100.0) var fruit_spacing: float = 56.0
@@ -9,7 +13,7 @@ const CARGO_ITEM_SCENE := preload("res://prefabs/cargo_item/cargo_item.tscn")
 var capacity: int = 10
 var speed: float = 360.0
 var _show_weights: bool = true
-var _fruits: Array[CargoItemData] = []
+var _cargo_items: Array[CargoItemData] = []
 var _followers: Array[PathFollow2D] = []
 
 @onready var _path: Path2D = $FruitPath
@@ -24,9 +28,9 @@ func configure(settings: DemoSettings) -> void:
 
 
 ## 果実を入口に追加する。容量超過または入口が塞がっていればfalseを返す。[br]
-## [param fruit]: 供給する果実。
-func add_fruit(fruit: CargoItemData) -> bool:
-	if _fruits.size() >= capacity:
+## [param cargo_item]: 供給する果実。
+func add_cargo_item(cargo_item: CargoItemData) -> bool:
+	if _cargo_items.size() >= capacity:
 		return false
 	if not _followers.is_empty() and _followers.back().progress < fruit_spacing:
 		return false
@@ -36,8 +40,8 @@ func add_fruit(fruit: CargoItemData) -> bool:
 	_path.add_child(follower)
 	var view := CARGO_ITEM_SCENE.instantiate() as CargoItem
 	follower.add_child(view)
-	view.construct(fruit.weight, _show_weights)
-	_fruits.append(fruit)
+	view.construct(cargo_item.weight, _show_weights)
+	_cargo_items.append(cargo_item)
 	_followers.append(follower)
 	return true
 
@@ -54,20 +58,20 @@ func advance(delta: float) -> void:
 
 
 ## 終端に到着した先頭果実を返す。移動中または空ならnullを返す。
-func peek_ready_fruit() -> CargoItemData:
+func peek_ready_cargo_item() -> CargoItemData:
 	if _followers.is_empty():
 		return null
 	if not is_equal_approx(_followers[0].progress, _path.curve.get_baked_length()):
 		return null
-	return _fruits[0]
+	return _cargo_items[0]
 
 
 ## 到着済みの先頭果実を取り出し、その表示を除去する。
-func take_ready_fruit() -> CargoItemData:
-	var fruit := peek_ready_fruit()
+func take_ready_cargo_item() -> CargoItemData:
+	var fruit := peek_ready_cargo_item()
 	if fruit == null:
 		return null
-	_fruits.pop_front()
+	_cargo_items.pop_front()
 	var follower: PathFollow2D = _followers.pop_front()
 	_path.remove_child(follower)
 	follower.queue_free()
@@ -76,7 +80,7 @@ func take_ready_fruit() -> CargoItemData:
 
 ## 搬送中を含む未処理果実を生成順のコピーで返す。
 func get_queue() -> Array[CargoItemData]:
-	return _fruits.duplicate()
+	return _cargo_items.duplicate()
 
 
 ## 全果実の重量表示を切り替える。[br]
@@ -85,7 +89,7 @@ func set_show_weights(enabled: bool) -> void:
 	_show_weights = enabled
 	for index in _followers.size():
 		var view := _followers[index].get_child(0) as CargoItem
-		view.construct(_fruits[index].weight, enabled)
+		view.construct(_cargo_items[index].weight, enabled)
 
 
 ## 全果実と表示を取り除き、空の搬送状態へ戻す。
@@ -94,12 +98,12 @@ func clear() -> void:
 		_path.remove_child(follower)
 		follower.queue_free()
 	_followers.clear()
-	_fruits.clear()
+	_cargo_items.clear()
 
 
 ## 到着済みの果実表示を切り替え、搬送中の果実は表示する。[br]
 ## [param enabled]: 到着済みの果実もコンベア上に表示するか。
 func set_ready_fruit_visible(enabled: bool) -> void:
-	var ready := peek_ready_fruit()
+	var ready := peek_ready_cargo_item()
 	for index in _followers.size():
-		_followers[index].visible = enabled or _fruits[index] != ready
+		_followers[index].visible = enabled or _cargo_items[index] != ready

@@ -4,7 +4,7 @@ extends Node
 
 signal changed
 signal shipped(points: int)
-signal fruit_sorted(side: BoxSide)
+signal sorted(side: BoxSide)
 
 enum State { READY, PLAYING, GAME_OVER }
 enum BoxSide { LEFT, RIGHT }
@@ -50,9 +50,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_echo():
 		return
 	elif event.is_action_pressed("sort_left"):
-		sort_fruit(GameSession.BoxSide.LEFT)
+		sort_cargo_item(GameSession.BoxSide.LEFT)
 	elif event.is_action_pressed("sort_right"):
-		sort_fruit(GameSession.BoxSide.RIGHT)
+		sort_cargo_item(GameSession.BoxSide.RIGHT)
 	elif event.is_action_pressed("ship_boxes"):
 		ship()
 
@@ -90,24 +90,24 @@ func advance(delta: float) -> void:
 func supply() -> void:
 	if state != State.PLAYING:
 		return
-	if not _main_conveyor.add_fruit(_generator.generate()):
+	if not _main_conveyor.add_cargo_item(_generator.generate()):
 		state = State.GAME_OVER
 	changed.emit()
 
 
 ## 到着した先頭果実を選択した箱へ渡す。処理できなければfalseを返す。[br]
 ## [param side]: 投入先の箱。
-func sort_fruit(side: BoxSide) -> bool:
+func sort_cargo_item(side: BoxSide) -> bool:
 	if state != State.PLAYING:
 		return false
 	if side != BoxSide.LEFT and side != BoxSide.RIGHT:
 		return false
-	var fruit := _main_conveyor.take_ready_fruit()
-	if fruit == null:
+	var cargo_item := _main_conveyor.take_ready_cargo_item()
+	if cargo_item == null:
 		return false
 	var box_state := _left_box_state if side == BoxSide.LEFT else _right_box_state
-	box_state.add(fruit)
-	fruit_sorted.emit(side)
+	box_state.add(cargo_item)
+	sorted.emit(side)
 	changed.emit()
 	return true
 
