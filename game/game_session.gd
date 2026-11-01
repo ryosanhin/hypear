@@ -2,7 +2,6 @@ class_name GameSession
 extends Node
 ## コンベアと箱を取りまとめ、供給、仕分け、出荷とゲーム進行を管理する。
 
-signal changed
 signal shipped(points: int)
 signal sorted(side: BoxSide)
 
@@ -70,7 +69,6 @@ func start_game() -> void:
 	score = 0
 	_supply_elapsed = 0.0
 	state = State.PLAYING
-	changed.emit()
 
 
 ## 供給時刻ごとに搬送を進め、長いフレームでも生成位置を重ねない。[br]
@@ -88,7 +86,6 @@ func advance(delta: float) -> void:
 		if _supply_elapsed >= settings.supply_interval:
 			_supply_elapsed = 0.0
 			supply()
-	changed.emit()
 
 
 ## 果実を供給する。容量超過または入口の詰まりでゲームを終了する。
@@ -97,7 +94,6 @@ func supply() -> void:
 		return
 	if not _main_conveyor.add_cargo_item(_generator.generate()):
 		state = State.GAME_OVER
-	changed.emit()
 
 
 ## 到着した先頭果実を選択した箱へ渡す。処理できなければfalseを返す。[br]
@@ -115,7 +111,6 @@ func sort_cargo_item(side: BoxSide) -> bool:
 	_character.set_fruit(null, settings.show_weights)
 	_character.show_sort_pose(side == BoxSide.LEFT)
 	sorted.emit(side)
-	changed.emit()
 	return true
 
 
@@ -143,7 +138,6 @@ func ship() -> int:
 	_left_box_state.ship()
 	_right_box_state.ship()
 	_create_boxes()
-	changed.emit()
 	return points
 
 
