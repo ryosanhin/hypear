@@ -34,8 +34,8 @@ func _test_scene_flow() -> void:
 	for index in 2:
 		scene.session.supply()
 		scene.session.conveyor.advance(0.2)
-	var first: FruitData = scene.session.conveyor.get_queue()[0]
-	var second: FruitData = scene.session.conveyor.get_queue()[1]
+	var first: CargoItemData = scene.session.conveyor.get_queue()[0]
+	var second: CargoItemData = scene.session.conveyor.get_queue()[1]
 	var player := scene.get_node("Player") as SortingCharacter
 	var body := player.get_node("Body") as Sprite2D
 	var front := body.texture
@@ -47,10 +47,10 @@ func _test_scene_flow() -> void:
 	scene.session.conveyor.advance(20.0)
 	scene.session.advance(0.001)
 	_helper.assert_true(held.visible, "到着した果実を手元に表示")
-	var arrived := scene.get_node("Conveyor/FruitPath").get_child(0) as PathFollow2D
+	var arrived := scene.get_node("MainConveyor/FruitPath").get_child(0) as PathFollow2D
 	_helper.assert_false(arrived.visible, "到着した果実を二重表示しない")
 	_press(scene, "sort_left")
-	_helper.assert_same(body.texture, player.left_pose_texture, "左投入で横向きへ切り替え")
+	_helper.assert_same(body.texture, player._left_pose_texture, "左投入で横向きへ切り替え")
 	_helper.assert_false(body.flip_h or held.visible, "左投入は反転せず果実を消す")
 	scene.session.conveyor.advance(20.0)
 	_press(scene, "sort_right")
@@ -62,7 +62,7 @@ func _test_scene_flow() -> void:
 	_press(scene, "ship_boxes")
 	_helper.assert_equal(scene.session.score, expected, "入力で出荷")
 	scene.session.supply()
-	var follower := scene.get_node("Conveyor/FruitPath").get_child(0) as PathFollow2D
+	var follower := scene.get_node("MainConveyor/FruitPath").get_child(0) as PathFollow2D
 	var initial_position := follower.position
 	scene.session.advance(0.25)
 	_helper.assert_not_equal(follower.position, initial_position, "果実が経路に沿って前進する")
@@ -79,7 +79,7 @@ func _test_scene_flow() -> void:
 	_press(scene, "start_game")
 	_helper.assert_true(scene.session.score == 0 and scene.session.conveyor.get_queue().is_empty(), "入力でリトライ")
 	_helper.assert_false(scene.get_node("UI/Overlay").visible, "リトライで終了画面を閉じる")
-	_helper.assert_equal(scene.get_node("Conveyor/FruitPath").get_child_count(), 0, "リトライで果実表示も除去")
+	_helper.assert_equal(scene.get_node("MainConveyor/FruitPath").get_child_count(), 0, "リトライで果実表示も除去")
 	_helper.assert_same(body.texture, front, "リトライで正面へ戻す")
 	_helper.assert_false(body.flip_h or held.visible, "リトライで手元と反転を初期化")
 	scene.queue_free()

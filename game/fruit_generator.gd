@@ -13,7 +13,7 @@ func _init(settings: DemoSettings) -> void:
 
 
 ## 設定された重量の果実を一個生成する。
-func generate() -> FruitData:
+func generate() -> CargoItemData:
 	var total := 0.0
 	for probability in _settings.fruit_probabilities:
 		total += probability
@@ -26,5 +26,5 @@ func generate() -> FruitData:
 		last_positive = index
 		value -= probability
 		if value < 0.0:
-			return FruitData.new(_settings.fruit_weights[index])
-	return FruitData.new(_settings.fruit_weights[last_positive])
+			return CargoItemData.new(_settings.fruit_weights[index])
+	return CargoItemData.new(_settings.fruit_weights[last_positive])

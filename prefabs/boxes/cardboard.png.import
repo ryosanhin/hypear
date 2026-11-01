@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tu5276cmfnne"
-path="res://.godot/imported/conveyor_simple.png-28822ebd0c5912b04165c517e12722ca.ctex"
+uid="uid://bhqo6pekbphae"
+path="res://.godot/imported/cardboard.png-780cbb9f0f670e9b400032f75050b69d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://backgrounds/conveyor_simple.png"
-dest_files=["res://.godot/imported/conveyor_simple.png-28822ebd0c5912b04165c517e12722ca.ctex"]
+source_file="res://prefabs/boxes/cardboard.png"
+dest_files=["res://.godot/imported/cardboard.png-780cbb9f0f670e9b400032f75050b69d.ctex"]
 
 [params]
 

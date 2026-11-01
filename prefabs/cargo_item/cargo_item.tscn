@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bcnambv625tio"]
+
+[ext_resource type="Script" uid="uid://bt7u1wfabylwc" path="res://prefabs/cargo_item/cargo_item.gd" id="1_2y763"]
+[ext_resource type="Texture2D" uid="uid://1fl2k1kg5fro" path="res://prefabs/cargo_item/pear.png" id="1_sf8sb"]
+
+[node name="CargoItem" type="Node2D" unique_id=909094776 node_paths=PackedStringArray("_sprite", "_label")]
+script = ExtResource("1_2y763")
+_sprite = NodePath("Sprite2D")
+_label = NodePath("DebugLabel")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1766034468]
+texture_filter = 1
+texture = ExtResource("1_sf8sb")
+offset = Vector2(0, -48)
+
+[node name="DebugLabel" type="Label" parent="." unique_id=256914769]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
