@@ -12,7 +12,7 @@ enum BoxSide { LEFT, RIGHT }
 
 @export var settings: DemoSettings = preload("res://game/demo_settings.tres")
 @export var _main_conveyor: MainConveyor
-@export var _shipping_conveyor :ShippingConveyor
+@export var _shipping_conveyor: ShippingConveyor
 @export var _character: SortingCharacter
 
 @export var _box_view_prefab: PackedScene
@@ -28,13 +28,13 @@ var _left_box_state: BoxState
 var _right_box_state: BoxState
 var state: State = State.READY
 var score: int = 0
-var _generator: FruitGenerator
-var _supply_elapsed: float = 0.0
+var _fruit_flow: FruitFlow
 
 
 ## 接続されたコンポーネントを設定して開始待ちにする。
 func _ready() -> void:
-	_generator = FruitGenerator.new(settings)
+	_fruit_flow = FruitFlow.new(settings, _main_conveyor)
+	_fruit_flow.supply_failed.connect(_end_game)
 	_main_conveyor.configure(settings)
 	_main_conveyor.reached_terminal.connect(_on_cargo_item_reached_terminal)
 	if is_start_automatically:
@@ -63,37 +63,37 @@ func start_game() -> void:
 	if state == State.PLAYING:
 		return
 	_main_conveyor.clear()
+	_shipping_conveyor.clear()
+	_clear_box(_left_box)
+	_clear_box(_right_box)
 	_character.set_fruit(null, settings.show_weights)
 	_character.reset_pose()
 	_create_boxes()
 	score = 0
-	_supply_elapsed = 0.0
+	_fruit_flow.start()
 	state = State.PLAYING
 
 
-## 供給時刻ごとに搬送を進め、長いフレームでも生成位置を重ねない。[br]
-## [param delta]: 前回の更新からの経過秒数。
+## 各流れへ同じゲーム内経過時間を渡す。周期の蓄積は各担当に委ねる。[br]
+## [param delta]: Engine.time_scaleが適用済みの前フレームからの経過秒数。
 func advance(delta: float) -> void:
 	if state != State.PLAYING or delta <= 0.0 or not is_finite(delta):
 		return
-	while delta > 0.0 and state == State.PLAYING:
-		var until_supply := maxf(0.0, settings.supply_interval - _supply_elapsed)
-		var step := minf(delta, until_supply)
-		_main_conveyor.advance(step)
-		_shipping_conveyor.advance(step)
-		_supply_elapsed += step
-		delta -= step
-		if _supply_elapsed >= settings.supply_interval:
-			_supply_elapsed = 0.0
-			supply()
+	_fruit_flow.advance(delta)
+	if state == State.PLAYING:
+		_shipping_conveyor.advance(delta)
 
 
 ## 果実を供給する。容量超過または入口の詰まりでゲームを終了する。
 func supply() -> void:
-	if state != State.PLAYING:
-		return
-	if not _main_conveyor.add_cargo_item(_generator.generate()):
-		state = State.GAME_OVER
+	_fruit_flow.supply()
+
+
+## 供給失敗時に全ての流れを停止する。
+func _end_game() -> void:
+	state = State.GAME_OVER
+	_fruit_flow.stop()
+	_shipping_conveyor.stop()
 
 
 ## 到着した先頭果実を選択した箱へ渡す。処理できなければfalseを返す。[br]
@@ -137,24 +137,34 @@ func ship() -> int:
 	shipped.emit(points)
 	_left_box_state.ship()
 	_right_box_state.ship()
+	_shipping_conveyor.start_shipment([_left_box, _right_box], settings.flow_tick_interval)
 	_create_boxes()
 	return points
 
 
+## 左右の投入先となる空箱を生成して状態と乗せ位置を接続する。
 func _create_boxes() -> void:
 	_left_box = _box_view_prefab.instantiate() as BoxView
 	add_child(_left_box)
 	_left_box.global_position = _left_box_spawn_marker.global_position
 	_left_box_state = BoxState.new()
 	_left_box.construct(_left_box_state, _left_box_ship_marker)
-	_left_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
 
 	_right_box = _box_view_prefab.instantiate() as BoxView
 	add_child(_right_box)
 	_right_box.global_position = _right_box_spawn_marker.global_position
 	_right_box_state = BoxState.new()
 	_right_box.construct(_right_box_state, _right_box_ship_marker)
-	_right_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+
+
+## 再開始時に古い投入先の表示と状態接続を除去する。[br]
+## [param box]: 前のゲームで使用した未出荷の箱。
+func _clear_box(box: BoxView) -> void:
+	if box == null:
+		return
+	box.unbind_state()
+	box.get_parent().remove_child(box)
+	box.queue_free()
 
 
 ## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]

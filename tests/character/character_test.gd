@@ -2,7 +2,7 @@ extends SceneTree
 ## 手元表示、左右画像の優先順位、反転補完とポーズ復帰を検証する。
 
 const TestHelper := preload("res://tests/supports/test_helper.gd")
-const CHARACTER_SCENE := preload("res://character/character.tscn")
+const CHARACTER_SCENE := preload("res://prefabs/character/character.tscn")
 
 var _helper := TestHelper.new(true)
 
@@ -32,11 +32,11 @@ func _test_holding() -> void:
 	_helper.assert_true(view.visible, "到着した果実を手元に表示")
 	_helper.assert_equal(view.global_position, point.global_position, "HoldPointに果実を置く")
 	_helper.assert_true(view.global_scale.is_equal_approx(Vector2.ONE), "キャラクターの倍率で果実を縮めない")
-	var pear := view.get_node("Pear") as Sprite2D
+	var pear := view.get_node("Sprite2D") as Sprite2D
 	_helper.assert_true(is_equal_approx(pear.scale.x, pow(2.0, 1.0 / 3.0)), "重量比の立方根で拡縮")
-	_helper.assert_equal(view.get_node("Weight").text, "10", "果実の重量を表示")
+	_helper.assert_equal(view.get_node("DebugLabel").text, "10", "果実の重量を表示")
 	character.set_fruit(CargoItemData.new(5), false)
-	_helper.assert_false(view.get_node("Weight").visible, "手元の重量も非表示にできる")
+	_helper.assert_false(view.get_node("DebugLabel").visible, "手元の重量も非表示にできる")
 	character.set_fruit(null, false)
 	_helper.assert_false(view.visible, "取り出した果実を非表示")
 	character.free()
@@ -69,10 +69,8 @@ func _test_poses() -> void:
 	character.show_sort_pose(true)
 	_helper.assert_same(body.texture, right, "左未設定なら右画像を使う")
 	_helper.assert_true(body.flip_h, "右画像を左用に反転する")
-	character._process(character._pose_duration / 2.0)
-	_helper.assert_same(body.texture, right, "表示時間の途中ではポーズを維持")
-	character._process(character._pose_duration)
-	_helper.assert_same(body.texture, front, "表示時間後に正面へ戻る")
+	character.get_node("Timer").timeout.emit()
+	_helper.assert_same(body.texture, front, "timeout通知で正面へ戻る")
 	_helper.assert_false(body.flip_h, "正面に反転を残さない")
 	_helper.assert_true(hands.visible and view.visible, "正面の手と待機果実を復元")
 	character._right_pose_texture = null

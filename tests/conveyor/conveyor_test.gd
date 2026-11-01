@@ -2,7 +2,7 @@ extends SceneTree
 ## 実コンベアの経路移動、待機、取り出しと初期化を検証する。
 
 const TestHelper := preload("res://tests/supports/test_helper.gd")
-const CONVEYOR_SCENE := preload("res://backgrounds/conveyor.tscn")
+const CONVEYOR_SCENE := preload("res://prefabs/conveyors/main_conveyor.tscn")
 
 var _helper := TestHelper.new(true)
 
@@ -41,7 +41,7 @@ func _test_transport() -> void:
 	_helper.assert_true(is_equal_approx(follower.progress - following.progress, conveyor.fruit_spacing), "後続は間隔を空けて停止")
 	_helper.assert_false(follower.loop or follower.rotates, "終端で折り返さず、表示を回転させない")
 	conveyor.set_show_weights(false)
-	_helper.assert_false(following.get_child(0).get_node("Weight").visible, "全果実の重量表示を切り替える")
+	_helper.assert_false(following.get_child(0).get_node("DebugLabel").visible, "全果実の重量表示を切り替える")
 	_helper.assert_same(conveyor.peek_ready_cargo_item(), first, "到着した先頭を参照できる")
 	_helper.assert_same(conveyor.take_ready_cargo_item(), first, "生成順で取り出す")
 	_helper.assert_null(conveyor.take_ready_cargo_item(), "後続の到着前は取り出せない")

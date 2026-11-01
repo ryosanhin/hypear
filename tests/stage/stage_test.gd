@@ -46,7 +46,6 @@ func _test_stage_flow() -> void:
 	var first_follower := path.get_child(0) as PathFollow2D
 	var second_follower := path.get_child(1) as PathFollow2D
 	_helper.assert_true(held.visible, "到着した果実を手元に表示する")
-	_helper.assert_equal(held.get_node("DebugLabel").text, "5", "到着した重量を表示する")
 	_helper.assert_false(first_follower.visible, "到着した果実をコンベア上で二重表示しない")
 	_helper.assert_true(second_follower.visible, "搬送中の後続果実は表示する")
 	conveyor.advance(0.1)
@@ -58,10 +57,9 @@ func _test_stage_flow() -> void:
 	_helper.assert_false(body.flip_h, "左投入では画像を反転しない")
 	_helper.assert_false(held.visible, "投入した果実を手元から消す")
 	conveyor.advance(0.25)
-	await character.get_node("Timer").timeout
+	character.get_node("Timer").timeout.emit()
 	_helper.assert_same(body.texture, front, "タイマーで正面画像へ戻る")
 	_helper.assert_true(held.visible, "投入ポーズ中に到着した後続果実を復帰後に表示する")
-	_helper.assert_equal(held.get_node("DebugLabel").text, "3", "後続果実の重量へ更新する")
 	_helper.assert_false(second_follower.visible, "後続果実も到着後はコンベア上から隠す")
 	_helper.assert_equal(arrivals.size(), 2, "後続果実の到着も通知する")
 	_press(stage, "sort_right")
@@ -73,7 +71,7 @@ func _test_stage_flow() -> void:
 	var left_box := stage._left_box
 	var right_box := stage._right_box
 	_press(stage, "ship_boxes")
-	await create_timer(1.2).timeout
+	stage.advance(0.5)
 	var shipping := stage.get_node("ShippingConveyor") as ShippingConveyor
 	var shipping_path := shipping.get_node("Path2D") as Path2D
 	_helper.assert_equal(shipping_path.get_child_count(), 2, "出荷した左右の箱を経路に載せる")

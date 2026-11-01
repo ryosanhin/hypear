@@ -5,6 +5,7 @@ extends Resource
 @export var fruit_weights: Array[int] = [2, 3, 5, 7, 10]
 @export var fruit_probabilities: Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0]
 @export_range(0.1, 60.0) var supply_interval: float = 1.5
+@export_range(0.01, 1.0, 0.01) var flow_tick_interval: float = 0.1
 @export_range(1, 30) var queue_capacity: int = 10
 @export_range(1, 1000) var target_weight: int = 20
 @export_range(10.0, 2000.0) var conveyor_speed: float = 360.0
@@ -13,6 +14,8 @@ extends Resource
 
 ## 設定が生成と進行に使用できるかを返す。
 func is_valid() -> bool:
+	if not is_finite(flow_tick_interval) or flow_tick_interval <= 0.0:
+		return false
 	if fruit_weights.is_empty() or fruit_weights.size() != fruit_probabilities.size():
 		return false
 	if supply_interval <= 0.0 or queue_capacity <= 0 or target_weight <= 0:
