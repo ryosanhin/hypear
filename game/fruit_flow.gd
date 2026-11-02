@@ -13,12 +13,12 @@ var _is_running: bool = false
 
 
 ## 供給設定と搬送先を保持する。[br]
-## [param settings]: 供給間隔と更新間隔の設定。[br]
-## [param conveyor]: 果実を受け入れ、搬送するコンポーネント。
-func _init(settings: DemoSettings, conveyor: MainConveyor) -> void:
-	_settings = settings
-	_conveyor = conveyor
-	_generator = FruitGenerator.new(settings)
+## [param init_settings]: 供給間隔と更新間隔の設定。[br]
+## [param init_conveyor]: 果実を受け入れ、搬送するコンポーネント。
+func _init(init_settings: DemoSettings, init_conveyor: MainConveyor) -> void:
+	_settings = init_settings
+	_conveyor = init_conveyor
+	_generator = FruitGenerator.new(init_settings)
 
 
 ## 果実の周期と供給時間をゼロから開始する。
@@ -43,7 +43,7 @@ func advance(delta: float) -> void:
 	for index in _stepper.take_steps(delta):
 		if not _is_running:
 			break
-		_advance_tick(_stepper.interval)
+		_advance_tick(_stepper.tick_interval)
 
 
 ## 果実を一個供給し、入口の詰まりや容量超過なら流れを停止して通知する。

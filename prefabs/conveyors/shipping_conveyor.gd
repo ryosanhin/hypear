@@ -41,7 +41,7 @@ func advance(delta: float) -> void:
 		return
 	for shipment: Shipment in _shipments.duplicate():
 		for index in shipment.stepper.take_steps(delta):
-			_advance_shipment(shipment, shipment.stepper.interval)
+			_advance_shipment(shipment, shipment.stepper.tick_interval)
 			if shipment.transports.is_empty():
 				break
 		if shipment.transports.is_empty():
