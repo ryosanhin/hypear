@@ -12,7 +12,8 @@ func _init(settings: DemoSettings) -> void:
 	_settings = settings
 
 
-## 設定された重量の果実を一個生成する。
+## 設定された重量の果実を一個生成する。[br]
+## 抽選失敗時には null を返す。
 func generate() -> CargoItemData:
 	var index := _random.rand_weighted(_settings.fruit_probabilities)
 	if index < 0:
