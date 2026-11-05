@@ -3,7 +3,7 @@ extends Resource
 ## デモの難易度と果実の出現設定。
 
 @export var fruit_weights: Array[int] = [2, 3, 5, 7, 10]
-@export var fruit_probabilities: Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0]
+@export var fruit_probabilities: PackedFloat32Array = PackedFloat32Array([1.0, 1.0, 1.0, 1.0, 1.0])
 @export_range(0.1, 60.0) var supply_interval: float = 1.5
 @export_range(1, 30) var queue_capacity: int = 10
 @export_range(1, 1000) var target_weight: int = 20
