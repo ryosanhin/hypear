@@ -62,6 +62,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func start_game() -> void:
 	if state == State.PLAYING:
 		return
+	if not settings.is_valid():
+		push_error("ゲーム設定が不正です。")
+		return
 	_main_conveyor.clear()
 	_character.set_fruit(null, settings.show_weights)
 	_character.reset_pose()
@@ -92,7 +95,11 @@ func advance(delta: float) -> void:
 func supply() -> void:
 	if state != State.PLAYING:
 		return
-	if not _main_conveyor.add_cargo_item(_generator.generate()):
+	var cargo_item := _generator.generate()
+	if cargo_item == null:
+		state = State.GAME_OVER
+		return
+	if not _main_conveyor.add_cargo_item(cargo_item):
 		state = State.GAME_OVER
 
 
