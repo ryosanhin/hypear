@@ -41,8 +41,8 @@ func _test_fifo_and_sorting() -> void:
 	session._main_conveyor.advance(20.0)
 	_helper.assert_false(session.sort_cargo_item(-1), "不正な仕分け先は無視する")
 	_helper.assert_true(session.sort_cargo_item(GameSession.BoxSide.RIGHT), "右に仕分け可能")
-	_helper.assert_equal(session._right_box.weight, original[0].weight, "先頭だけが右箱に入る")
-	_helper.assert_equal(session._left_box.weight, 0, "左箱は変化しない")
+	_helper.assert_equal(session._right_box_view.weight, original[0].weight, "先頭だけが右箱に入る")
+	_helper.assert_equal(session._left_box_view.weight, 0, "左箱は変化しない")
 	_helper.assert_same(session._main_conveyor.get_queue()[0], original[1], "二個目が先頭に進む")
 	_helper.assert_equal(session._main_conveyor.get_queue().size(), 3, "待機列から一個だけ除去")
 	var left_weight := 0
@@ -51,7 +51,7 @@ func _test_fifo_and_sorting() -> void:
 		left_weight += original[index].weight
 		session._main_conveyor.advance(20.0)
 		session.sort_cargo_item(GameSession.BoxSide.LEFT)
-	_helper.assert_equal(session._left_box.weight, left_weight, "左箱の加算重量")
+	_helper.assert_equal(session._left_box_view.weight, left_weight, "左箱の加算重量")
 	_helper.assert_false(session.sort_cargo_item(GameSession.BoxSide.LEFT), "空の待機列は操作不可")
 	_helper.assert_true(session._main_conveyor.get_queue().is_empty(), "全処理後は待機列が空")
 
@@ -73,10 +73,10 @@ func _test_shipping() -> void:
 		session.supply()
 		session._main_conveyor.advance(20.0)
 		session.sort_cargo_item(GameSession.BoxSide.RIGHT)
-	_helper.assert_equal(session._right_box.weight, 30, "目標超過しても投入できる")
+	_helper.assert_equal(session._right_box_view.weight, 30, "目標超過しても投入できる")
 	_helper.assert_equal(session.ship(), 150, "左右の得点を合計")
 	_helper.assert_equal(session.score, 150, "累計得点へ加算")
-	_helper.assert_true(session._left_box.weight == 0 and session._right_box.weight == 0, "左右を同時に空にする")
+	_helper.assert_true(session._left_box_view.weight == 0 and session._right_box_view.weight == 0, "左右を同時に空にする")
 	_helper.assert_array(shipments, [150], "出荷結果を通知")
 	session.supply()
 	session._main_conveyor.advance(20.0)
@@ -140,12 +140,12 @@ func _test_overflow_and_retry() -> void:
 	session.supply()
 	_helper.assert_false(session.sort_cargo_item(GameSession.BoxSide.LEFT), "終了後は仕分け停止")
 	_helper.assert_equal(session.ship(), 0, "終了後は出荷停止")
-	_helper.assert_true(session.score == 50 and session._right_box.weight == 10, "終了後は得点と箱を維持")
+	_helper.assert_true(session.score == 50 and session._right_box_view.weight == 10, "終了後は得点と箱を維持")
 	_helper.assert_equal(session._main_conveyor.get_queue().size(), 2, "終了後は生成停止")
 	session.start_game()
 	_helper.assert_equal(session.state, GameSession.State.PLAYING, "リトライでPLAYING")
 	_helper.assert_true(session.score == 0 and session._main_conveyor.get_queue().is_empty(), "得点と待機列を初期化")
-	_helper.assert_true(session._left_box.weight == 0 and session._right_box.weight == 0, "両方の箱を初期化")
+	_helper.assert_true(session._left_box_view.weight == 0 and session._right_box_view.weight == 0, "両方の箱を初期化")
 	session.advance(0.5)
 	_helper.assert_true(session._main_conveyor.get_queue().is_empty(), "供給タイマーも初期化")
 	session.advance(0.5)
@@ -165,8 +165,8 @@ func _make_session(settings: DemoSettings) -> GameSession:
 	var session := GameSession.new()
 	session.settings = settings
 	session._main_conveyor = conveyor
-	session._left_box = left_box
-	session._right_box = right_box
+	session._left_box_view = left_box
+	session._right_box_view = right_box
 	fixture.add_child(session)
 	root.add_child(fixture)
 	session.set_process(false)

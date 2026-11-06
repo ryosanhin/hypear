@@ -70,8 +70,8 @@ func _test_stage_flow() -> void:
 	_helper.assert_true(body.flip_h, "右入力では左画像を反転する")
 	_helper.assert_false(held.visible, "右投入後も手元に果実を残さない")
 
-	var left_box := stage._left_box
-	var right_box := stage._right_box
+	var left_box := stage._left_box_view
+	var right_box := stage._right_box_view
 	_press(stage, "ship_boxes")
 	await create_timer(1.2).timeout
 	var shipping := stage.get_node("ShippingConveyor") as ShippingConveyor
@@ -88,7 +88,7 @@ func _test_stage_flow() -> void:
 			is_equal_approx(left_box.global_position.y, left_position.y),
 			"箱は出荷ベルトの高さを保つ",
 	)
-	_helper.assert_not_equal(stage._left_box, left_box, "出荷後の投入先には新しい箱を用意する")
+	_helper.assert_not_equal(stage._left_box_view, left_box, "出荷後の投入先には新しい箱を用意する")
 	shipping.advance(30.0)
 	_helper.assert_equal(shipping_path.get_child_count(), 0, "終端に到着した追従ノードを除去する")
 	await process_frame

@@ -16,7 +16,7 @@ var _show_weights: bool = true
 var _cargo_items: Array[CargoItemData] = []
 var _followers: Array[PathFollow2D] = []
 
-@onready var _path: Path2D = $FruitPath
+@export var _path: Path2D
 
 
 ## 搬送条件と初期表示を設定する。[br]
@@ -35,14 +35,20 @@ func add_cargo_item(cargo_item: CargoItemData) -> bool:
 	if not _followers.is_empty() and _followers.back().progress < fruit_spacing:
 		return false
 	var follower := PathFollow2D.new()
+	
 	follower.loop = false
 	follower.rotates = false
+	
 	_path.add_child(follower)
+	_path.move_child(follower, 0)
+
 	var view := CARGO_ITEM_SCENE.instantiate() as CargoItem
 	follower.add_child(view)
 	view.construct(cargo_item.weight, _show_weights)
+
 	_cargo_items.append(cargo_item)
 	_followers.append(follower)
+	
 	return true
 
 

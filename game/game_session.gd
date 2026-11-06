@@ -21,8 +21,10 @@ enum BoxSide { LEFT, RIGHT }
 @export var _left_box_ship_marker: Marker2D
 @export var _right_box_ship_marker: Marker2D
 
-var _left_box: BoxView
-var _right_box: BoxView
+@export var _boxes_view_root: Node2D
+
+var _left_box_view: BoxView
+var _right_box_view: BoxView
 
 var _left_box_state: BoxState
 var _right_box_state: BoxState
@@ -149,19 +151,21 @@ func ship() -> int:
 
 
 func _create_boxes() -> void:
-	_left_box = _box_view_prefab.instantiate() as BoxView
-	add_child(_left_box)
-	_left_box.global_position = _left_box_spawn_marker.global_position
+	_left_box_view = _box_view_prefab.instantiate() as BoxView
+	_boxes_view_root.add_child(_left_box_view)
+	_boxes_view_root.move_child(_left_box_view, 0)
+	_left_box_view.global_position = _left_box_spawn_marker.global_position
 	_left_box_state = BoxState.new(settings.target_weight)
-	_left_box.construct(_left_box_state, _left_box_ship_marker)
-	_left_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+	_left_box_view.construct(_left_box_state, _left_box_ship_marker)
+	_left_box_view.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
 
-	_right_box = _box_view_prefab.instantiate() as BoxView
-	add_child(_right_box)
-	_right_box.global_position = _right_box_spawn_marker.global_position
+	_right_box_view = _box_view_prefab.instantiate() as BoxView
+	_boxes_view_root.add_child(_right_box_view)
+	_boxes_view_root.move_child(_right_box_view, 0)
+	_right_box_view.global_position = _right_box_spawn_marker.global_position
 	_right_box_state = BoxState.new(settings.target_weight)
-	_right_box.construct(_right_box_state, _right_box_ship_marker)
-	_right_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+	_right_box_view.construct(_right_box_state, _right_box_ship_marker)
+	_right_box_view.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
 
 
 ## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]
