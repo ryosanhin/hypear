@@ -130,14 +130,14 @@ func _on_cargo_item_reached_terminal(cargo_item: CargoItemData) -> void:
 
 ## 左右の箱を同時出荷して合計得点を返す。両方空の場合は出荷しない。
 func ship() -> int:
-	if state != State.PLAYING or (_left_box_state.weight == 0 and _right_box_state.weight == 0):
+	if state != State.PLAYING or (_left_box_state.current_weight == 0 and _right_box_state.current_weight == 0):
 		return 0
 	var points := calculate(
-			_left_box_state.weight,
+			_left_box_state.current_weight,
 			settings.target_weight,
 	)
 	points += calculate(
-			_right_box_state.weight,
+			_right_box_state.current_weight,
 			settings.target_weight,
 	)
 	score += points
@@ -152,14 +152,14 @@ func _create_boxes() -> void:
 	_left_box = _box_view_prefab.instantiate() as BoxView
 	add_child(_left_box)
 	_left_box.global_position = _left_box_spawn_marker.global_position
-	_left_box_state = BoxState.new()
+	_left_box_state = BoxState.new(settings.target_weight)
 	_left_box.construct(_left_box_state, _left_box_ship_marker)
 	_left_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
 
 	_right_box = _box_view_prefab.instantiate() as BoxView
 	add_child(_right_box)
 	_right_box.global_position = _right_box_spawn_marker.global_position
-	_right_box_state = BoxState.new()
+	_right_box_state = BoxState.new(settings.target_weight)
 	_right_box.construct(_right_box_state, _right_box_ship_marker)
 	_right_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
 

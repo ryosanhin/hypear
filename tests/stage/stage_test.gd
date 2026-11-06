@@ -53,7 +53,7 @@ func _test_stage_flow() -> void:
 	_helper.assert_equal(arrivals.size(), 1, "終端で待機中は到着通知を繰り返さない")
 
 	_press(stage, "sort_left")
-	_helper.assert_equal(stage._left_box_state.weight, first.weight, "左入力で左箱へ投入する")
+	_helper.assert_equal(stage._left_box_state.current_weight, first.weight, "左入力で左箱へ投入する")
 	_helper.assert_same(body.texture, character._left_pose_texture, "左入力で左の投入画像を使う")
 	_helper.assert_false(body.flip_h, "左投入では画像を反転しない")
 	_helper.assert_false(held.visible, "投入した果実を手元から消す")
@@ -65,7 +65,7 @@ func _test_stage_flow() -> void:
 	_helper.assert_false(second_follower.visible, "後続果実も到着後はコンベア上から隠す")
 	_helper.assert_equal(arrivals.size(), 2, "後続果実の到着も通知する")
 	_press(stage, "sort_right")
-	_helper.assert_equal(stage._right_box_state.weight, second.weight, "右入力で右箱へ投入する")
+	_helper.assert_equal(stage._right_box_state.current_weight, second.weight, "右入力で右箱へ投入する")
 	_helper.assert_same(body.texture, character._left_pose_texture, "右画像未設定時は左画像を使う")
 	_helper.assert_true(body.flip_h, "右入力では左画像を反転する")
 	_helper.assert_false(held.visible, "右投入後も手元に果実を残さない")
