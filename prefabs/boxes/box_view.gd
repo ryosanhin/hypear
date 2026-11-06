@@ -5,6 +5,7 @@ extends Node2D
 signal reached_ship_entry_position(box_view: BoxView)
 
 @export var _sprite: Sprite2D
+@export var _animated_sprite: AnimatedSprite2D
 @export var _debug_label: Label
 
 const SHIP_ENTRY_SPEED := 72.0 * 2.0
