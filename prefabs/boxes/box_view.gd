@@ -4,6 +4,9 @@ extends Node2D
 
 signal reached_ship_entry_position(box_view: BoxView)
 
+const ANIMATION_NAME := &"close"
+const BORDER_FRAME := 2
+
 @export var _sprite: Sprite2D
 @export var _animated_sprite: AnimatedSprite2D
 @export var _debug_label: Label
@@ -42,9 +45,9 @@ func unbind_state() -> void:
 func _ship_animation_async(_shipped_weight: int) -> void:
 	unbind_state()
 	
-	_animated_sprite.animation_finished.connect(_sprite.hide)
+	_animated_sprite.frame_changed.connect(_delete_unlidded_box_view)
 	_animated_sprite.show()
-	_animated_sprite.play(&"close")
+	_animated_sprite.play(ANIMATION_NAME)
 
 	var distance := (_ship_entry_marker.global_position - global_position).length()
 	var elapse_time := distance / SHIP_ENTRY_SPEED
@@ -84,3 +87,8 @@ func _calculate_sprite_frame(current_weight: int, target_weight: int) -> int:
 	if rate < 0.8:
 		return 4
 	return 5
+
+
+func _delete_unlidded_box_view() -> void:
+	if _animated_sprite.frame == BORDER_FRAME:
+		_sprite.hide()
