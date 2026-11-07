@@ -53,7 +53,7 @@ func _test_stage_flow() -> void:
 	_helper.assert_equal(arrivals.size(), 1, "終端で待機中は到着通知を繰り返さない")
 
 	_press(stage, "sort_left")
-	_helper.assert_equal(stage._left_box_state.weight, first.weight, "左入力で左箱へ投入する")
+	_helper.assert_equal(stage._left_box_state.current_weight, first.weight, "左入力で左箱へ投入する")
 	_helper.assert_same(body.texture, character._left_pose_texture, "左入力で左の投入画像を使う")
 	_helper.assert_false(body.flip_h, "左投入では画像を反転しない")
 	_helper.assert_false(held.visible, "投入した果実を手元から消す")
@@ -65,13 +65,13 @@ func _test_stage_flow() -> void:
 	_helper.assert_false(second_follower.visible, "後続果実も到着後はコンベア上から隠す")
 	_helper.assert_equal(arrivals.size(), 2, "後続果実の到着も通知する")
 	_press(stage, "sort_right")
-	_helper.assert_equal(stage._right_box_state.weight, second.weight, "右入力で右箱へ投入する")
+	_helper.assert_equal(stage._right_box_state.current_weight, second.weight, "右入力で右箱へ投入する")
 	_helper.assert_same(body.texture, character._left_pose_texture, "右画像未設定時は左画像を使う")
 	_helper.assert_true(body.flip_h, "右入力では左画像を反転する")
 	_helper.assert_false(held.visible, "右投入後も手元に果実を残さない")
 
-	var left_box := stage._left_box
-	var right_box := stage._right_box
+	var left_box := stage._left_box_view
+	var right_box := stage._right_box_view
 	_press(stage, "ship_boxes")
 	await create_timer(1.2).timeout
 	var shipping := stage.get_node("ShippingConveyor") as ShippingConveyor
@@ -88,7 +88,7 @@ func _test_stage_flow() -> void:
 			is_equal_approx(left_box.global_position.y, left_position.y),
 			"箱は出荷ベルトの高さを保つ",
 	)
-	_helper.assert_not_equal(stage._left_box, left_box, "出荷後の投入先には新しい箱を用意する")
+	_helper.assert_not_equal(stage._left_box_view, left_box, "出荷後の投入先には新しい箱を用意する")
 	shipping.advance(30.0)
 	_helper.assert_equal(shipping_path.get_child_count(), 0, "終端に到着した追従ノードを除去する")
 	await process_frame
