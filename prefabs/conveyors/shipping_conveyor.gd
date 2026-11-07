@@ -15,12 +15,12 @@ func accept_box(box: BoxView) -> void:
 	follower.loop = false
 	follower.rotates = false
 	_path.add_child(follower)
+	_path.move_child(follower, 0)
 
 	var local_position := _path.to_local(box.global_position)
 	follower.progress = _path.curve.get_closest_offset(local_position)
 
-	box.reparent(follower)
-	box.position = Vector2.ZERO
+	box.reparent(follower, true)
 	_followers.append(follower)
 
 

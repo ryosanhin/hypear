@@ -14,17 +14,7 @@ enum BoxSide { LEFT, RIGHT }
 @export var _main_conveyor: MainConveyor
 @export var _shipping_conveyor :ShippingConveyor
 @export var _character: SortingCharacter
-
-@export var _box_view_prefab: PackedScene
-@export var _left_box_spawn_marker: Marker2D
-@export var _right_box_spawn_marker: Marker2D
-@export var _left_box_ship_marker: Marker2D
-@export var _right_box_ship_marker: Marker2D
-
-@export var _boxes_view_root: Node2D
-
-var _left_box_view: BoxView
-var _right_box_view: BoxView
+@export var _boxes_view_controller: BoxesViewController
 
 var _left_box_state: BoxState
 var _right_box_state: BoxState
@@ -150,22 +140,11 @@ func ship() -> int:
 	return points
 
 
+## 左右の新しい箱の状態を生成し、表示の用意をControllerへ依頼する。
 func _create_boxes() -> void:
-	_left_box_view = _box_view_prefab.instantiate() as BoxView
-	_boxes_view_root.add_child(_left_box_view)
-	_boxes_view_root.move_child(_left_box_view, 0)
-	_left_box_view.global_position = _left_box_spawn_marker.global_position
 	_left_box_state = BoxState.new(settings.target_weight)
-	_left_box_view.construct(_left_box_state, _left_box_ship_marker)
-	_left_box_view.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
-
-	_right_box_view = _box_view_prefab.instantiate() as BoxView
-	_boxes_view_root.add_child(_right_box_view)
-	_boxes_view_root.move_child(_right_box_view, 0)
-	_right_box_view.global_position = _right_box_spawn_marker.global_position
 	_right_box_state = BoxState.new(settings.target_weight)
-	_right_box_view.construct(_right_box_state, _right_box_ship_marker)
-	_right_box_view.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+	_boxes_view_controller.create_boxes(_left_box_state, _right_box_state)
 
 
 ## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]

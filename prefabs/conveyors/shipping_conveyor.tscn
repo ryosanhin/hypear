@@ -18,5 +18,7 @@ texture_filter = 1
 tile_map_data = PackedByteArray("AAAAAP//AQAAAAAAAAAEAP//AQAAAAAAAAAIAP//AQAAAAAAAAAMAP//AQAAAAAAAAAQAP//AQAAAAAAAAAUAP//AQAAAAAAAAD+////AQAEAAAAAAACAP//AQAEAAAAAAAGAP//AQAEAAAAAAAKAP//AQAEAAAAAAAOAP//AQAEAAAAAAASAP//AQAEAAAAAAAWAP//AQAEAAAAAAD8////AQAAAAAAAAA=")
 tile_set = ExtResource("1_hlgup")
 
+[node name="BoxesEntryViewRoot" type="Node2D" parent="."]
+
 [node name="Path2D" type="Path2D" parent="." unique_id=654173839]
 curve = SubResource("Curve2D_gyxp3")
