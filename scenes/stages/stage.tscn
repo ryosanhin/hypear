@@ -34,6 +34,8 @@ scale = Vector2(0.4, 0.4)
 [node name="ShippingConveyor" parent="." unique_id=1465225219 instance=ExtResource("5_sc1co")]
 position = Vector2(0, 672)
 
+[node name="BoxesEntryViewRoot" type="Node2D" parent="." unique_id=1472495683]
+
 [node name="LeftBoxSpawnMarker2D" type="Marker2D" parent="." unique_id=1332628430]
 position = Vector2(288, 600)
 gizmo_extents = 96.0
@@ -50,11 +52,11 @@ gizmo_extents = 96.0
 position = Vector2(0, 72)
 gizmo_extents = 96.0
 
-[node name="BoxesViewController" type="Node" parent="." node_paths=PackedStringArray("_boxes_view_root", "_boxes_entry_view_root", "_shipping_conveyor", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
+[node name="BoxesViewController" type="Node" parent="." unique_id=566791484 node_paths=PackedStringArray("_boxes_view_root", "_boxes_entry_view_root", "_shipping_conveyor", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
 script = ExtResource("7_controller")
 _box_view_prefab = ExtResource("2_ko36a")
 _boxes_view_root = NodePath("../BoxesViewRoot")
-_boxes_entry_view_root = NodePath("../ShippingConveyor/BoxesEntryViewRoot")
+_boxes_entry_view_root = NodePath("../BoxesEntryViewRoot")
 _shipping_conveyor = NodePath("../ShippingConveyor")
 _left_box_spawn_marker = NodePath("../LeftBoxSpawnMarker2D")
 _right_box_spawn_marker = NodePath("../RightBoxSpawnMarker2D")

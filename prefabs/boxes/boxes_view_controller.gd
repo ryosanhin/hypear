@@ -60,7 +60,7 @@ func _on_box_shipped(_shipped_weight: int, box_state: BoxState) -> void:
 	else:
 		_right_box_view = null
 	box.unbind_state()
-	box.reparent(_boxes_entry_view_root, true)
+	box.reparent(_boxes_entry_view_root)
 	_boxes_entry_view_root.move_child(box, 0)
 	box.ship_to(ship_marker.global_position)
 
