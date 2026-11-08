@@ -18,10 +18,9 @@ var _box_state: BoxState
 ## コンストラクタの代わり。[br]
 ## [param init_box_state]: 参照する箱の状態。
 func construct(init_box_state: BoxState) -> BoxView:
-	unbind_state()
 	_box_state = init_box_state
 	_box_state.weight_changed.connect(_update_weight_display)
-	_update_weight_display(_box_state.current_weight)
+	_update_weight_display(_box_state.current_weight, _box_state.target_weight)
 	_animated_sprite.hide()
 	return self
 
@@ -58,15 +57,16 @@ func ship_to(ship_entry_position: Vector2) -> void:
 
 
 ## 重量に合わせて箱の表示を切り替える。[br]
-## [param current_weight]: 現在の重さ。
-func _update_weight_display(current_weight: int) -> void:
-	_sprite.frame = _calculate_sprite_frame(current_weight, _box_state.target_weight)
+## [param current_weight]: 現在の重量。[br]
+## [param target_weight]: 目標の重量。
+func _update_weight_display(current_weight: int, target_weight: int) -> void:
+	_sprite.frame = _calculate_sprite_frame(current_weight, target_weight)
 	_debug_label.text = "%d" % current_weight
 
 
 ## スプライトの表示フレームを計算する。[br]
-## [param current_weight]: 現在の重さ。[br]
-## [param target_weight]: 目標の重さ。
+## [param current_weight]: 現在の重量。[br]
+## [param target_weight]: 目標の重量。
 func _calculate_sprite_frame(current_weight: int, target_weight: int) -> int:
 	var rate := float(current_weight) / float(target_weight)
 	if rate <= 0.0:
