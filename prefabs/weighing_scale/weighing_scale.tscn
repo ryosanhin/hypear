@@ -11,4 +11,3 @@ _hand = NodePath("Hand")
 
 [node name="Hand" type="Sprite2D" parent="." unique_id=1770784992]
 texture = ExtResource("2_whmwx")
-offset = Vector2(0, -64)

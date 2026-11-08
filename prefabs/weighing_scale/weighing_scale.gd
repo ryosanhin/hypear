@@ -2,8 +2,9 @@ class_name WeighingScale
 extends Sprite2D
 ## 現在の重さを表示する。
 
-const TARGET_ANGLE_DEGREES := 300.0
-const INDICATE_LIMIT := 360.0 / TARGET_ANGLE_DEGREES
+const TARGET_ANGLE_DEGREES := 225.0
+const INDICATE_LIMIT := 270.0 / TARGET_ANGLE_DEGREES
+const ANGLE_OFFSET := -135.0
 
 @export var _hand: Sprite2D
 
@@ -26,7 +27,7 @@ func _update_weighting_scale(current_weight: int, target_weight: int) -> void:
 	var ratio := float(current_weight) / float(target_weight)
 	if ratio > INDICATE_LIMIT:
 		ratio = INDICATE_LIMIT
-	_hand.rotation = deg_to_rad(ratio * TARGET_ANGLE_DEGREES)
+	_hand.rotation = deg_to_rad(ratio * TARGET_ANGLE_DEGREES + ANGLE_OFFSET)
 
 
 ## 出荷時に監視対象の箱のモデルへのシグナル接続を解除し、[br]
@@ -36,4 +37,4 @@ func _cancel_observing(_current_weight: int, _target_weight: int) -> void:
 		_observing_box_state.weight_changed.disconnect(_update_weighting_scale)
 	if _observing_box_state.shipped.is_connected(_cancel_observing):
 		_observing_box_state.shipped.disconnect(_cancel_observing)
-	_hand.rotation = 0.0
+	_hand.rotation = deg_to_rad(ANGLE_OFFSET)

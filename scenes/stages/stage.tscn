@@ -68,8 +68,8 @@ _right_box_ship_marker = NodePath("../RightBoxSpawnMarker2D/RightBoxShipMarker2D
 
 [node name="LeftWeighingScale" parent="." unique_id=2051810136 instance=ExtResource("8_xch81")]
 position = Vector2(288, 384)
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.5, 0.5)
 
 [node name="RightWeighingScale" parent="." unique_id=453164961 instance=ExtResource("8_xch81")]
 position = Vector2(672, 384)
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.5, 0.5)
