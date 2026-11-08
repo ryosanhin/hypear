@@ -50,7 +50,7 @@ func _create_box(box_state: BoxState, spawn_marker: Marker2D) -> BoxView:
 
 ## 出荷時の表示を固定し、移動中の表示先へ親を変えてから演出を始める。[br]
 ## [param _shipped_weight]: 出荷した箱の重量。[br]
-## [param _shipped_weight]: 出荷した箱の目標重量。[br]
+## [param _target_weight]: 出荷した箱の目標重量。[br]
 ## [param box_state]: 出荷通知を送った箱の状態。
 func _on_box_shipped(_shipped_weight: int, _target_weight: int, box_state: BoxState) -> void:
 	var box := _waiting_boxes[box_state]
