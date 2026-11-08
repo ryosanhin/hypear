@@ -21,7 +21,6 @@ func construct(init_box_state: BoxState) -> BoxView:
 	unbind_state()
 	_box_state = init_box_state
 	_box_state.weight_changed.connect(_update_weight_display)
-	_update_weight_display(_box_state.current_weight)
 	_animated_sprite.hide()
 	return self
 
@@ -59,8 +58,8 @@ func ship_to(ship_entry_position: Vector2) -> void:
 
 ## 重量に合わせて箱の表示を切り替える。[br]
 ## [param current_weight]: 現在の重さ。
-func _update_weight_display(current_weight: int) -> void:
-	_sprite.frame = _calculate_sprite_frame(current_weight, _box_state.target_weight)
+func _update_weight_display(current_weight: int, target_weight: int) -> void:
+	_sprite.frame = _calculate_sprite_frame(current_weight, target_weight)
 	_debug_label.text = "%d" % current_weight
 
 
