@@ -1,6 +1,9 @@
+class_name WeighingScale
 extends Sprite2D
+## 現在の重さを表示する。
 
-const DGREES_RATE := 300.0
+const TARGET_ANGLE_DEGREES := 300.0
+const INDICATE_LIMIT := 360.0 / TARGET_ANGLE_DEGREES
 
 @export var _hand: Sprite2D
 
@@ -11,17 +14,19 @@ var _observing_box_state: BoxState
 ## [param box_state]: 箱の状態。
 func configure_observe_box(box_state: BoxState) -> void:
 	_observing_box_state = box_state
-	_observing_box_state.weight_changed.connect(_update_weighting_scale)
-	_observing_box_state.shipped.connect(_cancel_observing)
-	pass
+	box_state.weight_changed.connect(_update_weighting_scale)
+	box_state.shipped.connect(_cancel_observing)
+	_update_weighting_scale(box_state.current_weight, box_state.target_weight)
 
 
 ## 重量変化時に表示を切り替える。[br]
 ## [param current_weight]: 現在の重量。[br]
 ## [param target_weight]: 目標の重量。
 func _update_weighting_scale(current_weight: int, target_weight: int) -> void:
-	var ration := float(current_weight) / float(target_weight)
-	_hand.rotation = deg_to_rad(ration * DGREES_RATE)
+	var ratio := float(current_weight) / float(target_weight)
+	if ratio > INDICATE_LIMIT:
+		ratio = INDICATE_LIMIT
+	_hand.rotation = deg_to_rad(ratio * TARGET_ANGLE_DEGREES)
 
 
 ## 出荷時に監視対象の箱のモデルへのシグナル接続を解除し、[br]
