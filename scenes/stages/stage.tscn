@@ -9,12 +9,14 @@
 [ext_resource type="Script" uid="uid://boiqubqjebjvq" path="res://prefabs/boxes/boxes_view_controller.gd" id="7_controller"]
 [ext_resource type="PackedScene" uid="uid://houc2yscdiek" path="res://prefabs/weighing_scale/weighing_scale.tscn" id="8_xch81"]
 
-[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_boxes_view_controller")]
+[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_boxes_view_controller", "_left_weighing_scale", "_right_weighing_scale")]
 script = ExtResource("1_a70sx")
 _main_conveyor = NodePath("MainConveyor")
 _shipping_conveyor = NodePath("ShippingConveyor")
 _character = NodePath("Character")
 _boxes_view_controller = NodePath("BoxesViewController")
+_left_weighing_scale = NodePath("LeftWeighingScale")
+_right_weighing_scale = NodePath("RightWeighingScale")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=733164112]
 texture_filter = 1

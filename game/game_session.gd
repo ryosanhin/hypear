@@ -15,6 +15,8 @@ enum BoxSide { LEFT, RIGHT }
 @export var _shipping_conveyor :ShippingConveyor
 @export var _character: SortingCharacter
 @export var _boxes_view_controller: BoxesViewController
+@export var _left_weighing_scale: WeighingScale
+@export var _right_weighing_scale: WeighingScale
 
 var _left_box_state: BoxState
 var _right_box_state: BoxState
@@ -145,6 +147,8 @@ func _create_boxes() -> void:
 	_left_box_state = BoxState.new(settings.target_weight)
 	_right_box_state = BoxState.new(settings.target_weight)
 	_boxes_view_controller.create_boxes(_left_box_state, _right_box_state)
+	_left_weighing_scale.configure_observe_box(_left_box_state)
+	_right_weighing_scale.configure_observe_box(_right_box_state)
 
 
 ## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]
