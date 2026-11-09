@@ -1,35 +1,42 @@
 # Tests
 
-Run the following commands from the repository root:
+現在のステージと箱表示は、リポジトリのルートで次のコマンドを実行して検証します。
 
 ```sh
 godot --headless --path . --editor --import --quit
-for test_script in tests/*/*_test.gd; do
-    godot --headless --path . --script "$test_script" || exit 1
-done
+godot --headless --path . --script tests/boxes_view_controller/boxes_view_controller_test.gd
+godot --headless --path . --script tests/stage/stage_test.gd
+godot --headless --path . --script tests/demo_settings/demo_settings_test.gd
+godot --headless --path . --script tests/fruit_generator/fruit_generator_test.gd
 godot --headless --path . --quit-after 120
 ```
 
-## Structure and coverage
+## 構成と検証範囲
 
-- `tests/<target>/<target>_test.gd`: independently runnable headless test suites.
-- `tests/<target>/fixtures/`: settings and scripts used only by that suite.
-- `tests/supports/test_helper.gd`: shared assertions and result reporting.
+- `tests/<target>/<target>_test.gd`: 個別に実行するヘッドレステスト。
+- `tests/<target>/fixtures/`: そのテストだけで使用する設定やスクリプト。
+- `tests/supports/test_helper.gd`: アサーションと結果集計の共通ヘルパー。
 
-Each suite uses `tests/supports/test_helper.gd` and exits with code 1 on failure.
-To run one suite, for example:
-`godot --headless --path . --script tests/game_session/game_session_test.gd`.
+`boxes_view_controller` は実ステージを使用し、配置先と兄弟順、親変更時の変換保持、
+重量通知の切断、複数組の連続出荷、搬送・終端での解放、投入待ちの箱の交換を検証します。
+`stage` は実際の入力から手元表示、左右の仕分け、出荷・搬送までの連携を検証します。
+`demo_settings` と `fruit_generator` は設定と果実生成を検証します。
 
-Run the current stage's arrival display, sorting poses and shipping transport
-integration test with:
-`godot --headless --path . --script tests/stage/stage_test.gd`.
+各テストは共通ヘルパーを使用し、アサーション失敗時に終了コード1を返します。
+スクリプトの実行時エラーでもテスト関数だけが中断し、終了コード0になる場合があるため、
+成功表示に加えて `SCRIPT ERROR` / `ERROR` がないことも確認してください。
+ヘッドレステストは画面の見た目を検証しません。
+責務と画面確認の手順は [箱の表示](../prefabs/boxes/README.md) を参照してください。
 
-Fixture resources are duplicated for each test so configuration changes do not
-leak into other tests. Conveyor and box suites instantiate their real scenes.
-Session tests connect fresh conveyor and box instances without the HUD. Tests
-cover generation, FIFO, path movement, arrival restrictions, spacing, capacity,
-blocked entrances, box display, shipping, scoring, state restrictions, timer reset
-and retry. A game scene integration test checks InputMap bindings and the full
-start-to-retry connection flow.
+## 既存テストの未追従
 
-Headless tests do not verify rendered appearance. See [the playable demo README](../scenes/game/README.md) for visual verification and demo details.
+`character`、`conveyor`、`fruit_box`、`game_scene`、`game_session`、
+`score_calculator` は移動・削除前のシーンやAPIを参照しており、
+`feat/box-effect` の変更前から実行に失敗します。これらの復旧は今回の箱表示の変更には含めません。
+全テストの現状を確認する場合は、各スクリプトの終了コードとエラーログを確認してください。
+
+```sh
+for test_script in tests/*/*_test.gd; do
+    godot --headless --path . --script "$test_script"
+done
+```

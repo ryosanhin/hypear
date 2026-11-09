@@ -42,9 +42,8 @@ func _test_stage_flow() -> void:
 	conveyor.advance(0.2)
 	conveyor.add_cargo_item(second)
 	conveyor.advance(20.0)
-	var path := conveyor.get_node("FruitPath") as Path2D
-	var first_follower := path.get_child(0) as PathFollow2D
-	var second_follower := path.get_child(1) as PathFollow2D
+	var first_follower := conveyor._followers[0]
+	var second_follower := conveyor._followers[1]
 	_helper.assert_true(held.visible, "到着した果実を手元に表示する")
 	_helper.assert_equal(held.get_node("DebugLabel").text, "5", "到着した重量を表示する")
 	_helper.assert_false(first_follower.visible, "到着した果実をコンベア上で二重表示しない")
@@ -53,7 +52,7 @@ func _test_stage_flow() -> void:
 	_helper.assert_equal(arrivals.size(), 1, "終端で待機中は到着通知を繰り返さない")
 
 	_press(stage, "sort_left")
-	_helper.assert_equal(stage._left_box_state.weight, first.weight, "左入力で左箱へ投入する")
+	_helper.assert_equal(stage._left_box_state.current_weight, first.weight, "左入力で左箱へ投入する")
 	_helper.assert_same(body.texture, character._left_pose_texture, "左入力で左の投入画像を使う")
 	_helper.assert_false(body.flip_h, "左投入では画像を反転しない")
 	_helper.assert_false(held.visible, "投入した果実を手元から消す")
@@ -65,14 +64,18 @@ func _test_stage_flow() -> void:
 	_helper.assert_false(second_follower.visible, "後続果実も到着後はコンベア上から隠す")
 	_helper.assert_equal(arrivals.size(), 2, "後続果実の到着も通知する")
 	_press(stage, "sort_right")
-	_helper.assert_equal(stage._right_box_state.weight, second.weight, "右入力で右箱へ投入する")
+	_helper.assert_equal(stage._right_box_state.current_weight, second.weight, "右入力で右箱へ投入する")
 	_helper.assert_same(body.texture, character._left_pose_texture, "右画像未設定時は左画像を使う")
 	_helper.assert_true(body.flip_h, "右入力では左画像を反転する")
 	_helper.assert_false(held.visible, "右投入後も手元に果実を残さない")
 
-	var left_box := stage._left_box
-	var right_box := stage._right_box
+	var controller := stage.get_node("BoxesViewController") as BoxesViewController
+	var left_box := controller._left_box_view
+	var right_box := controller._right_box_view
 	_press(stage, "ship_boxes")
+	var entry_root := stage.get_node("ShippingConveyor/BoxesEntryViewRoot")
+	_helper.assert_same(left_box.get_parent(), entry_root, "出荷開始時に左箱をベルトの手前へ移す")
+	_helper.assert_same(right_box.get_parent(), entry_root, "出荷開始時に右箱をベルトの手前へ移す")
 	await create_timer(1.2).timeout
 	var shipping := stage.get_node("ShippingConveyor") as ShippingConveyor
 	var shipping_path := shipping.get_node("Path2D") as Path2D
@@ -88,7 +91,7 @@ func _test_stage_flow() -> void:
 			is_equal_approx(left_box.global_position.y, left_position.y),
 			"箱は出荷ベルトの高さを保つ",
 	)
-	_helper.assert_not_equal(stage._left_box, left_box, "出荷後の投入先には新しい箱を用意する")
+	_helper.assert_not_equal(controller._left_box_view, left_box, "出荷後の投入先には新しい箱を用意する")
 	shipping.advance(30.0)
 	_helper.assert_equal(shipping_path.get_child_count(), 0, "終端に到着した追従ノードを除去する")
 	await process_frame

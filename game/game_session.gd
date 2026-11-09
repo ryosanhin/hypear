@@ -14,15 +14,9 @@ enum BoxSide { LEFT, RIGHT }
 @export var _main_conveyor: MainConveyor
 @export var _shipping_conveyor :ShippingConveyor
 @export var _character: SortingCharacter
-
-@export var _box_view_prefab: PackedScene
-@export var _left_box_spawn_marker: Marker2D
-@export var _right_box_spawn_marker: Marker2D
-@export var _left_box_ship_marker: Marker2D
-@export var _right_box_ship_marker: Marker2D
-
-var _left_box: BoxView
-var _right_box: BoxView
+@export var _boxes_view_controller: BoxesViewController
+@export var _left_weighing_scale: WeighingScale
+@export var _right_weighing_scale: WeighingScale
 
 var _left_box_state: BoxState
 var _right_box_state: BoxState
@@ -130,14 +124,14 @@ func _on_cargo_item_reached_terminal(cargo_item: CargoItemData) -> void:
 
 ## 左右の箱を同時出荷して合計得点を返す。両方空の場合は出荷しない。
 func ship() -> int:
-	if state != State.PLAYING or (_left_box_state.weight == 0 and _right_box_state.weight == 0):
+	if state != State.PLAYING or (_left_box_state.current_weight == 0 and _right_box_state.current_weight == 0):
 		return 0
 	var points := calculate(
-			_left_box_state.weight,
+			_left_box_state.current_weight,
 			settings.target_weight,
 	)
 	points += calculate(
-			_right_box_state.weight,
+			_right_box_state.current_weight,
 			settings.target_weight,
 	)
 	score += points
@@ -148,20 +142,13 @@ func ship() -> int:
 	return points
 
 
+## 左右の新しい箱の状態を生成し、表示の用意をControllerへ依頼する。
 func _create_boxes() -> void:
-	_left_box = _box_view_prefab.instantiate() as BoxView
-	add_child(_left_box)
-	_left_box.global_position = _left_box_spawn_marker.global_position
-	_left_box_state = BoxState.new()
-	_left_box.construct(_left_box_state, _left_box_ship_marker)
-	_left_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
-
-	_right_box = _box_view_prefab.instantiate() as BoxView
-	add_child(_right_box)
-	_right_box.global_position = _right_box_spawn_marker.global_position
-	_right_box_state = BoxState.new()
-	_right_box.construct(_right_box_state, _right_box_ship_marker)
-	_right_box.reached_ship_entry_position.connect(_shipping_conveyor.accept_box)
+	_left_box_state = BoxState.new(settings.target_weight)
+	_right_box_state = BoxState.new(settings.target_weight)
+	_boxes_view_controller.create_boxes(_left_box_state, _right_box_state)
+	_left_weighing_scale.configure_observe_box(_left_box_state)
+	_right_weighing_scale.configure_observe_box(_right_box_state)
 
 
 ## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]

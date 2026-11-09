@@ -10,15 +10,16 @@ _data = {
 }
 point_count = 14
 
-[node name="MainConveyor" type="Node2D" unique_id=914560823]
+[node name="MainConveyor" type="Node2D" unique_id=914560823 node_paths=PackedStringArray("_path")]
 script = ExtResource("3_script")
+_path = NodePath("Path2D")
 
-[node name="BeltConveyorLayer" type="TileMapLayer" parent="." unique_id=589496843]
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=589496843]
 texture_filter = 1
 tile_map_data = PackedByteArray("AAAKAP//AQAAAAAAAFAJAAEAAQAEAAIAAEALAAEAAQAAAAAAAAANAAEAAQAEAAIAAAAOAAMAAQAAAAIAAFALAAMAAQAEAAAAAAAJAAMAAQAAAAAAAAAHAAMAAQAEAAAAAAAFAAQAAQAAAAIAAGAFAAUAAQAEAAIAAEAHAAUAAQAAAAAAAAAJAAUAAQAEAAIAAAAKAAcAAQAAAAAAAFA=")
 tile_set = ExtResource("1_u0rji")
 
-[node name="FruitPath" type="Path2D" parent="." unique_id=1460154912]
+[node name="Path2D" type="Path2D" parent="." unique_id=1460154912]
 position = Vector2(0, 43.826088)
 scale = Vector2(1, 0.9130435)
 curve = SubResource("Curve2D_fruit")

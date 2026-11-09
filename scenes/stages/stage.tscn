@@ -6,17 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://prefabs/conveyors/main_conveyor.tscn" id="4_sponv"]
 [ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://prefabs/conveyors/shipping_conveyor.tscn" id="5_sc1co"]
 [ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://prefabs/character/character.tscn" id="6_2lgi4"]
+[ext_resource type="Script" uid="uid://boiqubqjebjvq" path="res://prefabs/boxes/boxes_view_controller.gd" id="7_controller"]
+[ext_resource type="PackedScene" uid="uid://houc2yscdiek" path="res://prefabs/weighing_scale/weighing_scale.tscn" id="8_xch81"]
 
-[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
+[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_boxes_view_controller", "_left_weighing_scale", "_right_weighing_scale")]
 script = ExtResource("1_a70sx")
 _main_conveyor = NodePath("MainConveyor")
 _shipping_conveyor = NodePath("ShippingConveyor")
 _character = NodePath("Character")
-_box_view_prefab = ExtResource("2_ko36a")
-_left_box_spawn_marker = NodePath("LeftBoxSpawnMarker2D")
-_right_box_spawn_marker = NodePath("RightBoxSpawnMarker2D")
-_left_box_ship_marker = NodePath("LeftBoxSpawnMarker2D/LeftBoxShipMarker2D")
-_right_box_ship_marker = NodePath("RightBoxSpawnMarker2D/RightBoxShipMarker2D")
+_boxes_view_controller = NodePath("BoxesViewController")
+_left_weighing_scale = NodePath("LeftWeighingScale")
+_right_weighing_scale = NodePath("RightWeighingScale")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=733164112]
 texture_filter = 1
@@ -26,14 +26,18 @@ texture = ExtResource("3_xch81")
 region_enabled = true
 region_rect = Rect2(0, 0, 1024, 1024)
 
-[node name="MainConveyor" parent="." unique_id=914560823 instance=ExtResource("4_sponv")]
+[node name="BoxesViewRoot" type="Node2D" parent="." unique_id=736165412]
 
-[node name="ShippingConveyor" parent="." unique_id=1465225219 instance=ExtResource("5_sc1co")]
-position = Vector2(0, 672)
+[node name="MainConveyor" parent="." unique_id=914560823 instance=ExtResource("4_sponv")]
 
 [node name="Character" parent="." unique_id=1421077664 instance=ExtResource("6_2lgi4")]
 position = Vector2(480, 520)
 scale = Vector2(0.4, 0.4)
+
+[node name="BoxesEntryViewRoot" type="Node2D" parent="." unique_id=1472495683]
+
+[node name="ShippingConveyor" parent="." unique_id=1465225219 instance=ExtResource("5_sc1co")]
+position = Vector2(0, 672)
 
 [node name="LeftBoxSpawnMarker2D" type="Marker2D" parent="." unique_id=1332628430]
 position = Vector2(288, 600)
@@ -50,3 +54,22 @@ gizmo_extents = 96.0
 [node name="RightBoxShipMarker2D" type="Marker2D" parent="RightBoxSpawnMarker2D" unique_id=519624363]
 position = Vector2(0, 72)
 gizmo_extents = 96.0
+
+[node name="BoxesViewController" type="Node" parent="." unique_id=566791484 node_paths=PackedStringArray("_boxes_view_root", "_boxes_entry_view_root", "_shipping_conveyor", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
+script = ExtResource("7_controller")
+_box_view_prefab = ExtResource("2_ko36a")
+_boxes_view_root = NodePath("../BoxesViewRoot")
+_boxes_entry_view_root = NodePath("../BoxesEntryViewRoot")
+_shipping_conveyor = NodePath("../ShippingConveyor")
+_left_box_spawn_marker = NodePath("../LeftBoxSpawnMarker2D")
+_right_box_spawn_marker = NodePath("../RightBoxSpawnMarker2D")
+_left_box_ship_marker = NodePath("../LeftBoxSpawnMarker2D/LeftBoxShipMarker2D")
+_right_box_ship_marker = NodePath("../RightBoxSpawnMarker2D/RightBoxShipMarker2D")
+
+[node name="LeftWeighingScale" parent="." unique_id=2051810136 instance=ExtResource("8_xch81")]
+position = Vector2(288, 384)
+scale = Vector2(0.5, 0.5)
+
+[node name="RightWeighingScale" parent="." unique_id=453164961 instance=ExtResource("8_xch81")]
+position = Vector2(672, 384)
+scale = Vector2(0.5, 0.5)

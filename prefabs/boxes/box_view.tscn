@@ -1,18 +1,55 @@
 [gd_scene format=3 uid="uid://dws5x03rm72mu"]
 
 [ext_resource type="Script" uid="uid://bmktw6r4podf5" path="res://prefabs/boxes/box_view.gd" id="1_fu4bm"]
-[ext_resource type="Texture2D" uid="uid://bhqo6pekbphae" path="res://prefabs/boxes/cardboard.png" id="1_nkrun"]
+[ext_resource type="Texture2D" uid="uid://dayrqyn6mf5wa" path="res://prefabs/boxes/boxes.png" id="2_fu4bm"]
+[ext_resource type="Texture2D" uid="uid://d254tiqjui20k" path="res://prefabs/boxes/boxes_lid.png" id="3_0t3rf"]
 
-[node name="BoxView" type="Node2D" unique_id=2061415090 node_paths=PackedStringArray("_sprite", "_debug_label")]
+[sub_resource type="AtlasTexture" id="AtlasTexture_7x5tt"]
+atlas = ExtResource("3_0t3rf")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3542"]
+atlas = ExtResource("3_0t3rf")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ctrcs"]
+atlas = ExtResource("3_0t3rf")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pnr66"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7x5tt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h3542")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ctrcs")
+}],
+"loop": 0,
+"name": &"close",
+"speed": 5.0
+}]
+
+[node name="BoxView" type="Node2D" unique_id=2061415090 node_paths=PackedStringArray("_sprite", "_animated_sprite", "_debug_label")]
 script = ExtResource("1_fu4bm")
 _sprite = NodePath("Sprite2D")
+_animated_sprite = NodePath("AnimatedSprite2D")
 _debug_label = NodePath("DebugLabel")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1041591730]
 texture_filter = 1
-scale = Vector2(2, 2)
-texture = ExtResource("1_nkrun")
-offset = Vector2(0, -48)
+texture = ExtResource("2_fu4bm")
+offset = Vector2(0, -96)
+hframes = 3
+vframes = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2084169848]
+sprite_frames = SubResource("SpriteFrames_pnr66")
+animation = &"close"
+offset = Vector2(0, -96)
 
 [node name="DebugLabel" type="Label" parent="." unique_id=1949685904]
 anchors_preset = 8
