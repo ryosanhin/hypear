@@ -1,42 +1,37 @@
 # Tests
 
-現在のステージと箱表示は、リポジトリのルートで次のコマンドを実行して検証します。
+CLIテストは、目視で照合しにくい採点と数値・状態の連携だけを対象にします。
+表示や入力、アニメーション、描画順はデバッグプレイで確認します。
+
+## 実行
+
+リポジトリのルートで実行します。
 
 ```sh
 godot --headless --path . --editor --import --quit
-godot --headless --path . --script tests/boxes_view_controller/boxes_view_controller_test.gd
+godot --headless --path . --script tests/score_calculator/score_calculator_test.gd
 godot --headless --path . --script tests/stage/stage_test.gd
-godot --headless --path . --script tests/demo_settings/demo_settings_test.gd
-godot --headless --path . --script tests/fruit_generator/fruit_generator_test.gd
-godot --headless --path . --quit-after 120
 ```
 
-## 構成と検証範囲
+- `score_calculator`: 現在の `GameSession.calculate()` に対する一致・不足・超過・空箱・0点下限の5例。
+- `stage`: 実Stageを使ったFIFOの重量加算、出荷得点と累計、次の空箱、供給・容量超過・終了後の数値の維持。
+- `supports/test_helper.gd`: アサーションと結果集計の共通ヘルパー。
 
-- `tests/<target>/<target>_test.gd`: 個別に実行するヘッドレステスト。
-- `tests/<target>/fixtures/`: そのテストだけで使用する設定やスクリプト。
-- `tests/supports/test_helper.gd`: アサーションと結果集計の共通ヘルパー。
+Stageの設定はインスタンスごとに複製し、供給重量と間隔を固定します。
+時間は手動で進め、演出完了のタイマー待ちやノード階層・接続数の照合は行いません。
 
-`boxes_view_controller` は実ステージを使用し、配置先と兄弟順、親変更時の変換保持、
-重量通知の切断、複数組の連続出荷、搬送・終端での解放、投入待ちの箱の交換を検証します。
-`stage` は実際の入力から手元表示、左右の仕分け、出荷・搬送までの連携を検証します。
-`demo_settings` と `fruit_generator` は設定と果実生成を検証します。
+アサーション失敗時は終了コード1を返します。
+テスト内で別の実行時エラーが起きた場合は終了コード0になることもあるため、
+成功表示だけでなく `SCRIPT ERROR` / `ERROR` が出ていないことも確認してください。
 
-各テストは共通ヘルパーを使用し、アサーション失敗時に終了コード1を返します。
-スクリプトの実行時エラーでもテスト関数だけが中断し、終了コード0になる場合があるため、
-成功表示に加えて `SCRIPT ERROR` / `ERROR` がないことも確認してください。
-ヘッドレステストは画面の見た目を検証しません。
-責務と画面確認の手順は [箱の表示](../prefabs/boxes/README.md) を参照してください。
+## デバッグプレイ
 
-## 既存テストの未追従
+通常のStageで、変更した機能に関わる項目を確認します。
 
-`character`、`conveyor`、`fruit_box`、`game_scene`、`game_session`、
-`score_calculator` は移動・削除前のシーンやAPIを参照しており、
-`feat/box-effect` の変更前から実行に失敗します。これらの復旧は今回の箱表示の変更には含めません。
-全テストの現状を確認する場合は、各スクリプトの終了コードとエラーログを確認してください。
+- 実際の左右キーで正しい箱へ投入でき、手元とベルトに果実が二重表示されない。
+- 投入ポーズから戻ると次の果実が表示され、果実の大きさが不自然に変わらない。
+- 箱の中身と重量計が投入に応じて変化し、超過時の表示も読み取れる。
+- 片箱だけ入れた出荷や連続出荷で、蓋・移動・重なり順が自然に表示される。
+- 出荷済みの箱がベルトを進み、終端に滞留しない。
 
-```sh
-for test_script in tests/*/*_test.gd; do
-    godot --headless --path . --script "$test_script"
-done
-```
+箱表示の役割は [箱の表示](../prefabs/boxes/README.md) を参照してください。

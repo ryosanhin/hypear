@@ -1,5 +1,5 @@
 extends SceneTree
-## 実ステージの手元表示、左右の投入ポーズと出荷箱の搬送を検証する。
+## 実ステージの投入順、出荷得点と容量超過による終了を検証する。
 
 const TestHelper := preload("res://tests/supports/test_helper.gd")
 const STAGE_SCENE := preload("res://scenes/stages/stage.tscn")
@@ -12,100 +12,112 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 
-## ステージの連携を検証し、結果を集計する。
+## 数値と状態の連携だけを検証し、結果を集計する。
 func _run() -> void:
-	await _test_stage_flow()
+	_test_sorting_order()
+	_test_shipping_scores()
+	_test_capacity_game_over()
 	await _helper.finish(self, "stage")
 
 
-## 到着から左右の仕分け、出荷と経路終端での解放までを確認する。
-func _test_stage_flow() -> void:
-	_helper.change_test_name("stage_flow")
+## 異なる重量の果実が供給順に一個ずつ箱へ入ることを確認する。
+func _test_sorting_order() -> void:
+	_helper.change_test_name("sorting_order")
+	var stage := _make_stage()
+	var conveyor := stage._main_conveyor
+	conveyor.add_cargo_item(CargoItemData.new(7))
+	conveyor.advance(1.0)
+	conveyor.add_cargo_item(CargoItemData.new(3))
+	conveyor.advance(20.0)
+	stage.sort_cargo_item(GameSession.BoxSide.LEFT)
+	conveyor.advance(1.0)
+	stage.sort_cargo_item(GameSession.BoxSide.RIGHT)
+	_helper.assert_array(
+			[stage._left_box_state.current_weight, stage._right_box_state.current_weight],
+			[7, 3], "供給順の重量を左右の箱へ加算する",
+	)
+	_helper.assert_true(conveyor.get_queue().is_empty(), "投入した果実を待機列に残さない")
+	_dispose_stage(stage)
+
+
+## 左右の合計点、空箱への交換と連続出荷時の累計点を確認する。
+func _test_shipping_scores() -> void:
+	_helper.change_test_name("shipping_scores")
+	var stage := _make_stage()
+	for index in 2:
+		_supply_and_sort(stage, GameSession.BoxSide.LEFT)
+	for index in 3:
+		_supply_and_sort(stage, GameSession.BoxSide.RIGHT)
+	_helper.assert_equal(stage.ship(), 150, "左20と右30の出荷得点を合計する")
+	_helper.assert_equal(stage.score, 150, "出荷得点を累計へ加算する")
+	_helper.assert_array(
+			[stage._left_box_state.current_weight, stage._right_box_state.current_weight],
+			[0, 0], "出荷後は左右の投入先を空箱に交換する",
+	)
+	_supply_and_sort(stage, GameSession.BoxSide.LEFT)
+	_helper.assert_equal(stage.ship(), 50, "次の箱にも投入し、片箱だけで出荷できる")
+	_helper.assert_equal(stage.ship(), 0, "両箱が空なら出荷得点は0")
+	_helper.assert_equal(stage.score, 200, "連続出荷を累計し、空箱では加点しない")
+	_dispose_stage(stage)
+
+
+## 時間経過による供給と容量上限、終了後の数値の維持を確認する。
+func _test_capacity_game_over() -> void:
+	_helper.change_test_name("capacity_game_over")
+	var stage := _make_stage(2)
+	_supply_and_sort(stage, GameSession.BoxSide.LEFT)
+	stage.ship()
+	_supply_and_sort(stage, GameSession.BoxSide.RIGHT)
+	stage.advance(2.0)
+	_helper.assert_equal(stage._main_conveyor.get_queue().size(), 2, "二間隔で二個供給する")
+	_helper.assert_equal(stage.state, GameSession.State.PLAYING, "容量丁度では継続する")
+	stage._main_conveyor.advance(20.0)
+	stage.advance(1.0)
+	_helper.assert_equal(stage.state, GameSession.State.GAME_OVER, "次の供給で容量超過となり終了する")
+	stage.advance(1.0)
+	stage.supply()
+	stage.sort_cargo_item(GameSession.BoxSide.LEFT)
+	stage.ship()
+	_helper.assert_array(
+			[
+				stage.score, stage._left_box_state.current_weight,
+				stage._right_box_state.current_weight, stage._main_conveyor.get_queue().size(),
+			],
+			[50, 0, 10, 2], "終了後は得点・左右の重量・待機数を変えない",
+	)
+	_dispose_stage(stage)
+
+
+## 設定を複製し、重量10を手動進行で供給する実ステージを用意する。[br]
+## [param capacity]: 果実の待機容量。
+func _make_stage(capacity: int = 10) -> GameSession:
 	var stage := STAGE_SCENE.instantiate() as GameSession
+	stage.settings = stage.settings.duplicate() as DemoSettings
+	stage.settings.fruit_weights = [10]
+	stage.settings.fruit_probabilities = PackedFloat32Array([1.0])
+	stage.settings.supply_interval = 1.0
+	stage.settings.conveyor_speed = 360.0
+	stage.settings.queue_capacity = capacity
+	stage.settings.target_weight = 20
+	stage.is_start_automatically = false
 	root.add_child(stage)
 	stage.set_process(false)
-	var conveyor := stage.get_node("MainConveyor") as MainConveyor
-	var character := stage.get_node("Character") as SortingCharacter
-	var body := character.get_node("Body") as Sprite2D
-	var held := character.get_node("Body/HoldPoint/Pear") as CargoItem
-	var front := body.texture
-	_press(stage, "sort_left")
-	_helper.assert_same(body.texture, front, "果実がない入力ではポーズを変えない")
-
-	var arrivals: Array[CargoItemData] = []
-	conveyor.reached_terminal.connect(
-			func(item: CargoItemData) -> void: arrivals.append(item),
-	)
-	var first := CargoItemData.new(5)
-	var second := CargoItemData.new(3)
-	conveyor.add_cargo_item(first)
-	conveyor.advance(0.2)
-	conveyor.add_cargo_item(second)
-	conveyor.advance(20.0)
-	var first_follower := conveyor._followers[0]
-	var second_follower := conveyor._followers[1]
-	_helper.assert_true(held.visible, "到着した果実を手元に表示する")
-	_helper.assert_equal(held.get_node("DebugLabel").text, "5", "到着した重量を表示する")
-	_helper.assert_false(first_follower.visible, "到着した果実をコンベア上で二重表示しない")
-	_helper.assert_true(second_follower.visible, "搬送中の後続果実は表示する")
-	conveyor.advance(0.1)
-	_helper.assert_equal(arrivals.size(), 1, "終端で待機中は到着通知を繰り返さない")
-
-	_press(stage, "sort_left")
-	_helper.assert_equal(stage._left_box_state.current_weight, first.weight, "左入力で左箱へ投入する")
-	_helper.assert_same(body.texture, character._left_pose_texture, "左入力で左の投入画像を使う")
-	_helper.assert_false(body.flip_h, "左投入では画像を反転しない")
-	_helper.assert_false(held.visible, "投入した果実を手元から消す")
-	conveyor.advance(0.25)
-	await character.get_node("Timer").timeout
-	_helper.assert_same(body.texture, front, "タイマーで正面画像へ戻る")
-	_helper.assert_true(held.visible, "投入ポーズ中に到着した後続果実を復帰後に表示する")
-	_helper.assert_equal(held.get_node("DebugLabel").text, "3", "後続果実の重量へ更新する")
-	_helper.assert_false(second_follower.visible, "後続果実も到着後はコンベア上から隠す")
-	_helper.assert_equal(arrivals.size(), 2, "後続果実の到着も通知する")
-	_press(stage, "sort_right")
-	_helper.assert_equal(stage._right_box_state.current_weight, second.weight, "右入力で右箱へ投入する")
-	_helper.assert_same(body.texture, character._left_pose_texture, "右画像未設定時は左画像を使う")
-	_helper.assert_true(body.flip_h, "右入力では左画像を反転する")
-	_helper.assert_false(held.visible, "右投入後も手元に果実を残さない")
-
-	var controller := stage.get_node("BoxesViewController") as BoxesViewController
-	var left_box := controller._left_box_view
-	var right_box := controller._right_box_view
-	_press(stage, "ship_boxes")
-	var entry_root := stage.get_node("ShippingConveyor/BoxesEntryViewRoot")
-	_helper.assert_same(left_box.get_parent(), entry_root, "出荷開始時に左箱をベルトの手前へ移す")
-	_helper.assert_same(right_box.get_parent(), entry_root, "出荷開始時に右箱をベルトの手前へ移す")
-	await create_timer(1.2).timeout
-	var shipping := stage.get_node("ShippingConveyor") as ShippingConveyor
-	var shipping_path := shipping.get_node("Path2D") as Path2D
-	_helper.assert_equal(shipping_path.get_child_count(), 2, "出荷した左右の箱を経路に載せる")
-	_helper.assert_true(left_box.get_parent() is PathFollow2D, "左箱を経路の追従ノードへ渡す")
-	_helper.assert_true(right_box.get_parent() is PathFollow2D, "右箱を経路の追従ノードへ渡す")
-	var left_position := left_box.global_position
-	var right_position := right_box.global_position
-	stage.advance(0.25)
-	_helper.assert_true(left_box.global_position.x < left_position.x, "中枢の更新で左箱が左へ進む")
-	_helper.assert_true(right_box.global_position.x < right_position.x, "中枢の更新で右箱が左へ進む")
-	_helper.assert_true(
-			is_equal_approx(left_box.global_position.y, left_position.y),
-			"箱は出荷ベルトの高さを保つ",
-	)
-	_helper.assert_not_equal(controller._left_box_view, left_box, "出荷後の投入先には新しい箱を用意する")
-	shipping.advance(30.0)
-	_helper.assert_equal(shipping_path.get_child_count(), 0, "終端に到着した追従ノードを除去する")
-	await process_frame
-	_helper.assert_false(is_instance_valid(left_box), "終端に到着した左箱を解放する")
-	_helper.assert_false(is_instance_valid(right_box), "終端に到着した右箱を解放する")
-	stage.queue_free()
-	await process_frame
+	stage.start_game()
+	return stage
 
 
-## 指定アクションの入力をステージへ渡す。[br]
+## 一個供給し、到着させてから指定した箱へ投入する。[br]
 ## [param stage]: 検証対象のステージ。[br]
-## [param action]: 入力するアクション名。
-func _press(stage: GameSession, action: StringName) -> void:
-	var event := InputEventAction.new()
-	event.action = action
-	event.pressed = true
-	stage._unhandled_input(event)
+## [param side]: 投入先の箱。
+func _supply_and_sort(stage: GameSession, side: GameSession.BoxSide) -> void:
+	stage.supply()
+	stage._main_conveyor.advance(20.0)
+	stage.sort_cargo_item(side)
+
+
+## 出荷時のTweenを手動で完了させ、待機中の処理を残さず破棄する。[br]
+## [param stage]: 検証を終えたステージ。
+func _dispose_stage(stage: GameSession) -> void:
+	for tween in get_processed_tweens():
+		tween.custom_step(60.0)
+	stage.free()
