@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://houc2yscdiek"]
+
+[ext_resource type="Texture2D" uid="uid://2twpb4mytf5y" path="res://prefabs/weighing_scale/weighing_scale.png" id="1_8upao"]
+[ext_resource type="Script" uid="uid://dl222f2s8l042" path="res://prefabs/weighing_scale/weighing_scale.gd" id="2_3rcpu"]
+[ext_resource type="Texture2D" uid="uid://d1o44i2jg0ura" path="res://prefabs/weighing_scale/weighing_scale_hand.png" id="2_whmwx"]
+
+[node name="WeighingScale" type="Sprite2D" unique_id=2051810136 node_paths=PackedStringArray("_hand")]
+texture = ExtResource("1_8upao")
+script = ExtResource("2_3rcpu")
+_hand = NodePath("Hand")
+
+[node name="Hand" type="Sprite2D" parent="." unique_id=1770784992]
+texture = ExtResource("2_whmwx")
