@@ -20,8 +20,10 @@ func _run() -> void:
 ## 目標一致、不足、超過、空箱と最低得点を確認する。
 func _test_score_calculation() -> void:
 	_helper.change_test_name("score_calculation")
-	_helper.assert_equal(ScoreCalculator.calculate(20, 20), 100, "目標一致は100点")
-	_helper.assert_equal(ScoreCalculator.calculate(17, 20), 85, "不足は差に応じて減点")
-	_helper.assert_equal(ScoreCalculator.calculate(23, 20), 85, "超過も同じ差として評価")
-	_helper.assert_equal(ScoreCalculator.calculate(0, 20), 0, "空箱は0点")
-	_helper.assert_equal(ScoreCalculator.calculate(50, 20), 0, "得点は負にならない")
+	var session := GameSession.new()
+	_helper.assert_equal(session.calculate(20, 20), 100, "目標一致は100点")
+	_helper.assert_equal(session.calculate(17, 20), 85, "不足は差に応じて減点")
+	_helper.assert_equal(session.calculate(23, 20), 85, "超過も同じ差として評価")
+	_helper.assert_equal(session.calculate(0, 20), 0, "空箱は0点")
+	_helper.assert_equal(session.calculate(50, 20), 0, "得点は負にならない")
+	session.free()

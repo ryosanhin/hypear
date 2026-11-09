@@ -11,12 +11,13 @@
 | タイミング | 箱の親 | 処理 |
 |---|---|---|
 | 投入待ち・投入中 | `Stage/BoxesViewRoot` | Controllerが生成・配置し、BoxViewが重量通知で表示を更新 |
-| 出荷開始 | `ShippingConveyor/BoxesEntryViewRoot` | Controllerが重量接続を解除し、親変更後に `BoxView.ship_to()` を呼ぶ |
+| 出荷開始 | `Stage/BoxesEntryViewRoot` | Controllerが重量接続を解除し、親変更後に `BoxView.ship_to()` を呼ぶ |
 | ベルト到着 | `ShippingConveyor/Path2D/PathFollow2D` | Controllerが到着を通知した箱自身を `ShippingConveyor.accept_box()` へ渡す |
 | 経路終端 | — | ShippingConveyorが追従ノードと箱を解放 |
 
-`ShippingConveyor` の子は `TileMapLayer`、`BoxesEntryViewRoot`、`Path2D` の順です。
-同じ描画設定のツリー順で、ベルト、移動中の箱、搬送中の箱の順に手前へ描画します。
+`BoxesEntryViewRoot` はStage直下にあり、`ShippingConveyor` より前に並びます。
+`ShippingConveyor` の子は `TileMapLayer`、`Path2D` の順です。
+描画順の見え方は実際のステージで確認します。
 各表示先では新しい箱（経路上では追従ノード）を兄弟の先頭へ追加するため、
 先に追加した箱が手前になります。親変更ではグローバル変換を保持します。
 
@@ -27,11 +28,8 @@
 
 ## 検証
 
-```sh
-godot --headless --path . --editor --import --quit
-godot --headless --path . --script tests/boxes_view_controller/boxes_view_controller_test.gd
-godot --headless --path . --script tests/stage/stage_test.gd
-```
+箱表示の演出と描画順はデバッグプレイで確認します。
+採点とゲーム進行のCLIテストは [テスト手順](../../tests/README.md) を参照してください。
 
 画面では左右に果実を入れて下キーで出荷し、移動開始から箱が出荷ベルトの手前に
 表示されること、蓋が閉じてベルトへ移ること、続けて出荷しても各箱が残ることを確認します。
