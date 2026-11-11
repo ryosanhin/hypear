@@ -117,5 +117,3 @@ offset_top = 48.0
 offset_right = -24.0
 offset_bottom = 118.0
 grow_horizontal = 0
-
-[connection signal="score_changed" from="." to="CanvasLayer/TotalScore" method="set_score"]
