@@ -24,7 +24,7 @@ region = Rect2(192, 192, 192, 192)
 atlas = ExtResource("3_sc1co")
 region = Rect2(0, 192, 192, 192)
 
-[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_boxes_view_controller", "_left_weighing_scale", "_right_weighing_scale")]
+[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_boxes_view_controller", "_left_weighing_scale", "_right_weighing_scale", "_total_score")]
 script = ExtResource("1_a70sx")
 _main_conveyor = NodePath("MainConveyor")
 _shipping_conveyor = NodePath("ShippingConveyor")
@@ -32,6 +32,7 @@ _character = NodePath("Character")
 _boxes_view_controller = NodePath("BoxesViewController")
 _left_weighing_scale = NodePath("LeftWeighingScale")
 _right_weighing_scale = NodePath("RightWeighingScale")
+_total_score = NodePath("CanvasLayer/TotalScore")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=733164112]
 texture_filter = 1

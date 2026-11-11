@@ -18,6 +18,7 @@ enum BoxSide { LEFT, RIGHT }
 @export var _boxes_view_controller: BoxesViewController
 @export var _left_weighing_scale: WeighingScale
 @export var _right_weighing_scale: WeighingScale
+@export var _total_score: TotalScore
 
 var _left_box_state: BoxState
 var _right_box_state: BoxState
@@ -32,6 +33,7 @@ func _ready() -> void:
 	_generator = FruitGenerator.new(settings)
 	_main_conveyor.configure(settings)
 	_main_conveyor.reached_terminal.connect(_on_cargo_item_reached_terminal)
+	score_changed.connect(_total_score.set_score)
 	if is_start_automatically:
 		start_game()
 

@@ -1,3 +1,4 @@
+class_name TotalScore
 extends Label
 ## 合計得点を表示する。
 
