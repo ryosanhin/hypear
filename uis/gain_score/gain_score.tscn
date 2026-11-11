@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bdaui30ubh7wo"]
+
+[ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://uis/main_theme.tres" id="1_jcsxr"]
+
+[node name="TotalScore" type="Label" unique_id=2034807368]
+theme = ExtResource("1_jcsxr")
+text = "+000"
