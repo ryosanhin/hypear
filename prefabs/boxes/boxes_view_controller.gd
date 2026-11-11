@@ -2,6 +2,8 @@ class_name BoxesViewController
 extends Node
 ## 箱の表示と状態を対応付け、出荷演出からコンベアへの引き渡しを管理する。
 
+const GAIN_SCORE_OFFSET := Vector2(0.0, -120.0)
+
 @export var _box_view_prefab: PackedScene
 @export var _boxes_view_root: Node2D
 @export var _boxes_entry_view_root: Node2D
@@ -10,6 +12,8 @@ extends Node
 @export var _right_box_spawn_marker: Marker2D
 @export var _left_box_ship_marker: Marker2D
 @export var _right_box_ship_marker: Marker2D
+@export var _gain_score_prefab: PackedScene
+@export var _score_effects_root: Node2D
 
 var _left_box_view: BoxView
 var _right_box_view: BoxView
@@ -31,6 +35,17 @@ func create_boxes(left_state: BoxState, right_state: BoxState) -> void:
 	_clear_waiting_boxes()
 	_left_box_view = _create_box(left_state, _left_box_spawn_marker)
 	_right_box_view = _create_box(right_state, _right_box_spawn_marker)
+
+
+## 出荷前の箱の上に、その箱で得た点を表示する。[br]
+## [param box_state]: 出荷する箱の状態。[br]
+## [param points]: 箱の得点。
+func show_shipping_score(box_state: BoxState, points: int) -> void:
+	var box := _waiting_boxes[box_state]
+	var gain_score := _gain_score_prefab.instantiate() as GainScore
+	_score_effects_root.add_child(gain_score)
+	gain_score.global_position = box.global_position + GAIN_SCORE_OFFSET
+	gain_score.play(points)
 
 
 ## 状態と表示を対応付け、先に追加した箱が手前になるよう配置する。[br]
