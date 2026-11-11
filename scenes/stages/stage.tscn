@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://boiqubqjebjvq" path="res://prefabs/boxes/boxes_view_controller.gd" id="7_controller"]
 [ext_resource type="PackedScene" uid="uid://houc2yscdiek" path="res://prefabs/weighing_scale/weighing_scale.tscn" id="8_xch81"]
 [ext_resource type="PackedScene" uid="uid://8yqwt2bp87gg" path="res://uis/total_score/total_score.tscn" id="9_sponv"]
+[ext_resource type="PackedScene" uid="uid://bdaui30ubh7wo" path="res://uis/gain_score/gain_score.tscn" id="10_gain_score"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjevm"]
 atlas = ExtResource("3_sc1co")
@@ -81,7 +82,7 @@ gizmo_extents = 96.0
 position = Vector2(0, 72)
 gizmo_extents = 96.0
 
-[node name="BoxesViewController" type="Node" parent="." unique_id=566791484 node_paths=PackedStringArray("_boxes_view_root", "_boxes_entry_view_root", "_shipping_conveyor", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker")]
+[node name="BoxesViewController" type="Node" parent="." unique_id=566791484 node_paths=PackedStringArray("_boxes_view_root", "_boxes_entry_view_root", "_shipping_conveyor", "_left_box_spawn_marker", "_right_box_spawn_marker", "_left_box_ship_marker", "_right_box_ship_marker", "_score_effects_root")]
 script = ExtResource("7_controller")
 _box_view_prefab = ExtResource("2_ko36a")
 _boxes_view_root = NodePath("../BoxesViewRoot")
@@ -91,6 +92,8 @@ _left_box_spawn_marker = NodePath("../LeftBoxSpawnMarker2D")
 _right_box_spawn_marker = NodePath("../RightBoxSpawnMarker2D")
 _left_box_ship_marker = NodePath("../LeftBoxSpawnMarker2D/LeftBoxShipMarker2D")
 _right_box_ship_marker = NodePath("../RightBoxSpawnMarker2D/RightBoxShipMarker2D")
+_gain_score_prefab = ExtResource("10_gain_score")
+_score_effects_root = NodePath("../ScoreEffects")
 
 [node name="LeftWeighingScale" parent="." unique_id=2051810136 instance=ExtResource("8_xch81")]
 position = Vector2(288, 384)
@@ -99,6 +102,8 @@ scale = Vector2(0.5, 0.5)
 [node name="RightWeighingScale" parent="." unique_id=453164961 instance=ExtResource("8_xch81")]
 position = Vector2(672, 384)
 scale = Vector2(0.5, 0.5)
+
+[node name="ScoreEffects" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1588316911]
 
@@ -111,3 +116,5 @@ offset_top = 48.0
 offset_right = -24.0
 offset_bottom = 118.0
 grow_horizontal = 0
+
+[connection signal="score_changed" from="." to="CanvasLayer/TotalScore" method="set_score"]

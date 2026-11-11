@@ -3,6 +3,7 @@ extends Node
 ## コンベアと箱を取りまとめ、供給、仕分け、出荷とゲーム進行を管理する。
 
 signal shipped(points: int)
+signal score_changed(total_score: int)
 signal sorted(side: BoxSide)
 
 enum State { READY, PLAYING, GAME_OVER }
@@ -66,6 +67,7 @@ func start_game() -> void:
 	score = 0
 	_supply_elapsed = 0.0
 	state = State.PLAYING
+	score_changed.emit(score)
 
 
 ## 供給時刻ごとに搬送を進め、長いフレームでも生成位置を重ねない。[br]
@@ -126,19 +128,26 @@ func _on_cargo_item_reached_terminal(cargo_item: CargoItemData) -> void:
 func ship() -> int:
 	if state != State.PLAYING or (_left_box_state.current_weight == 0 and _right_box_state.current_weight == 0):
 		return 0
-	var points := calculate(
+	var left_points := calculate(
 			_left_box_state.current_weight,
 			settings.target_weight,
 	)
-	points += calculate(
+	var right_points := calculate(
 			_right_box_state.current_weight,
 			settings.target_weight,
 	)
+	var points := left_points + right_points
 	score += points
 	shipped.emit(points)
+	if _left_box_state.current_weight > 0:
+		_boxes_view_controller.show_shipping_score(_left_box_state, left_points)
 	_left_box_state.ship()
+	if _right_box_state.current_weight > 0:
+		_boxes_view_controller.show_shipping_score(_right_box_state, right_points)
 	_right_box_state.ship()
 	_create_boxes()
+	if points > 0:
+		score_changed.emit(score)
 	return points
 
 

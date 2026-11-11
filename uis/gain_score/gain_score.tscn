@@ -1,7 +1,19 @@
 [gd_scene format=3 uid="uid://bdaui30ubh7wo"]
 
 [ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://uis/main_theme.tres" id="1_jcsxr"]
+[ext_resource type="Script" uid="uid://mhki70jdtnje" path="res://uis/gain_score/gain_score.gd" id="2_gain_score"]
 
-[node name="TotalScore" type="Label" unique_id=2034807368]
+[node name="GainScore" type="Node2D" unique_id=2034807368]
+script = ExtResource("2_gain_score")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -56.0
+offset_top = -20.0
+offset_right = 56.0
+offset_bottom = 20.0
+mouse_filter = 2
 theme = ExtResource("1_jcsxr")
+theme_override_constants/outline_size = 4
 text = "+000"
+horizontal_alignment = 1
+vertical_alignment = 1
