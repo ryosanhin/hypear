@@ -103,7 +103,7 @@ scale = Vector2(0.5, 0.5)
 position = Vector2(672, 384)
 scale = Vector2(0.5, 0.5)
 
-[node name="ScoreEffects" type="Node2D" parent="."]
+[node name="ScoreEffects" type="Node2D" parent="." unique_id=483751201]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1588316911]
 
