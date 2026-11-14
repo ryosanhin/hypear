@@ -15,7 +15,7 @@ const SHAKE_COUNT := 5
 
 
 ## シャッターが閉まるアニメーションをする。
-func async_close() -> void:
+func close_async() -> void:
 	position = _entry_point
 	var close_tween := create_tween()
 	close_tween.tween_property(self, "position", _end_point, CLOSE_DURATION)
