@@ -36,6 +36,3 @@ func async_close() -> void:
 		await shake_tween.finished
 	
 	position = _end_point
-
-
-
