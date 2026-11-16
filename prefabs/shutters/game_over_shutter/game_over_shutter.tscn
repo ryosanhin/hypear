@@ -46,7 +46,7 @@ offset_right = 368.0
 offset_bottom = 142.0
 theme = ExtResource("2_om2sq")
 theme_override_font_sizes/font_size = 64
-text = "営業終了！"
+text = "勤務終了！"
 
 [node name="Score" type="Label" parent="Control/ResultPanel/Title" index="0" unique_id=1786839476]
 layout_mode = 1
@@ -55,7 +55,7 @@ offset_right = 320.0
 offset_bottom = 238.0
 theme = ExtResource("2_om2sq")
 theme_override_font_sizes/font_size = 64
-text = "0000000点"
+text = "00.00秒"
 
 [node name="TextureRect" type="TextureRect" parent="Control/ResultPanel" index="1" unique_id=1353254844]
 layout_mode = 1
