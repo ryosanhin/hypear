@@ -1,6 +1,7 @@
 extends TextureRect
 
 const CLOSE_DURATION := 0.5
+const OPEN_DURATION := 1.0
 const SHAKE_DURATION := 0.05
 const SHAKE_COUNT := 5
 
@@ -36,3 +37,9 @@ func close_async() -> void:
 		await shake_tween.finished
 	
 	position = _end_point
+
+
+func open_async() -> void:
+	position = _end_point
+	var close_tween := create_tween()
+	close_tween.tween_property(self, "position", _entry_point, OPEN_DURATION)
