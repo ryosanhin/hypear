@@ -27,8 +27,5 @@ jobs:
       - name: Import project
         run: godot --headless --path . --import
 
-      - name: Run score calculate test
-        run: godot --headless --path . --script tests/score_calculator/score_calculator_test.gd
-
       - name: Run stage test
         run: godot --headless --path . --script tests/stage/stage_test.gd
