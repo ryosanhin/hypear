@@ -9,12 +9,10 @@ CLIテストは、目視で照合しにくい採点と数値・状態の連携�
 
 ```sh
 godot --headless --path . --editor --import --quit
-godot --headless --path . --script tests/score_calculator/score_calculator_test.gd
 godot --headless --path . --script tests/stage/stage_test.gd
 ```
 
-- `score_calculator`: 現在の `GameSession.calculate()` に対する一致・不足・超過・空箱・0点下限の5例。
-- `stage`: 実Stageを使ったFIFOの重量加算、出荷得点と累計、次の空箱、供給・容量超過・終了後の数値の維持。
+- `stage`: 実ステージを使ったFIFOの重量加算、両箱・片箱・空箱の出荷得点、均等ボーナスと累計、箱の交換、供給・容量超過・終了後の数値の維持。
 - `supports/test_helper.gd`: アサーションと結果集計の共通ヘルパー。
 
 Stageの設定はインスタンスごとに複製し、供給重量と間隔を固定します。

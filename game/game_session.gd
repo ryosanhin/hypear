@@ -130,15 +130,22 @@ func _on_cargo_item_reached_terminal(cargo_item: CargoItemData) -> void:
 func ship() -> int:
 	if state != State.PLAYING or (_left_box_state.current_weight == 0 and _right_box_state.current_weight == 0):
 		return 0
-	var left_points := calculate(
+	var left_points := ScoreCalculator.calculate(
 			_left_box_state.current_weight,
 			settings.target_weight,
 	)
-	var right_points := calculate(
+	var right_points := ScoreCalculator.calculate(
 			_right_box_state.current_weight,
 			settings.target_weight,
 	)
-	var points := left_points + right_points
+	var bonus := ScoreCalculator.calculate_balance_bonus(
+			left_points,
+			right_points,
+			_left_box_state.current_weight,
+			_right_box_state.current_weight,
+			settings.target_weight,
+	)
+	var points := left_points + right_points + bonus
 	score += points
 	shipped.emit(points)
 	if _left_box_state.current_weight > 0:
@@ -160,12 +167,3 @@ func _create_boxes() -> void:
 	_boxes_view_controller.create_boxes(_left_box_state, _right_box_state)
 	_left_weighing_scale.configure_observe_box(_left_box_state)
 	_right_weighing_scale.configure_observe_box(_right_box_state)
-
-
-## 一箱の得点を返す。空箱は0点、超過と不足は同じ差として評価する。[br]
-## [param shipped_weight]: 箱の現在重量。[br]
-## [param target_weight]: 目標重量。
-func calculate(shipped_weight: int, target_weight: int) -> int:
-	if shipped_weight == 0:
-		return 0
-	return maxi(0, 100 - absi(shipped_weight - target_weight) * 5)
