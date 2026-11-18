@@ -20,7 +20,6 @@ func close_async() -> void:
 	position = _entry_point
 	var close_tween := create_tween()
 	close_tween.tween_property(self, "position", _end_point, CLOSE_DURATION)
-	
 	await close_tween.finished
 
 	var shake_count := 0
@@ -41,5 +40,6 @@ func close_async() -> void:
 
 func open_async() -> void:
 	position = _end_point
-	var close_tween := create_tween()
-	close_tween.tween_property(self, "position", _entry_point, OPEN_DURATION)
+	var open_tween := create_tween()
+	open_tween.tween_property(self, "position", _entry_point, OPEN_DURATION)
+	await open_tween.finished
