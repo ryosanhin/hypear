@@ -44,20 +44,21 @@ func _test_sorting_order() -> void:
 func _test_shipping_scores() -> void:
 	_helper.change_test_name("shipping_scores")
 	var stage := _make_stage()
-	for index in 2:
+	for _index in 2:
 		_supply_and_sort(stage, GameSession.BoxSide.LEFT)
-	for index in 3:
+	for _index in 2:
 		_supply_and_sort(stage, GameSession.BoxSide.RIGHT)
-	_helper.assert_equal(stage.ship(), 150, "左20と右30の出荷得点を合計する")
-	_helper.assert_equal(stage.score, 150, "出荷得点を累計へ加算する")
+	_helper.assert_equal(stage.ship(), 260, "左右とも目標重量なら基礎点200に均等ボーナス60を加える")
+	_helper.assert_equal(stage.score, 260, "出荷得点を累計へ加算する")
 	_helper.assert_array(
 			[stage._left_box_state.current_weight, stage._right_box_state.current_weight],
 			[0, 0], "出荷後は左右の投入先を空箱に交換する",
 	)
 	_supply_and_sort(stage, GameSession.BoxSide.LEFT)
-	_helper.assert_equal(stage.ship(), 50, "次の箱にも投入し、片箱だけで出荷できる")
+	_supply_and_sort(stage, GameSession.BoxSide.LEFT)
+	_helper.assert_equal(stage.ship(), 100, "片箱だけ目標重量なら基礎点100を得る")
 	_helper.assert_equal(stage.ship(), 0, "両箱が空なら出荷得点は0")
-	_helper.assert_equal(stage.score, 200, "連続出荷を累計し、空箱では加点しない")
+	_helper.assert_equal(stage.score, 360, "連続出荷を累計し、空箱では加点しない")
 	_dispose_stage(stage)
 
 
@@ -66,7 +67,9 @@ func _test_capacity_game_over() -> void:
 	_helper.change_test_name("capacity_game_over")
 	var stage := _make_stage(2)
 	_supply_and_sort(stage, GameSession.BoxSide.LEFT)
+	_supply_and_sort(stage, GameSession.BoxSide.LEFT)
 	stage.ship()
+	var score_before_game_over := stage.score
 	_supply_and_sort(stage, GameSession.BoxSide.RIGHT)
 	stage.advance(2.0)
 	_helper.assert_equal(stage._main_conveyor.get_queue().size(), 2, "二間隔で二個供給する")
@@ -83,7 +86,7 @@ func _test_capacity_game_over() -> void:
 				stage.score, stage._left_box_state.current_weight,
 				stage._right_box_state.current_weight, stage._main_conveyor.get_queue().size(),
 			],
-			[50, 0, 10, 2], "終了後は得点・左右の重量・待機数を変えない",
+			[score_before_game_over, 0, 10, 2], "終了後は得点・左右の重量・待機数を変えない",
 	)
 	_dispose_stage(stage)
 

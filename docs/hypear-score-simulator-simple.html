@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>選果場の得点シミュレーター</title>
+  <style>
+    body { max-width: 36rem; margin: 1rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; }
+    fieldset { margin: 1rem 0; }
+    input[type="range"] { width: 100%; margin: .35rem 0; }
+    .summary dd { margin: 0 0 .5rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>得点シミュレーター</h1>
+    <p>
+      <label for="target">箱の目標重量</label>
+      <input id="target" type="number" min="1" max="1000" step="1" value="20" required aria-describedby="target-error">
+      <button id="reset" type="button">リセット</button>
+    </p>
+    <p id="target-error" role="status" hidden>目標重量は1〜1000の整数で入力してください。</p>
+
+    <fieldset>
+      <legend><label for="left">左の箱</label></legend>
+      <div>重量 <span id="left-weight"></span> <span id="left-target"></span>（<span id="left-ratio"></span>）</div>
+      <input id="left" type="range" min="0" max="30" step="1" value="20" aria-describedby="left-range">
+      <div id="left-range">範囲 0〜<span id="left-max">30</span></div>
+      <div>基礎点 <span id="left-score"></span></div>
+    </fieldset>
+
+    <fieldset>
+      <legend><label for="right">右の箱</label></legend>
+      <div>重量 <span id="right-weight"></span> <span id="right-target"></span>（<span id="right-ratio"></span>）</div>
+      <input id="right" type="range" min="0" max="30" step="1" value="20" aria-describedby="right-range">
+      <div id="right-range">範囲 0〜<span id="right-max">30</span></div>
+      <div>基礎点 <span id="right-score"></span></div>
+    </fieldset>
+
+    <h2>出荷得点 <output id="total" for="target left right" aria-label="今回の出荷得点"></output> 点</h2>
+    <dl class="summary">
+      <dt>基礎点合計</dt><dd id="base"></dd>
+      <dt>均等ボーナス</dt><dd id="bonus"></dd>
+      <dt>左右の重量差</dt><dd id="difference"></dd>
+    </dl>
+    <p><a href="https://github.com/ryosanhin/hypear/blob/main/game/score_calculator.gd">採点式</a></p>
+  </main>
+
+  <script>
+    "use strict";
+
+    const initialWeight = 20;
+    const byId = (id) => document.getElementById(id);
+    const targetInput = byId("target");
+    const sliders = [byId("left"), byId("right")];
+    let target = initialWeight;
+
+    function calculateBaseScore(weight, targetWeight) {
+      if (targetWeight <= 0 || weight <= 0) return 0;
+
+      const rate = weight / targetWeight;
+      if (rate < 0.5) return 0;
+      if (rate < 0.8) return Math.round(100 * (rate - 0.5));
+      if (rate <= 1) {
+        const t = (rate - 0.8) / 0.2;
+        return Math.round(30 + 20 * t + 50 * t * t);
+      }
+
+      const remaining = Math.max(0, 1 - (rate - 1) / 0.15);
+      return Math.round(100 * Math.pow(remaining, 4));
+    }
+
+    function calculateBalanceBonus(leftPoints, rightPoints, leftWeight, rightWeight, targetWeight) {
+      if (targetWeight <= 0) return 0;
+
+      const differenceRate = Math.abs(leftWeight - rightWeight) / targetWeight;
+      const closeness = Math.max(0, 1 - differenceRate / 0.3);
+      return Math.round(0.6 * Math.min(leftPoints, rightPoints) * closeness * closeness);
+    }
+
+    function updateSliderLimits() {
+      const maximum = Math.max(Math.ceil(target * 1.5), ...sliders.map((slider) => slider.valueAsNumber));
+      for (const slider of sliders) {
+        slider.max = maximum;
+        byId(slider.id + "-max").textContent = maximum;
+      }
+    }
+
+    function render() {
+      const [leftWeight, rightWeight] = sliders.map((slider) => slider.valueAsNumber);
+      const leftPoints = calculateBaseScore(leftWeight, target);
+      const rightPoints = calculateBaseScore(rightWeight, target);
+      const bonus = calculateBalanceBonus(leftPoints, rightPoints, leftWeight, rightWeight, target);
+      const base = leftPoints + rightPoints;
+
+      for (const slider of sliders) {
+        const side = slider.id;
+        const weight = slider.valueAsNumber;
+        const ratio = byId(side + "-ratio");
+        ratio.textContent = Number((100 * weight / target).toFixed(1)) + "%";
+        byId(side + "-weight").textContent = weight;
+        byId(side + "-target").textContent = "/ " + target;
+        byId(side + "-score").textContent = (side === "left" ? leftPoints : rightPoints) + " 点";
+      }
+
+      byId("base").textContent = base + " 点";
+      byId("bonus").textContent = "+" + bonus + " 点";
+      byId("difference").textContent = Math.abs(leftWeight - rightWeight);
+      byId("total").value = base + bonus;
+    }
+
+    function updateTarget() {
+      const valid = targetInput.validity.valid;
+      byId("target-error").hidden = valid;
+      targetInput.setAttribute("aria-invalid", String(!valid));
+      if (!valid) return;
+
+      target = targetInput.valueAsNumber;
+      updateSliderLimits();
+      render();
+    }
+
+    for (const slider of sliders) slider.addEventListener("input", render);
+    targetInput.addEventListener("input", updateTarget);
+    byId("reset").addEventListener("click", () => {
+      targetInput.value = initialWeight;
+      for (const slider of sliders) {
+        slider.max = Math.ceil(initialWeight * 1.5);
+        slider.value = initialWeight;
+      }
+      updateTarget();
+    });
+
+    updateTarget();
+  </script>
+</body>
+</html>
