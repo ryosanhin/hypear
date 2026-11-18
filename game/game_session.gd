@@ -130,15 +130,15 @@ func _on_cargo_item_reached_terminal(cargo_item: CargoItemData) -> void:
 func ship() -> int:
 	if state != State.PLAYING or (_left_box_state.current_weight == 0 and _right_box_state.current_weight == 0):
 		return 0
-	var left_points := calculate(
+	var left_points := ScoreCalculator.calculate(
 			_left_box_state.current_weight,
 			settings.target_weight,
 	)
-	var right_points := calculate(
+	var right_points := ScoreCalculator.calculate(
 			_right_box_state.current_weight,
 			settings.target_weight,
 	)
-	var bonus := calculate_balance_bonus(
+	var bonus := ScoreCalculator.calculate_balance_bonus(
 			left_points,
 			right_points,
 			_left_box_state.current_weight,
@@ -167,49 +167,3 @@ func _create_boxes() -> void:
 	_boxes_view_controller.create_boxes(_left_box_state, _right_box_state)
 	_left_weighing_scale.configure_observe_box(_left_box_state)
 	_right_weighing_scale.configure_observe_box(_right_box_state)
-
-
-## 一箱の出荷得点を計算する。[br]
-## [param shipped_weight]: 出荷重量。[br]
-## [param target_weight]: 目標重量。
-func calculate(shipped_weight: int, target_weight: int) -> int:
-	if target_weight <= 0 or shipped_weight <= 0:
-		return 0
-
-	var rate := float(shipped_weight) / float(target_weight)
-
-	if rate < 0.5:
-		return 0
-
-	if rate < 0.8:
-		return roundi(100.0 * (rate - 0.5))
-
-	if rate <= 1.0:
-		var t := (rate - 0.8) / 0.2
-		return roundi(30.0 + 20.0 * t + 50.0 * t * t)
-
-	var remaining := maxf(0.0, 1.0 - (rate - 1.0) / 0.15)
-	return roundi(100.0 * pow(remaining, 4.0))
-
-
-## 左右の得点と重量差から均等ボーナスを計算する。[br]
-## [param left_points]: 左箱の得点。[br]
-## [param right_points]: 右箱の得点。[br]
-## [param left_weight]: 左箱の重量。[br]
-## [param right_weight]: 右箱の重量。[br]
-## [param target_weight]: 目標重量。
-func calculate_balance_bonus(
-	left_points: int,
-	right_points: int,
-	left_weight: int,
-	right_weight: int,
-	target_weight: int,
-) -> int:
-	if target_weight <= 0:
-		return 0
-
-	var difference_rate := float(absi(left_weight - right_weight)) / float(target_weight)
-	var closeness := maxf(0.0, 1.0 - difference_rate / 0.3)
-	var lower_points := mini(left_points, right_points)
-
-	return roundi(0.6 * lower_points * closeness * closeness)
