@@ -1,14 +1,20 @@
 [gd_scene format=3 uid="uid://dbaosrv1ku3jv"]
 
 [ext_resource type="Texture2D" uid="uid://d1stsfocogdx8" path="res://prefabs/shutters/shutter.png" id="1_xa847"]
+[ext_resource type="Script" uid="uid://cj417u5x0d1dp" path="res://prefabs/shutters/shutter.gd" id="2_dawys"]
 
 [node name="Shutter" type="TextureRect" unique_id=1629729892]
 texture_filter = 1
 texture_repeat = 2
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_xa847")
 stretch_mode = 1
+script = ExtResource("2_dawys")
