@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://houc2yscdiek" path="res://prefabs/weighing_scale/weighing_scale.tscn" id="8_xch81"]
 [ext_resource type="PackedScene" uid="uid://8yqwt2bp87gg" path="res://uis/total_score/total_score.tscn" id="9_sponv"]
 [ext_resource type="PackedScene" uid="uid://bdaui30ubh7wo" path="res://uis/gain_score/gain_score.tscn" id="10_gain_score"]
+[ext_resource type="PackedScene" uid="uid://dtwdm0p75eh7m" path="res://uis/cargo_item_counter/cargo_item_counter.tscn" id="12_mim2l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjevm"]
 atlas = ExtResource("3_sc1co")
@@ -117,3 +118,9 @@ offset_top = 48.0
 offset_right = -24.0
 offset_bottom = 118.0
 grow_horizontal = 0
+
+[node name="CargoItemCounter" parent="CanvasLayer" unique_id=1916176708 instance=ExtResource("12_mim2l")]
+offset_left = 232.0
+offset_top = 48.0
+offset_right = 428.0
+offset_bottom = 144.0

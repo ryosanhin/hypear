@@ -7,7 +7,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ewylh"]
 bg_color = Color(1, 1, 1, 1)
 
-[node name="Shutter" unique_id=1629729892 instance=ExtResource("1_o3avh")]
+[node name="NowLoadingShutter" unique_id=1629729892 instance=ExtResource("1_o3avh")]
 
 [node name="Panel" type="Panel" parent="." index="0" unique_id=1462927156]
 layout_mode = 1

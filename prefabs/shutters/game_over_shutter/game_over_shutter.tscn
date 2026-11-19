@@ -8,7 +8,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
 bg_color = Color(1, 1, 1, 1)
 
-[node name="Shutter" unique_id=1629729892 instance=ExtResource("1_pwoyu")]
+[node name="GameOverShutter" unique_id=1629729892 instance=ExtResource("1_pwoyu")]
 
 [node name="Control" type="Control" parent="." index="0" unique_id=2026053682]
 layout_mode = 1
@@ -46,7 +46,7 @@ offset_right = 368.0
 offset_bottom = 142.0
 theme = ExtResource("2_om2sq")
 theme_override_font_sizes/font_size = 64
-text = "勤務終了！"
+text = "終了！"
 
 [node name="Score" type="Label" parent="Control/ResultPanel/Title" index="0" unique_id=1786839476]
 layout_mode = 1
@@ -55,7 +55,7 @@ offset_right = 320.0
 offset_bottom = 238.0
 theme = ExtResource("2_om2sq")
 theme_override_font_sizes/font_size = 64
-text = "00.00秒"
+text = "000000点"
 
 [node name="TextureRect" type="TextureRect" parent="Control/ResultPanel" index="1" unique_id=1353254844]
 layout_mode = 1

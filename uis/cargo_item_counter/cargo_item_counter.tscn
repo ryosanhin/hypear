@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dtwdm0p75eh7m"]
+
+[ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://uis/main_theme.tres" id="1_5j11p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[node name="CargoItemCounter" type="PanelContainer" unique_id=1916176708]
+offset_right = 196.0
+offset_bottom = 96.0
+theme = ExtResource("1_5j11p")
+theme_override_styles/panel = SubResource("StyleBoxFlat_rjevm")
+
+[node name="Label" type="Label" parent="." unique_id=209131167]
+layout_mode = 2
+theme = ExtResource("1_5j11p")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "100/100"
+horizontal_alignment = 1
+vertical_alignment = 1
