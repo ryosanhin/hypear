@@ -4,3 +4,4 @@
 
 [resource]
 script = ExtResource("1")
+target_score = 600

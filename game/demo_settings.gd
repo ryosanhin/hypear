@@ -7,6 +7,7 @@ extends Resource
 @export_range(0.1, 60.0) var supply_interval: float = 1.5
 @export_range(1, 30) var queue_capacity: int = 10
 @export_range(1, 1000) var target_weight: int = 20
+@export_range(1, 999999, 1, "or_greater") var target_score: int = 600
 @export_range(10.0, 2000.0) var conveyor_speed: float = 360.0
 @export var show_weights: bool = true
 
@@ -15,7 +16,7 @@ extends Resource
 func is_valid() -> bool:
 	if fruit_weights.is_empty() or fruit_weights.size() != fruit_probabilities.size():
 		return false
-	if supply_interval <= 0.0 or queue_capacity <= 0 or target_weight <= 0:
+	if supply_interval <= 0.0 or queue_capacity <= 0 or target_weight <= 0 or target_score <= 0:
 		return false
 	if not is_finite(supply_interval) or not is_finite(conveyor_speed) or conveyor_speed <= 0.0:
 		return false

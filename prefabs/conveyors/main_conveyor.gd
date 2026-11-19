@@ -91,6 +91,11 @@ func take_ready_cargo_item() -> CargoItemData:
 	return fruit
 
 
+## 搬送中と終端で仕分け待ちの果実を含めた件数を返す。
+func get_cargo_item_count() -> int:
+	return _cargo_items.size()
+
+
 ## 搬送中を含む未処理果実を生成順のコピーで返す。
 func get_queue() -> Array[CargoItemData]:
 	return _cargo_items.duplicate()
