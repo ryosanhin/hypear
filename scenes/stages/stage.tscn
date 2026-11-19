@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://8yqwt2bp87gg" path="res://uis/total_score/total_score.tscn" id="9_sponv"]
 [ext_resource type="PackedScene" uid="uid://bdaui30ubh7wo" path="res://uis/gain_score/gain_score.tscn" id="10_gain_score"]
 [ext_resource type="PackedScene" uid="uid://dtwdm0p75eh7m" path="res://uis/cargo_item_counter/cargo_item_counter.tscn" id="12_mim2l"]
+[ext_resource type="PackedScene" uid="uid://bmaaxn545av5n" path="res://prefabs/shutters/game_clear_shutter/game_clear_shutter.tscn" id="13_clear"]
+[ext_resource type="PackedScene" uid="uid://dq2m370bdj0xh" path="res://prefabs/shutters/game_over_shutter/game_over_shutter.tscn" id="14_game_over"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjevm"]
 atlas = ExtResource("3_sc1co")
@@ -25,8 +27,9 @@ region = Rect2(192, 192, 192, 192)
 atlas = ExtResource("3_sc1co")
 region = Rect2(0, 192, 192, 192)
 
-[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_boxes_view_controller", "_left_weighing_scale", "_right_weighing_scale", "_total_score", "_cargo_item_counter")]
+[node name="Stage" type="Node" unique_id=1784597213 node_paths=PackedStringArray("_main_conveyor", "_shipping_conveyor", "_character", "_boxes_view_controller", "_left_weighing_scale", "_right_weighing_scale", "_total_score", "_cargo_item_counter", "game_clear_shutter", "game_over_shutter")]
 script = ExtResource("1_a70sx")
+is_start_automatically = false
 _main_conveyor = NodePath("MainConveyor")
 _shipping_conveyor = NodePath("ShippingConveyor")
 _character = NodePath("Character")
@@ -35,6 +38,8 @@ _left_weighing_scale = NodePath("LeftWeighingScale")
 _right_weighing_scale = NodePath("RightWeighingScale")
 _total_score = NodePath("CanvasLayer/TotalScore")
 _cargo_item_counter = NodePath("CanvasLayer/CargoItemCounter")
+game_clear_shutter = NodePath("ResultLayer/GameClearShutter")
+game_over_shutter = NodePath("ResultLayer/GameOverShutter")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=733164112]
 texture_filter = 1
@@ -125,3 +130,10 @@ offset_left = 232.0
 offset_top = 48.0
 offset_right = 428.0
 offset_bottom = 144.0
+
+[node name="ResultLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="GameClearShutter" parent="ResultLayer" instance=ExtResource("13_clear")]
+
+[node name="GameOverShutter" parent="ResultLayer" instance=ExtResource("14_game_over")]

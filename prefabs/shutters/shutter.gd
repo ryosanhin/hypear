@@ -34,10 +34,11 @@ func close_async() -> void:
 		shake_tween.tween_property(self, "position", actual_vector, SHAKE_DURATION)
 		shake_count += 1
 		await shake_tween.finished
-	
+
 	position = _end_point
 
 
+## シャッターを画面の外まで開く。
 func open_async() -> void:
 	position = _end_point
 	var open_tween := create_tween()

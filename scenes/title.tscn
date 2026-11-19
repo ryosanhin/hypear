@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dayrqyn6mf5wa" path="res://prefabs/boxes/boxes.png" id="2_p6dhs"]
 [ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://prefabs/conveyors/conveyor_tile_set.tres" id="2_wosw1"]
 [ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://uis/main_theme.tres" id="3_p6dhs"]
+[ext_resource type="Script" path="res://scenes/title.gd" id="4_title"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pyl7j"]
 atlas = ExtResource("2_p6dhs")
@@ -17,7 +18,9 @@ region = Rect2(192, 192, 192, 192)
 atlas = ExtResource("2_p6dhs")
 region = Rect2(0, 192, 192, 192)
 
-[node name="Title" type="Node" unique_id=24895862]
+[node name="Title" type="Node" unique_id=24895862 node_paths=PackedStringArray("_start_button")]
+script = ExtResource("4_title")
+_start_button = NodePath("Start")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=1714864702]
 texture_filter = 1
@@ -74,6 +77,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_p6dhs")
 theme_override_font_sizes/font_size = 64
+disabled = true
 text = "スタート"
 flat = true
 

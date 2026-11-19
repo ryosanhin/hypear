@@ -15,6 +15,8 @@ signal game_finished(result: State, final_score: int, elapsed_seconds: float)
 enum State { READY, PLAYING, GAME_OVER, CLEARED }
 enum BoxSide { LEFT, RIGHT }
 
+const ResultShutter := preload("res://prefabs/shutters/result_shutter.gd")
+
 @export var is_start_automatically: bool = true
 
 @export var settings: DemoSettings = preload("res://game/demo_settings.tres")
@@ -26,6 +28,8 @@ enum BoxSide { LEFT, RIGHT }
 @export var _right_weighing_scale: WeighingScale
 @export var _total_score: TotalScore
 @export var _cargo_item_counter: CargoItemCounter
+@export var game_clear_shutter: ResultShutter
+@export var game_over_shutter: ResultShutter
 
 var _left_box_state: BoxState
 var _right_box_state: BoxState
