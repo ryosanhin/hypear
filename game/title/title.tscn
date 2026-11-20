@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dayrqyn6mf5wa" path="res://game/stage/boxes/boxes.png" id="2_p6dhs"]
 [ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://game/stage/conveyors/conveyor_tile_set.tres" id="2_wosw1"]
 [ext_resource type="PackedScene" uid="uid://dmrhu07r3mr7w" path="res://game/title/license_viewer/copyright_viewer.tscn" id="2_yql1r"]
+[ext_resource type="PackedScene" uid="uid://bcnambv625tio" path="res://game/stage/cargo_item/cargo_item.tscn" id="3_3qtp3"]
 [ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://game/shared/main_theme.tres" id="3_p6dhs"]
 [ext_resource type="Script" uid="uid://bkwl6c82qjfc8" path="res://game/title/title.gd" id="4_title"]
 [ext_resource type="Texture2D" uid="uid://c4ydty22f5pgq" path="res://game/title/hypear_title_logo.png" id="5_4rr2b"]
@@ -20,11 +21,19 @@ region = Rect2(192, 192, 192, 192)
 atlas = ExtResource("2_p6dhs")
 region = Rect2(0, 192, 192, 192)
 
-[node name="Title" type="Node" unique_id=24895862 node_paths=PackedStringArray("_start_button", "_copyright_button")]
+[sub_resource type="Curve2D" id="Curve2D_olf1s"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1152, 384, 0, 0, 0, 0, -192, 384)
+}
+point_count = 2
+
+[node name="Title" type="Node" unique_id=24895862 node_paths=PackedStringArray("_start_button", "_copyright_button", "_path2d")]
 script = ExtResource("4_title")
 _start_button = NodePath("Start")
 _copyright_button = NodePath("Copyright")
 _copyright_viewer = ExtResource("2_yql1r")
+_cargo_item = ExtResource("3_3qtp3")
+_path2d = NodePath("Path2D")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=1714864702]
 texture_filter = 1
@@ -50,6 +59,9 @@ texture = SubResource("AtlasTexture_4rr2b")
 texture_filter = 1
 tile_map_data = PackedByteArray("AAD8/wcAAQAAAAAAAAD+/wcAAQAEAAAAAAAAAAcAAQAAAAAAAAACAAcAAQAEAAAAAAAEAAcAAQAAAAAAAAAGAAcAAQAEAAAAAAAIAAcAAQAAAAAAAAAKAAcAAQAEAAAAAAAMAAcAAQAAAAAAAAAOAAcAAQAEAAAAAAAQAAcAAQAAAAAAAAASAAcAAQAEAAAAAAAUAAcAAQAAAAAAAAAWAAcAAQAEAAAAAAA=")
 tile_set = ExtResource("2_wosw1")
+
+[node name="Path2D" type="Path2D" parent="." unique_id=1759591017]
+curve = SubResource("Curve2D_olf1s")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=734302042]
 offset_left = 238.0

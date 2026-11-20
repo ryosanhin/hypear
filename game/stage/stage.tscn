@@ -37,7 +37,7 @@ _boxes_view_controller = NodePath("BoxesViewController")
 _left_weighing_scale = NodePath("LeftWeighingScale")
 _right_weighing_scale = NodePath("RightWeighingScale")
 _total_score = NodePath("CanvasLayer/TotalScore")
-_cargo_item_counter = NodePath("CanvasLayer/CargoItemCounter")
+_cargo_item_counter = NodePath("CargoItemCounter")
 game_clear_shutter = NodePath("ResultLayer/GameClearShutter")
 game_over_shutter = NodePath("ResultLayer/GameOverShutter")
 
@@ -60,6 +60,12 @@ texture = SubResource("AtlasTexture_mnqji")
 [node name="BackgroundBox_02" type="Sprite2D" parent="BackgroundFloor" unique_id=960409473]
 position = Vector2(-426, -121)
 texture = SubResource("AtlasTexture_67o3j")
+
+[node name="CargoItemCounter" parent="." unique_id=1916176708 instance=ExtResource("12_mim2l")]
+offset_left = 232.0
+offset_top = 48.0
+offset_right = 428.0
+offset_bottom = 144.0
 
 [node name="BoxesViewRoot" type="Node2D" parent="." unique_id=736165412]
 
@@ -124,12 +130,6 @@ offset_top = 48.0
 offset_right = -24.0
 offset_bottom = 118.0
 grow_horizontal = 0
-
-[node name="CargoItemCounter" parent="CanvasLayer" unique_id=1916176708 instance=ExtResource("12_mim2l")]
-offset_left = 232.0
-offset_top = 48.0
-offset_right = 428.0
-offset_bottom = 144.0
 
 [node name="ResultLayer" type="CanvasLayer" parent="." unique_id=1135315519]
 layer = 2
