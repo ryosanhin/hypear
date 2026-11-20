@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1i3l1k54mgvo"
-path="res://.godot/imported/ic_input_key-arrow-down_01.svg-6ace3b0bd8c204b6d65b3841063f1d38.ctex"
+uid="uid://col5th5tnbcxs"
+path="res://.godot/imported/ic_input_key-arrow-left_01.svg-c676475383ebb6be8141855c363de769.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/shared/ic_input_key-arrow-down_01.svg"
-dest_files=["res://.godot/imported/ic_input_key-arrow-down_01.svg-6ace3b0bd8c204b6d65b3841063f1d38.ctex"]
+source_file="res://game/stage/ic_input_key-arrow-left_01.svg"
+dest_files=["res://.godot/imported/ic_input_key-arrow-left_01.svg-c676475383ebb6be8141855c363de769.ctex"]
 
 [params]
 
