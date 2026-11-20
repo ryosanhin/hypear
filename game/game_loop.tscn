@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bo5wvq7cxekjs"]
+
+[ext_resource type="Script" uid="uid://cg0bk7ld5vsyd" path="res://game/game_loop.gd" id="1_game_loop"]
+[ext_resource type="PackedScene" uid="uid://bpqepsdm0gv16" path="res://utils/scene_management/scene_controller.tscn" id="2_controller"]
+[ext_resource type="PackedScene" uid="uid://c23a4po1in5o4" path="res://game/title/title.tscn" id="3_title"]
+
+[node name="GameLoop" type="Node" unique_id=1745544740 node_paths=PackedStringArray("_scene_controller", "_main_scene_parent")]
+script = ExtResource("1_game_loop")
+_scene_controller = NodePath("SceneController")
+_main_scene_parent = NodePath("MainScene")
+
+[node name="MainScene" type="Node" parent="." unique_id=682719010]
+
+[node name="Title" parent="MainScene" unique_id=1482498853 instance=ExtResource("3_title")]
+
+[node name="SceneController" parent="." unique_id=370838043 node_paths=PackedStringArray("_main_scene_parent") instance=ExtResource("2_controller")]
+_main_scene_parent = NodePath("../MainScene")

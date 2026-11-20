@@ -1,12 +1,12 @@
 extends Node
 ## タイトルとステージを切り替え、ステージの終了結果を表示する。
 
-const Title := preload("res://scenes/title.gd")
-const ResultShutter := preload("res://prefabs/shutters/result_shutter.gd")
+const Title := preload("res://game/title/title.gd")
+const ResultShutter := preload("res://game/shutters/result_shutter.gd")
 
-const TITLE_SCENE := "res://scenes/title.tscn"
-const STAGE_SCENE := "res://scenes/stages/stage.tscn"
-const LOADING_SHUTTER := "res://prefabs/shutters/now_loading_shutter/now_loading_shutter.tscn"
+const TITLE_SCENE := "res://game/title/title.tscn"
+const STAGE_SCENE := "res://game/stage/stage.tscn"
+const LOADING_SHUTTER := "res://game/shutters/now_loading_shutter/now_loading_shutter.tscn"
 
 @export var _scene_controller: SceneController
 @export var _main_scene_parent: Node

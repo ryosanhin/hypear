@@ -2,7 +2,7 @@ extends SceneTree
 ## 実ステージの投入順、出荷得点と終了結果を検証する。
 
 const TestHelper := preload("res://tests/supports/test_helper.gd")
-const STAGE_SCENE := preload("res://scenes/stages/stage.tscn")
+const STAGE_SCENE := preload("res://game/stage/stage.tscn")
 
 var _helper := TestHelper.new(true)
 
