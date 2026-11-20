@@ -6,6 +6,21 @@
 
 *English is not my first language so there may be some mistakes. Suggestions or corrections are always welcome. Thank you for your understanding!*
 
+## Project layout
+
+Start with [the game loop](game/game_loop.tscn) to follow a playthrough from the title screen to the stage and back.
+
+| To work on | Start here |
+| --- | --- |
+| Title screen and license viewer | [game/title/](game/title/) |
+| Stage layout, difficulty settings and scoring | [game/stage/](game/stage/) |
+| Sorting and shipping | [Cargo items](game/stage/cargo_item/), [boxes](game/stage/boxes/), [character](game/stage/character/), [conveyors](game/stage/conveyors/), [weighing scale](game/stage/weighing_scale/) |
+| In-game counters and score displays | [game/stage/hud/](game/stage/hud/) |
+| Loading and result shutters | [game/shutters/](game/shutters/) |
+| Theme and floor tile shared by multiple screens | [game/shared/](game/shared/) |
+| Reusable Godot utilities | [utils/](utils/) |
+| Stage tests and scoring simulator | [Test instructions](tests/README.md), [simulator](docs/hypear-score-simulator-simple.html) |
+
 ## Setup
 
 The font used by this game is not included in this repository.
