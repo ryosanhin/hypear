@@ -122,6 +122,6 @@ func clear() -> void:
 ## 到着済みの果実表示を切り替え、搬送中の果実は表示する。[br]
 ## [param enabled]: 到着済みの果実もコンベア上に表示するか。
 func set_ready_fruit_visible(enabled: bool) -> void:
-	var ready := peek_ready_cargo_item()
+	var ready_cargo_item := peek_ready_cargo_item()
 	for index in _followers.size():
-		_followers[index].visible = enabled or _cargo_items[index] != ready
+		_followers[index].visible = enabled or _cargo_items[index] != ready_cargo_item
