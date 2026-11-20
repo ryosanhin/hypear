@@ -40,7 +40,7 @@ var _generator: FruitGenerator
 var _supply_elapsed: float = 0.0
 
 
-## 接続されたコンポーネントを設定して開始待ちにする。
+## コンポーネントを接続し、開始待ちの間に表示できるよう初期状態を整える。
 func _ready() -> void:
 	_generator = FruitGenerator.new(settings)
 	_main_conveyor.configure(settings)
@@ -48,6 +48,9 @@ func _ready() -> void:
 	score_changed.connect(_total_score.set_score)
 	if is_start_automatically:
 		start_game()
+	elif settings.is_valid():
+		_reset_game()
+		_total_score.set_score(score)
 
 
 ## ゲームの時間を進める。[br]
@@ -67,13 +70,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		ship()
 
 
-## 全コンポーネント、経過時間、供給時間とスコアを初期化して開始する。
+## 準備済みのステージで時間計測と果実供給を開始する。再開時は初期状態へ戻す。
 func start_game() -> void:
 	if state == State.PLAYING:
 		return
 	if not settings.is_valid():
 		push_error("ゲーム設定が不正です。")
 		return
+	if state != State.READY or _left_box_state == null:
+		_reset_game()
+	state = State.PLAYING
+	score_changed.emit(score)
+
+
+## 搬送中の果実と手元の表示をクリアし、空箱・重量計・果実数と進行値を初期化する。
+func _reset_game() -> void:
 	_main_conveyor.clear()
 	_character.set_fruit(null, settings.show_weights)
 	_character.reset_pose()
@@ -81,9 +92,7 @@ func start_game() -> void:
 	score = 0
 	elapsed_seconds = 0.0
 	_supply_elapsed = 0.0
-	state = State.PLAYING
 	_update_cargo_item_counter()
-	score_changed.emit(score)
 
 
 ## 供給時刻ごとに搬送を進め、長いフレームでも生成位置を重ねない。[br]
