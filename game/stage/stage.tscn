@@ -7,12 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://game/stage/conveyors/main_conveyor.tscn" id="4_sponv"]
 [ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://game/stage/conveyors/shipping_conveyor.tscn" id="5_sc1co"]
 [ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://game/stage/character/character.tscn" id="6_2lgi4"]
+[ext_resource type="Texture2D" uid="uid://d1i3l1k54mgvo" path="res://game/shared/ic_input_key-arrow-down_01.svg" id="6_v5iu8"]
 [ext_resource type="Script" uid="uid://boiqubqjebjvq" path="res://game/stage/boxes/boxes_view_controller.gd" id="7_controller"]
+[ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://game/shared/main_theme.tres" id="7_xrl45"]
 [ext_resource type="PackedScene" uid="uid://houc2yscdiek" path="res://game/stage/weighing_scale/weighing_scale.tscn" id="8_xch81"]
 [ext_resource type="PackedScene" uid="uid://8yqwt2bp87gg" path="res://game/stage/hud/total_score/total_score.tscn" id="9_sponv"]
 [ext_resource type="PackedScene" uid="uid://bdaui30ubh7wo" path="res://game/stage/hud/gain_score/gain_score.tscn" id="10_gain_score"]
 [ext_resource type="PackedScene" uid="uid://dtwdm0p75eh7m" path="res://game/stage/hud/cargo_item_counter/cargo_item_counter.tscn" id="12_mim2l"]
 [ext_resource type="PackedScene" uid="uid://bmaaxn545av5n" path="res://game/shutters/game_clear_shutter/game_clear_shutter.tscn" id="13_clear"]
+[ext_resource type="Texture2D" uid="uid://col5th5tnbcxs" path="res://game/shared/ic_input_key-arrow-left_01.svg" id="13_pv4ae"]
 [ext_resource type="PackedScene" uid="uid://dq2m370bdj0xh" path="res://game/shutters/game_over_shutter/game_over_shutter.tscn" id="14_game_over"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjevm"]
@@ -67,12 +70,54 @@ offset_top = 48.0
 offset_right = 428.0
 offset_bottom = 144.0
 
+[node name="SupportArrowLeft" type="TextureRect" parent="." unique_id=1157799583]
+self_modulate = Color(0, 0, 0, 1)
+offset_left = 400.0
+offset_top = 550.0
+offset_right = 440.0
+offset_bottom = 590.0
+texture = ExtResource("13_pv4ae")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SupportArrowRight" type="TextureRect" parent="." unique_id=199730749]
+self_modulate = Color(0, 0, 0, 1)
+offset_left = 520.0
+offset_top = 550.0
+offset_right = 560.0
+offset_bottom = 590.0
+texture = ExtResource("13_pv4ae")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1004517525]
+offset_left = 432.0
+offset_top = 590.0
+offset_right = 540.0
+offset_bottom = 638.0
+
+[node name="SupportArrowDown" type="TextureRect" parent="HBoxContainer" unique_id=1305293832]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("6_v5iu8")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=221119300]
+layout_mode = 2
+theme = ExtResource("7_xrl45")
+theme_override_font_sizes/font_size = 24
+text = "出荷"
+
 [node name="BoxesViewRoot" type="Node2D" parent="." unique_id=736165412]
 
 [node name="MainConveyor" parent="." unique_id=914560823 instance=ExtResource("4_sponv")]
 
 [node name="Character" parent="." unique_id=1421077664 instance=ExtResource("6_2lgi4")]
-position = Vector2(480, 520)
+position = Vector2(480, 500)
 scale = Vector2(0.4, 0.4)
 
 [node name="BoxesEntryViewRoot" type="Node2D" parent="." unique_id=1472495683]
