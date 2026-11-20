@@ -3,8 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://crckknvc07tx8" path="res://backgrounds/floor_tile.png" id="1_wosw1"]
 [ext_resource type="Texture2D" uid="uid://dayrqyn6mf5wa" path="res://prefabs/boxes/boxes.png" id="2_p6dhs"]
 [ext_resource type="TileSet" uid="uid://s4ro47keg0x1" path="res://prefabs/conveyors/conveyor_tile_set.tres" id="2_wosw1"]
+[ext_resource type="PackedScene" uid="uid://dmrhu07r3mr7w" path="res://license_viewer/copyright_viewer.tscn" id="2_yql1r"]
 [ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://uis/main_theme.tres" id="3_p6dhs"]
-[ext_resource type="Script" path="res://scenes/title.gd" id="4_title"]
+[ext_resource type="Script" uid="uid://bkwl6c82qjfc8" path="res://scenes/title.gd" id="4_title"]
+[ext_resource type="Texture2D" uid="uid://c4ydty22f5pgq" path="res://scenes/hypear_title_logo.png" id="5_4rr2b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pyl7j"]
 atlas = ExtResource("2_p6dhs")
@@ -18,9 +20,11 @@ region = Rect2(192, 192, 192, 192)
 atlas = ExtResource("2_p6dhs")
 region = Rect2(0, 192, 192, 192)
 
-[node name="Title" type="Node" unique_id=24895862 node_paths=PackedStringArray("_start_button")]
+[node name="Title" type="Node" unique_id=24895862 node_paths=PackedStringArray("_start_button", "_copyright_button")]
 script = ExtResource("4_title")
 _start_button = NodePath("Start")
+_copyright_button = NodePath("Copyright")
+_copyright_viewer = ExtResource("2_yql1r")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=1714864702]
 texture_filter = 1
@@ -47,21 +51,14 @@ texture_filter = 1
 tile_map_data = PackedByteArray("AAD8/wcAAQAAAAAAAAD+/wcAAQAEAAAAAAAAAAcAAQAAAAAAAAACAAcAAQAEAAAAAAAEAAcAAQAAAAAAAAAGAAcAAQAEAAAAAAAIAAcAAQAAAAAAAAAKAAcAAQAEAAAAAAAMAAcAAQAAAAAAAAAOAAcAAQAEAAAAAAAQAAcAAQAAAAAAAAASAAcAAQAEAAAAAAAUAAcAAQAAAAAAAAAWAAcAAQAEAAAAAAA=")
 tile_set = ExtResource("2_wosw1")
 
-[node name="TitleName" type="Label" parent="." unique_id=89256465]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -256.0
-offset_top = 96.0
-offset_right = 256.0
-offset_bottom = 287.0
-grow_horizontal = 2
-theme = ExtResource("3_p6dhs")
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 64
-text = "フリオーソと
-　　大忙し選果場"
+[node name="TextureRect" type="TextureRect" parent="." unique_id=734302042]
+offset_left = 238.0
+offset_top = 98.0
+offset_right = 750.0
+offset_bottom = 290.0
+texture = ExtResource("5_4rr2b")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Start" type="Button" parent="." unique_id=971216223]
 anchors_preset = 8
@@ -81,7 +78,7 @@ disabled = true
 text = "スタート"
 flat = true
 
-[node name="Copyrights" type="Button" parent="." unique_id=683349581]
+[node name="Copyright" type="Button" parent="." unique_id=683349581]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
