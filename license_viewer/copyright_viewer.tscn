@@ -7,8 +7,9 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
 bg_color = Color(0, 0, 0, 0.78431374)
 
-[node name="CopyrightViewer" type="Node" unique_id=245152374]
+[node name="CopyrightViewer" type="Node" unique_id=245152374 node_paths=PackedStringArray("_input_blocker")]
 script = ExtResource("1_ysinm")
+_input_blocker = NodePath("CanvasLayer/InputBlocker")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1862996234]
 
