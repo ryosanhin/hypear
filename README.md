@@ -45,4 +45,4 @@ Please see `UMAMUSUME_ASSETS_LICENSE.md` for details.
 
 ### Third-party assets
 
-- Stage input guide icons (`ic_input_key-arrow-left_01.svg` and `ic_input_key-arrow-down_01.svg`) from [Free Game UI Assets](https://freegameui.net/), released under [CC0 1.0 Universal](https://freegameui.net/license/).
+- Stage input guide icons under the `third_party/freegameui.net/` directory are from [Free Game UI Assets](https://freegameui.net/), released under [CC0 1.0 Universal](https://freegameui.net/license/).
