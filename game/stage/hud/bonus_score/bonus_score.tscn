@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://csnolb3wsxu72"]
+
+[ext_resource type="Script" uid="uid://bg4o2eo7sam0f" path="res://game/stage/hud/bonus_score/bonus_score.gd" id="1_m274t"]
+[ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://game/shared/main_theme.tres" id="1_xfojn"]
+
+[node name="BonusScore" type="Node2D" unique_id=1360833664 node_paths=PackedStringArray("_label")]
+script = ExtResource("1_m274t")
+_label = NodePath("Label")
+
+[node name="Label" type="Label" parent="." unique_id=491883619]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -24.0
+offset_right = 104.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_xfojn")
+theme_override_constants/outline_size = 4
+text = "ボーナス +000"
+horizontal_alignment = 1
+vertical_alignment = 1
