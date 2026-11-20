@@ -1,6 +1,10 @@
 class_name ScoreCalculator
 extends RefCounted
 
+const THRESHOLD_SMALL := 0.5
+const THRESHOLD_GOOD := 0.8
+const THRESHOLD_LARGE := 1.15
+
 
 ## 一箱の出荷得点を計算する。[br]
 ## [param shipped_weight]: 出荷重量。[br]
@@ -11,17 +15,17 @@ static func calculate(shipped_weight: int, target_weight: int) -> int:
 
 	var rate := float(shipped_weight) / float(target_weight)
 
-	if rate < 0.5:
+	if rate < THRESHOLD_SMALL:
 		return 0
 
-	if rate < 0.8:
+	if rate < THRESHOLD_GOOD:
 		return roundi(100.0 * (rate - 0.5))
 
 	if rate <= 1.0:
-		var t := (rate - 0.8) / 0.2
+		var t := (rate - THRESHOLD_GOOD) / (1.0 - THRESHOLD_GOOD)
 		return roundi(30.0 + 20.0 * t + 50.0 * t * t)
 
-	var remaining := maxf(0.0, 1.0 - (rate - 1.0) / 0.15)
+	var remaining := maxf(0.0, 1.0 - (rate - 1.0) / THRESHOLD_LARGE - 1.0)
 	return roundi(100.0 * pow(remaining, 4.0))
 
 
