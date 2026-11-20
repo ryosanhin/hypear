@@ -4,4 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-target_score = 600
+fruit_probabilities = null
+supply_interval = 1.0
+conveyor_speed = 240.0
+show_weights = false

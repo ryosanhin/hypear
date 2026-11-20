@@ -131,9 +131,9 @@ offset_top = 48.0
 offset_right = 428.0
 offset_bottom = 144.0
 
-[node name="ResultLayer" type="CanvasLayer" parent="."]
+[node name="ResultLayer" type="CanvasLayer" parent="." unique_id=1135315519]
 layer = 2
 
-[node name="GameClearShutter" parent="ResultLayer" instance=ExtResource("13_clear")]
+[node name="GameClearShutter" parent="ResultLayer" unique_id=1116750369 instance=ExtResource("13_clear")]
 
-[node name="GameOverShutter" parent="ResultLayer" instance=ExtResource("14_game_over")]
+[node name="GameOverShutter" parent="ResultLayer" unique_id=168658719 instance=ExtResource("14_game_over")]
