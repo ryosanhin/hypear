@@ -42,3 +42,7 @@ All files under the `umamusume/` directory are **NOT covered by the MIT License*
 Those files are distributed separately under the terms described in `UMAMUSUME_ASSETS_LICENSE.md`.
 
 Please see `UMAMUSUME_ASSETS_LICENSE.md` for details.
+
+### Third-party assets
+
+- Stage input guide icons (`ic_input_key-arrow-left_01.svg` and `ic_input_key-arrow-down_01.svg`) from [Free Game UI Assets](https://freegameui.net/), released under [CC0 1.0 Universal](https://freegameui.net/license/).
