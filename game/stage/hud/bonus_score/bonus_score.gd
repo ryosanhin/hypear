@@ -17,4 +17,3 @@ func play(points: int) -> void:
 	tween.tween_property(self, "position:y", position.y - RISE_DISTANCE, DURATION)
 	tween.tween_property(self, "modulate:a", 0.0, DURATION - FADE_DELAY).set_delay(FADE_DELAY)
 	tween.chain().tween_callback(queue_free)
-
