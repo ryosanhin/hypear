@@ -25,7 +25,7 @@ static func calculate(shipped_weight: int, target_weight: int) -> int:
 		var t := (rate - THRESHOLD_GOOD) / (1.0 - THRESHOLD_GOOD)
 		return roundi(30.0 + 20.0 * t + 50.0 * t * t)
 
-	var remaining := maxf(0.0, 1.0 - (rate - 1.0) / THRESHOLD_LARGE - 1.0)
+	var remaining := maxf(0.0, 1.0 - (rate - 1.0) / (THRESHOLD_LARGE - 1.0))
 	return roundi(100.0 * pow(remaining, 4.0))
 
 
