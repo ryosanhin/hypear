@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b6qpwg2vmpc8" path="res://game/stage/conveyors/main_conveyor.tscn" id="4_sponv"]
 [ext_resource type="PackedScene" uid="uid://pxjcsgc58q0l" path="res://game/stage/conveyors/shipping_conveyor.tscn" id="5_sc1co"]
 [ext_resource type="PackedScene" uid="uid://bynpr1ss5gqby" path="res://game/stage/character/character.tscn" id="6_2lgi4"]
-[ext_resource type="Texture2D" uid="uid://d1i3l1k54mgvo" path="res://game/stage/ic_input_key-arrow-down_01.svg" id="6_v5iu8"]
+[ext_resource type="Texture2D" uid="uid://d1i3l1k54mgvo" path="res://third_party/freegameui.net/ic_input_key-arrow-down_01.svg" id="6_v5iu8"]
 [ext_resource type="Script" uid="uid://boiqubqjebjvq" path="res://game/stage/boxes/boxes_view_controller.gd" id="7_controller"]
 [ext_resource type="Theme" uid="uid://cpkcgg75qk6rm" path="res://game/shared/main_theme.tres" id="7_xrl45"]
 [ext_resource type="PackedScene" uid="uid://houc2yscdiek" path="res://game/stage/weighing_scale/weighing_scale.tscn" id="8_xch81"]
@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bdaui30ubh7wo" path="res://game/stage/hud/gain_score/gain_score.tscn" id="10_gain_score"]
 [ext_resource type="PackedScene" uid="uid://dtwdm0p75eh7m" path="res://game/stage/hud/cargo_item_counter/cargo_item_counter.tscn" id="12_mim2l"]
 [ext_resource type="PackedScene" uid="uid://bmaaxn545av5n" path="res://game/shutters/game_clear_shutter/game_clear_shutter.tscn" id="13_clear"]
-[ext_resource type="Texture2D" uid="uid://col5th5tnbcxs" path="res://game/stage/ic_input_key-arrow-left_01.svg" id="13_pv4ae"]
+[ext_resource type="Texture2D" uid="uid://col5th5tnbcxs" path="res://third_party/freegameui.net/ic_input_key-arrow-left_01.svg" id="13_pv4ae"]
 [ext_resource type="PackedScene" uid="uid://dq2m370bdj0xh" path="res://game/shutters/game_over_shutter/game_over_shutter.tscn" id="14_game_over"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjevm"]
