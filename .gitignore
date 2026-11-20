@@ -30,3 +30,5 @@ addons/*
 third_party/**
 !third_party/**/
 !third_party/**/*.import
+!third_party/freegameui.net/ic_input_key-arrow-down_01.svg
+!third_party/freegameui.net/ic_input_key-arrow-left_01.svg

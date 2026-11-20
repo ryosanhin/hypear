@@ -93,6 +93,7 @@ func _reset_game() -> void:
 	elapsed_seconds = 0.0
 	_supply_elapsed = 0.0
 	_update_cargo_item_counter()
+	_total_score.configure(settings.target_score)
 
 
 ## 供給時刻ごとに搬送を進め、長いフレームでも生成位置を重ねない。[br]

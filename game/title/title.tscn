@@ -27,13 +27,14 @@ _data = {
 }
 point_count = 2
 
-[node name="Title" type="Node" unique_id=24895862 node_paths=PackedStringArray("_start_button", "_copyright_button", "_path2d")]
+[node name="Title" type="Node" unique_id=24895862 node_paths=PackedStringArray("_start_button", "_copyright_button", "_path2d", "_spawn_timer")]
 script = ExtResource("4_title")
 _start_button = NodePath("Start")
 _copyright_button = NodePath("Copyright")
 _copyright_viewer = ExtResource("2_yql1r")
 _cargo_item = ExtResource("3_3qtp3")
 _path2d = NodePath("Path2D")
+_spawn_timer = NodePath("SpawnTimer")
 
 [node name="BackgroundFloor" type="Sprite2D" parent="." unique_id=1714864702]
 texture_filter = 1
@@ -106,3 +107,6 @@ theme = ExtResource("3_p6dhs")
 theme_override_font_sizes/font_size = 64
 text = "権利表記"
 flat = true
+
+[node name="SpawnTimer" type="Timer" parent="." unique_id=1332399414]
+one_shot = true

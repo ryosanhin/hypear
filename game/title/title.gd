@@ -7,6 +7,7 @@ signal start_requested
 @export var _copyright_viewer: PackedScene
 @export var _cargo_item: PackedScene
 @export var _path2d: Path2D
+@export var _spawn_timer: Timer
 
 var _entry_point: Vector2
 var _end_point: Vector2
@@ -40,7 +41,8 @@ func _cargo_item_effect() -> void:
 		_add_cargo_item()
 
 		var interval := randi_range(1, 5)
-		await get_tree().create_timer(float(interval)).timeout
+		_spawn_timer.start(float(interval))
+		await _spawn_timer.timeout
 
 
 func _add_cargo_item() -> void:
