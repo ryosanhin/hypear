@@ -5,6 +5,7 @@ extends Node
 
 ## 背景の GUI 入力を受け取る。
 func _ready() -> void:
+	_input_blocker.grab_focus()
 	_input_blocker.gui_input.connect(_on_input_blocker_gui_input)
 
 
