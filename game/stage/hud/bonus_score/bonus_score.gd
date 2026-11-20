@@ -10,7 +10,7 @@ const FADE_DELAY := 0.2
 
 
 ## 得点を表示し、演出終了時に自身を解放する。[br]
-## [param points]: 箱の得点。
+## [param points]: 今回の出荷で獲得したボーナス得点。
 func play(points: int) -> void:
 	_label.text = "ボーナス +%d" % points
 	var tween := create_tween().set_parallel(true)

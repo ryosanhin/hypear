@@ -27,6 +27,7 @@ const ResultShutter := preload("res://game/shutters/result_shutter.gd")
 @export var _left_weighing_scale: WeighingScale
 @export var _right_weighing_scale: WeighingScale
 @export var _total_score: TotalScore
+@export var _bonus_score_spawner: BonusScoreSpawner
 @export var _cargo_item_counter: CargoItemCounter
 @export var game_clear_shutter: ResultShutter
 @export var game_over_shutter: ResultShutter
@@ -185,6 +186,8 @@ func ship() -> int:
 		_boxes_view_controller.show_shipping_score(_right_box_state, right_points)
 	_right_box_state.ship()
 	_create_boxes()
+	if bonus > 0:
+		_bonus_score_spawner.show_bonus(bonus)
 	if points > 0:
 		score_changed.emit(score)
 	if score >= settings.target_score:
