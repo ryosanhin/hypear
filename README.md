@@ -28,7 +28,7 @@ The font used by this game is not included in this repository.
 ### Font
 
 This game uses **DotGothic16**.
-Get the font from [Google Fonts](https://fonts.google.com/specimen/DotGothic16) and place the Bold font file at `third_party/fonts/DotGothic16-Regular.ttf`.
+Get the font from [Google Fonts](https://fonts.google.com/specimen/DotGothic16) and place the font file at `third_party/fonts/DotGothic16-Regular.ttf`.
 
 ## License
 The files in this repository are licensed under different terms depending on the directory.
